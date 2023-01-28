@@ -1,0 +1,38 @@
+{
+  "expo": {
+    "name": "IZRA",
+    "slug": "IZRA",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "icon": "./src/assets/img/tatum.png",
+    "splash": {
+      "image": "./src/assets/img/tatum.png",
+      "resizeMode": "contain",
+      "backgroundColor": "#66a3ff"
+    },
+    "updates": {
+      "fallbackToCacheTimeout": 0
+    },
+    "assetBundlePatterns": [
+      "**/*"
+    ],
+    "ios": {
+      "supportsTablet": true
+    },
+    "android": {
+      "adaptiveIcon": {
+        "foregroundImage": "./src/assets/img/tatum.png",
+        "backgroundColor": "#FFFFFF"
+      },
+      "package": "com.ibluday.IZRA",
+      "config": {
+        "googleMaps": {
+          "apiKey": "AIzaSyBXJiFMPFrDc1Q2hlsRG-evFpGAnOf07O0"
+        }
+      }
+    },
+    "web": {
+      "favicon": "./src/assets/icon.png"
+    }
+  }
+}

@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "106199221549",
+    "project_id": "atomic-task-4e592",
+    "storage_bucket": "atomic-task-4e592.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:106199221549:android:141149dba9400eda4abfa4",
+        "android_client_info": {
+          "package_name": "com.atomic.task"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "106199221549-94mcuu5egt6ea3e36ql9c0l2dfp3ircu.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBFKOiohODALvCzKrBq4ue4fOkWJ2DH_5Q"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "106199221549-94mcuu5egt6ea3e36ql9c0l2dfp3ircu.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
