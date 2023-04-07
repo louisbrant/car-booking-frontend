@@ -7,8 +7,8 @@ import { useApi } from '../../redux/services'
 import { setUserInfo } from '../../redux/actions/authActions';
 import { useDispatch, useSelector } from 'react-redux'
 
-import { GoogleSignIn } from 'expo-google-sign-in';
-import * as Facebook from 'expo-facebook';
+// import { GoogleSignIn } from 'expo-google-sign-in';
+// import * as Facebook from 'expo-facebook';
 
 const LogInScreen = ({ navigation }) => {
 
@@ -36,7 +36,6 @@ const LogInScreen = ({ navigation }) => {
             email,
             password
         }).then(({ data }) => {
-            console.log("data=====================================>", data)
             dispatch(setUserInfo(data.user))
             if (data.status) {
                 Toast.show({ title: "Success Sign In!", placement: 'bottom', status: 'success', w: 300 })
@@ -46,7 +45,6 @@ const LogInScreen = ({ navigation }) => {
                 return Toast.show({ title: data.message, placement: 'bottom', status: 'error', w: 300 })
             }
         }).catch(error => {
-            console.log(error);
             if (error.response && error.response.status === 400) {
                 return Toast.show({ title: error.response.data, placement: 'bottom', status: 'error', w: 300 })
             } else {
@@ -56,103 +54,103 @@ const LogInScreen = ({ navigation }) => {
         })
     }
     const onGoogleSignIn = async () => {
-        try {
-            await GoogleSignIn.askForPlayServicesAsync()
-            const { type, user } = await GoogleSignIn.signInAsync()
-            if (type === 'success') {
-                GoGoogleSignIn()
-            }
-        } catch ({ message }) {
-            console.log('login: Error:' + message)
-        }
+        // try {
+        //     await GoogleSignIn.askForPlayServicesAsync()
+        //     const { type, user } = await GoogleSignIn.signInAsync()
+        //     if (type === 'success') {
+        //         GoGoogleSignIn()
+        //     }
+        // } catch ({ message }) {
+        //     console.log('login: Error:' + message)
+        // }
     }
     const GoGoogleSignIn = async () => {
-        const user = await GoogleSignIn.signInSilentlyAsync();
-        if (user.email) {
-            setEmail(user.email)
-            Api.ThirdSignIn({
-                email: user.email,
-                password: ""
-            }).then(({ data }) => {
-                // console.log("data=>",data)
-                dispatch(setUserInfo(data.user))
-                if (data.status) {
-                    Toast.show({ title: "Success Sign In!", placement: 'bottom', status: 'success', w: 300 })
-                    if (data.user.roles == "renter") {
-                        navigation.navigate("SecondScreen")
-                    }
-                    else {
-                        navigation.navigate("CarHomeScreen");
-                    }
-                }
-                else {
-                    return Toast.show({ title: data.message, placement: 'bottom', status: 'error', w: 300 })
-                }
-            }).catch(error => {
-                console.log(error);
-                if (error.response && error.response.status === 400) {
-                    return Toast.show({ title: error.response.data, placement: 'bottom', status: 'error', w: 300 })
-                } else {
-                    return Toast.show({ title: "Error", placement: 'bottom', status: 'error', w: 300 })
+        // const user = await GoogleSignIn.signInSilentlyAsync();
+        // if (user.email) {
+        //     setEmail(user.email)
+        //     Api.ThirdSignIn({
+        //         email: user.email,
+        //         password: ""
+        //     }).then(({ data }) => {
+        //         // console.log("data=>",data)
+        //         dispatch(setUserInfo(data.user))
+        //         if (data.status) {
+        //             Toast.show({ title: "Success Sign In!", placement: 'bottom', status: 'success', w: 300 })
+        //             if (data.user.roles == "renter") {
+        //                 navigation.navigate("SecondScreen")
+        //             }
+        //             else {
+        //                 navigation.navigate("CarHomeScreen");
+        //             }
+        //         }
+        //         else {
+        //             return Toast.show({ title: data.message, placement: 'bottom', status: 'error', w: 300 })
+        //         }
+        //     }).catch(error => {
+        //         console.log(error);
+        //         if (error.response && error.response.status === 400) {
+        //             return Toast.show({ title: error.response.data, placement: 'bottom', status: 'error', w: 300 })
+        //         } else {
+        //             return Toast.show({ title: "Error", placement: 'bottom', status: 'error', w: 300 })
 
-                }
-            })
-        }
-        else {
-            return Toast.show({ title: "Error", placement: 'bottom', status: 'error', w: 300 });
-        }
+        //         }
+        //     })
+        // }
+        // else {
+        //     return Toast.show({ title: "Error", placement: 'bottom', status: 'error', w: 300 });
+        // }
     };
 
     const onFacebookSignIn = async () => {
-        try {
-            await Facebook.initializeAsync({
-                appId: '1:106199221549:android:141149dba9400eda4abfa4',
-            });
-            const { type, token, expirationDate, permissions, declinedPermissions } =
-                await Facebook.logInWithReadPermissionsAsync({
-                    permissions: ['public_profile'],
-                });
-            if (type === 'success') {
-                // Get the user's name using Facebook's Graph API
-                const response = await fetch(`https://graph.facebook.com/me?access_token=${token}`);
-                const email = (await response.json()).email;
-                setEmail(email);
-                if (user.email)
-                    Api.ThirdSignIn({
-                        email,
-                        password: ""
-                    }).then(({ data }) => {
-                        // console.log("data=>",data)
-                        dispatch(setUserInfo(data.user))
-                        if (data.status) {
-                            Toast.show({ title: "Success Sign In!", placement: 'bottom', status: 'success', w: 300 })
-                            if (data.user.roles == "renter") {
-                                navigation.navigate("SecondScreen")
-                            }
-                            else {
-                                navigation.navigate("CarHomeScreen");
-                            }
-                        }
-                        else {
-                            return Toast.show({ title: data.message, placement: 'bottom', status: 'error', w: 300 })
-                        }
-                    }).catch(error => {
-                        if (error.response && error.response.status === 400) {
-                            return Toast.show({ title: error.response.data, placement: 'bottom', status: 'error', w: 300 })
-                        } else {
-                            return Toast.show({ title: "Error", placement: 'bottom', status: 'error', w: 300 })
+        //     try {
+        //         await Facebook.initializeAsync({
+        //             appId: '1:106199221549:android:141149dba9400eda4abfa4',
+        //         });
+        //         const { type, token, expirationDate, permissions, declinedPermissions } =
+        //             await Facebook.logInWithReadPermissionsAsync({
+        //                 permissions: ['public_profile'],
+        //             });
+        //         if (type === 'success') {
+        //             // Get the user's name using Facebook's Graph API
+        //             const response = await fetch(`https://graph.facebook.com/me?access_token=${token}`);
+        //             const email = (await response.json()).email;
+        //             setEmail(email);
+        //             if (user.email)
+        //                 Api.ThirdSignIn({
+        //                     email,
+        //                     password: ""
+        //                 }).then(({ data }) => {
+        //                     // console.log("data=>",data)
+        //                     dispatch(setUserInfo(data.user))
+        //                     if (data.status) {
+        //                         Toast.show({ title: "Success Sign In!", placement: 'bottom', status: 'success', w: 300 })
+        //                         if (data.user.roles == "renter") {
+        //                             navigation.navigate("SecondScreen")
+        //                         }
+        //                         else {
+        //                             navigation.navigate("CarHomeScreen");
+        //                         }
+        //                     }
+        //                     else {
+        //                         return Toast.show({ title: data.message, placement: 'bottom', status: 'error', w: 300 })
+        //                     }
+        //                 }).catch(error => {
+        //                     if (error.response && error.response.status === 400) {
+        //                         return Toast.show({ title: error.response.data, placement: 'bottom', status: 'error', w: 300 })
+        //                     } else {
+        //                         return Toast.show({ title: "Error", placement: 'bottom', status: 'error', w: 300 })
 
-                        }
-                    })
-                else {
-                    return Toast.show({ title: "Error", placement: 'bottom', status: 'error', w: 300 });
-                }
-            } else {
-                return Toast.show({ title: "Error", placement: 'bottom', status: 'error', w: 300 });
-            }
-        } catch ({ message }) {
-            alert(`Facebook Login Error: ${message}`);
-        }
+        //                     }
+        //                 })
+        //             else {
+        //                 return Toast.show({ title: "Error", placement: 'bottom', status: 'error', w: 300 });
+        //             }
+        //         } else {
+        //             return Toast.show({ title: "Error", placement: 'bottom', status: 'error', w: 300 });
+        //         }
+        //     } catch ({ message }) {
+        //         alert(`Facebook Login Error: ${message}`);
+        //     }
     }
 
     const goForgotPass = () => {
@@ -237,7 +235,7 @@ const LogInScreen = ({ navigation }) => {
                                     value="test"
                                     accessibilityLabel="This is a dummy checkbox"
                                     defaultIsChecked
-                                    colorScheme={COLOR.white}
+                                    colorScheme="info"
                                     icon={<Icon as={<Ionicons name="checkmark-sharp" color={COLOR.inIconColor} />} color={COLOR.inIconColor} />}
                                     style={{
                                         width: 15,

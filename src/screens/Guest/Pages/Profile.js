@@ -6,7 +6,7 @@ import { LinearGradient } from 'expo-linear-gradient'
 
 import { useSelector } from 'react-redux'
 
-import * as ImagePicker from 'expo-image-picker';
+// import * as ImagePicker from 'expo-image-picker';
 
 
 import { COLOR, Images, LAYOUT, ROOT } from "../../../constants";
@@ -65,31 +65,30 @@ const ProfilePage = ({ navigation }) => {
         }
     }
     const onUpload = async () => {
-        try {
-            let result = await ImagePicker.launchImageLibraryAsync
-                ({
-                    mediaTypes: ImagePicker.MediaTypeOptions.All,
-                    allowsEditing: false
-                })
-            if (!result.cancelled) {
-                setImageInfor({
-                    ...imageInfor,
-                    img: result,
-                    selected: true
-                });
-                console.log(user);
-                // let newuser = user;
-                // newuser.avatar = result;
+        // try {
+        //     let result = await ImagePicker.launchImageLibraryAsync
+        //         ({
+        //             mediaTypes: ImagePicker.MediaTypeOptions.All,
+        //             allowsEditing: false
+        //         })
+        //     if (!result.cancelled) {
+        //         setImageInfor({
+        //             ...imageInfor,
+        //             img: result,
+        //             selected: true
+        //         });
+        //         // let newuser = user;
+        //         // newuser.avatar = result;
 
-            }
-            else {
-                return Toast.show({ title: "Upload error!", placement: 'bottom', status: 'error', w: 300 })
-            }
-        }
-        catch (E) {
-            // console.log(E)
-            return Toast.show({ title: "Upload error!", placement: 'bottom', status: 'error', w: 300 })
-        }
+        //     }
+        //     else {
+        //         return Toast.show({ title: "Upload error!", placement: 'bottom', status: 'error', w: 300 })
+        //     }
+        // }
+        // catch (E) {
+        //     // console.log(E)
+        //     return Toast.show({ title: "Upload error!", placement: 'bottom', status: 'error', w: 300 })
+        // }
     }
 
 

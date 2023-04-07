@@ -7,11 +7,11 @@ const initialState = {
   user: null,
   address: null,
   car: null,
+  book: null,
   token: null,
 }
 
 export default function reducer(state = initialState, action) {
-  console.log(action)
   return produce(state, (draft) => {
     switch (action.type) {
       case 'SET_USERINFO':
@@ -19,6 +19,9 @@ export default function reducer(state = initialState, action) {
         return
       case 'SET_CARINFO':
         draft.car = action.payload.car
+        return
+      case 'SET_BOOKINFO':
+        draft.book = action.payload.book
         return
       case 'REGISTER_SERVICE': {
         return {

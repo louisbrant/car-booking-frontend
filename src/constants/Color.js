@@ -35,13 +35,13 @@ export const COLOR = {
 	chatCover: '#4752a8',
 	chatColor: ['#dc5931', '#6931dc', '#31b6dc', '#31dc9a', '#dc31da', '#3179dc'],
 
-	inpBorderColor: "#DADADA",
+	inpBorderColor: "#dadada",
 	inPlaceholder: '#B1A9A9',
 	inIconColor: '#130F26',
 	searchIconColor: '#C6C6C6',
 
 	sliderTrackerColor: '#185BDE',
-	sliderHiddenColor: '#DADADA',
+	sliderHiddenColor: '#dadada',
 
 	smBoxColor: 'rgba(255, 255, 255, 0.5)',
 	smBoxBoderColor: '#EBEBEB',

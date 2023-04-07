@@ -20,7 +20,6 @@ const EditProfilePage = ({ navigation }) => {
 
     const [secondname, setSecondName] = useState(user.username.toString().split(" ")[1] != undefined && user.username.toString().split(" ")[1] != "" ? user.username.split(" ")[1] : "");
 
-    console.log(user);
     const onShowProfile = () => {
         navigation.navigate("PersonalScreen")
     }

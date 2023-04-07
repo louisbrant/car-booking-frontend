@@ -3,13 +3,9 @@ import { COLOR, Images, LAYOUT, ROOT } from "../../../constants";
 import { ScrollView, TouchableOpacity, Dimensions } from "react-native";
 import { Image, Text, Box, Stack, HStack, Button, View, Icon, Avatar, VStack, Input, AspectRatio, Center, Actionsheet, Menu, Pressable, useToast, Checkbox, Radio } from "native-base";
 import Slider from 'rn-range-slider';
-import SwipePicker from 'react-native-swipe-picker';
-// import WheelPickerExpo from 'react-native-wheel-picker-expo'
+// import SwipePicker from 'react-native-swipe-picker';
 import { MaterialCommunityIcons, AntDesign, EvilIcons, Entypo, Feather, FontAwesome } from "@expo/vector-icons"
 
-// import CalendarPicker from 'react-native-calendar-picker';
-// import { Calendar, CalendarList } from "react-native-calendars";
-// import DateTimePicker from '@react-native-community/datetimepicker';
 import CalendarList from 'react-native-calendar-list';
 
 import { useDispatch, useSelector } from 'react-redux'
@@ -29,11 +25,6 @@ import { Footers, Headers, Loading, MainCurrency, MarketsItem } from '../../../c
 import { backgroundColor } from 'styled-system';
 
 
-const markStyle = { dayTextStyle: { color: 'white', fontSize: 14, fontWeight: 'bold' }, dayBackgroundColor: '#08a' };
-
-const odmeteritems = ['Select', '10 - 20k miles', '20 - 30k miles', '30 - 40k miles', '40 - 50k miles', '50 - 60k miles', '60 - 70k miles', '70 - 80k miles', '80 - 90k miles', '90 - 100k miles'];
-const transmissionitems = ['Select', 'Manual', 'Automatic ', 'Continuously variable', 'Semi-automatic and dual-clutch']
-const trimitems = ['Select', 'AMG E 43 4MATIC', 'AMG E 63 4MATIC', 'E 300 AMG Line'];
 
 // let PickerItem = Picker.Item;
 
@@ -93,11 +84,10 @@ const SelectCarStylePage = ({ navigation }) => {
     }
 
     const onClose = () => {
-        return navigation.navigate("CarHomeScreen");
+        return navigation.navigate("FinalizeCarPageScreen");
     }
 
     useEffect(() => {
-        console.log(car);
         if (car?.address != "" && car?.barcode != undefined && car?.barcode != "" && car?.carname != "" && car?.odmeter != "" && car?.transmission != "" && car?.trim != "") {
             setNextOrSave('Confirm and Pay')
         }
@@ -173,7 +163,7 @@ const SelectCarStylePage = ({ navigation }) => {
                             accessibilityLabel="favorite number" value={carstyle} onChange={nextValue => {
                                 setCarStyle(nextValue)
                             }}>
-                            <Radio value="1" aria-label={false} my={1} colorScheme="blue" style={{
+                            <Radio value={1} aria-label={false} my={1} colorScheme="blue" style={{
                                 borderColor: COLOR.IBase
                             }}>
                                 <Text></Text>
@@ -197,7 +187,7 @@ const SelectCarStylePage = ({ navigation }) => {
                             accessibilityLabel="favorite number" value={carstyle} onChange={nextValue => {
                                 setCarStyle(nextValue)
                             }}>
-                            <Radio value="2" aria-label={false} my={1} colorScheme="blue" style={{
+                            <Radio value={2} aria-label={false} my={1} colorScheme="blue" style={{
                                 borderColor: COLOR.IBase
                             }}>
                                 <Text></Text>

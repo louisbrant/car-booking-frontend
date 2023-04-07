@@ -63,13 +63,24 @@ class ApiService {
     return axios.post(ROOT.ResetPassword, ...args)
   }
 
-  UpdateUserInfo(...args) {
-    return axios.post(ROOT.UpdateUserInfo, ...args)
+  UpdateUserInfor(...args) {
+    return axios.post(ROOT.UpdateUserInfor, ...args)
   }
 
-  GetUserInfo(args) {
-    return axios.get(`${ROOT.userInfo}${args}`)
+  GetUserInfor(...args) {
+    return axios.post(ROOT.GetUserInfor, ...args)
   }
+
+  RentCar(...args) {
+    return axios.post(ROOT.RentCar, ...args)
+  }
+
+  AddCard(...args) {
+    return axios.post(ROOT.AddCard, ...args)
+  }
+
+
+
 
   EmailCheck(...args) {
     return axios.post(ROOT.EmailCheck, ...args)
@@ -188,6 +199,9 @@ class ApiService {
   }
   GetMyCars(...args) {
     return axios.post(ROOT.GetMyCars, ...args)
+  }
+  AddCarImage(...args) {
+    return axios.post(ROOT.AddCarImage, ...args)
   }
   DeleteMyCar(...args) {
     return axios.post(ROOT.DeleteMyCar, ...args)

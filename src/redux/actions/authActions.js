@@ -16,6 +16,13 @@ export const setCarInfo = (car) => {
   }
 }
 
+export const setBookInfo = (book) => {
+  return {
+    type: 'SET_BOOKINFO',
+    payload: { book },
+  }
+}
+
 export const register_service_store = (data) => {
   return {
     type: 'REGISTER_SERVICE',

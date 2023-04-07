@@ -89,10 +89,10 @@ const HomePage = ({ navigation }) => {
                                         // position: 'absolute',
                                         zIndex: 0
                                     }}
-                                    loop={true}
-                                    autoplayDirection={true}
+                                    loop={false}
+                                    autoplayDirection={false}
                                     showsButtons={false}
-                                    autoplay={true}
+                                    autoplay={false}
                                     autoplayTimeout={3}
                                     showsPagination={false}
                                     dot={
@@ -128,7 +128,6 @@ const HomePage = ({ navigation }) => {
                                 >
                                     {
                                         Images.HomeSliders.map((item, i) => {
-                                            console.log(i, item)
                                             return (
                                                 <View
                                                     key={i}
@@ -188,7 +187,7 @@ const HomePage = ({ navigation }) => {
                                             fontSize="24"
                                             textAlign="center"
                                         >
-                                            Find your Driver
+                                            For the traveling heart
                                         </Text>
                                     </Box>
                                     <Box

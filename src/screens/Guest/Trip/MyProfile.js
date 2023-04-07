@@ -35,7 +35,6 @@ const MyProfilePage = ({ navigation }) => {
     // console.log(imageInfor, user.avatar, Images.Profile8);
 
     const onUpload = async () => {
-        console.log("SSSS");
         try {
             let result = await ImagePicker.launchImageLibraryAsync
                 ({
@@ -44,14 +43,12 @@ const MyProfilePage = ({ navigation }) => {
                 })
             let newuser = user;
             newuser.avatar = result;
-            console.log(result, "DDD");
             if (!result.cancelled) {
                 setImageInfor({
                     ...imageInfor,
                     img: result,
                     selected: true
                 });
-                console.log(newuser);
                 dispatch(setUserInfo(newuser))
             }
             else {

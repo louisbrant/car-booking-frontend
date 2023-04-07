@@ -3,12 +3,14 @@ import { Image, ScrollView, TouchableOpacity, Dimensions, StatusBar, Pressable, 
 import { Text, Box, Stack, HStack, Button, View, Icon, Avatar, VStack, Input, AspectRatio, Center, Actionsheet, useColorModeValue, Modal, useToast } from "native-base";
 import { MaterialCommunityIcons, MaterialIcons, AntDesign, EvilIcons, Entypo, Ionicons, FontAwesome, SimpleLineIcons } from "@expo/vector-icons"
 import { Footers, Headers, Loading, MainCurrency, MarketsItem } from '../../../components'
-import { COLOR, Images, LAYOUT, ROOT } from "../../../constants";
+import { COLOR, Images, LAYOUT, ROOT, CarStyle } from "../../../constants";
 
 import { BottomTab } from '../../../components';
 import { useApi } from '../../../redux/services'
 import { useSelector } from 'react-redux'
 import { borderRadius, height } from 'styled-system';
+
+const transmissionitems = CarStyle.transmissionitems;
 
 const AllCarsPage = ({ navigation }) => {
     const { user } = useSelector((store) => store.auth)
@@ -35,10 +37,9 @@ const AllCarsPage = ({ navigation }) => {
     }
 
     const onDeleteCar = (_id) => {
-        console.log("_id=========>", _id);
+        setModalVisible(false);
+        setLoading(true);
         Api.DeleteMyCar({ _id }).then(({ data }) => {
-            setModalVisible(false);
-            console.log("data==========>", data);
             if (data.status) {
                 setReload(!reload);
                 return Toast.show({ title: "Delete Car!", placement: 'bottom', status: 'error', w: 300 });
@@ -47,7 +48,6 @@ const AllCarsPage = ({ navigation }) => {
                 return Toast.show({ title: data.message, placement: 'bottom', status: 'error', w: 300 });
             }
         }).catch(error => {
-            setModalVisible(false);
             if (error.response && error.response.status === 400) {
                 return Toast.show({ title: error.response.data, placement: 'bottom', status: 'error', w: 300 })
             } else {
@@ -58,9 +58,7 @@ const AllCarsPage = ({ navigation }) => {
 
     useEffect(() => {
         setLoading(true);
-        console.log(user);
         Api.GetMyCars({ email: user.email }).then(({ data }) => {
-            console.log("data=>", data)
             if (data.status) {
                 data = data.data;
                 let newcars = [];
@@ -69,7 +67,6 @@ const AllCarsPage = ({ navigation }) => {
                     for (let j = 0; j < data[i]["review"].length; j++) {
                         stars += data[i]["review"][j]["star"];
                     }
-                    console.log(stars, "-----", stars / Number(data[i]["review"].length));
                     const newcar = {
                         _id: data[i]._id,
                         name: data[i].name,
@@ -224,7 +221,7 @@ const AllCarsPage = ({ navigation }) => {
                                                             fontWeight="medium"
                                                             fontSize="xs"
                                                         >
-                                                            {`${item.automatic}`}
+                                                            {transmissionitems[item.automatic]}
                                                         </Text>
                                                     </Stack>
                                                     <HStack space={2} style={{ alignItems: 'center' }}>

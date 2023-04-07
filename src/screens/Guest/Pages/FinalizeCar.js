@@ -1,12 +1,10 @@
 import React, { useCallback, useState, useEffect } from 'react';
-import { COLOR, Images, LAYOUT, ROOT } from "../../../constants";
+import { COLOR, Images, LAYOUT, ROOT, CarStyle } from "../../../constants";
 import { ScrollView, TouchableOpacity, Dimensions } from "react-native";
 import { Image, Text, Box, Stack, HStack, Button, View, Icon, Avatar, VStack, Input, AspectRatio, Center, Actionsheet, Menu, Pressable, useToast, Checkbox } from "native-base";
-import Slider from 'rn-range-slider';
 import SwipePicker from 'react-native-swipe-picker';
 import { MaterialCommunityIcons, AntDesign, EvilIcons, Entypo, Feather, FontAwesome } from "@expo/vector-icons"
 
-import CalendarList from 'react-native-calendar-list';
 
 import { useDispatch, useSelector } from 'react-redux'
 import { BottomTab } from '../../../components';
@@ -26,10 +24,15 @@ import { Footers, Headers, Loading, MainCurrency, MarketsItem } from '../../../c
 
 const markStyle = { dayTextStyle: { color: 'white', fontSize: 14, fontWeight: 'bold' }, dayBackgroundColor: '#08a' };
 
-const odmeteritems = ['Select', '10 - 20k miles', '20 - 30k miles', '30 - 40k miles', '40 - 50k miles', '50 - 60k miles', '60 - 70k miles', '70 - 80k miles', '80 - 90k miles', '90 - 100k miles'];
-const transmissionitems = ['Select', 'Manual', 'Automatic ', 'Continuously variable', 'Semi-automatic and dual-clutch']
-const trimitems = ['Select', 'AMG E 43 4MATIC', 'AMG E 63 4MATIC', 'E 300 AMG Line'];
-const carstyleitems = ['Select', '4dr Sedan AWD(3.0L 6cyl Turbo 9A)', '4dr Sedan AWD(3.0L 6cyl Turbo 9A)'];
+const odmeteritems = CarStyle.odmeteritems;
+const transmissionitems = CarStyle.transmissionitems;
+const carstyleitems = CarStyle.carstyleitems;
+const trimitems = CarStyle.trimitems;
+
+
+const trimlist = CarStyle.trimlist;
+const transmissionlist = CarStyle.transmissionlist;
+const odmeterlist = CarStyle.odmeterlist;
 
 // let PickerItem = Picker.Item;
 
@@ -50,89 +53,22 @@ const FinalizeCarPage = ({ navigation }) => {
     const [address, setAddress] = useState(car.address);
     const [carname, setCarName] = useState(car.carname == undefined ? "" : car.carname);
     const [carnamesave, setCarNameSave] = useState('Save');
-    const [odmeter, setOdmeter] = useState(car.odmeter == undefined ? 0 : car.odmeter);
-    const [transmission, setTransmission] = useState(car.transmission == undefined ? 0 : car.transmission);
-    const [trim, setTrim] = useState(car.trim == undefined ? 0 : car.trim);
-    const [style, setStyle] = useState(car.style == undefined ? 0 : car.style);
+
+    // const [odmeter, setOdmeter] = useState(car.odmeter == undefined ? 0 : car.odmeter);
+    // const [transmission, setTransmission] = useState(car.transmission == undefined ? 0 : car.transmission);
+    // const [trim, setTrim] = useState(car.trim == undefined ? 0 : car.trim);
+    // const [style, setStyle] = useState(car.style == undefined ? 0 : car.style);
+
+    const [odmeter, setOdmeter] = useState(car.odmeter == undefined ? 1 : car.odmeter);
+    const [transmission, setTransmission] = useState(car.transmission == undefined ? 1 : car.transmission);
+    const [trim, setTrim] = useState(car.trim == undefined ? 1 : car.trim);
+    const [style, setStyle] = useState(car.style == undefined ? 1 : car.style);
+
     const [ipsum, setIpsum] = useState(car.ipsum == undefined ? 'Select' : car.ipsum);
     const [branced, setBranced] = useState(car.ipsum == undefined ? false : car.ipsum);
 
     const [showpicker, setShowPicker] = useState(false);
     const [currentselpicker, setCurrentSelPicker] = useState(0);
-
-    const trimlist = [
-        {
-            value: 1,
-            label: 'AMG E 43 4MATIC'
-        },
-        {
-            value: 2,
-            label: 'AMG E 63 4MATIC'
-        },
-        {
-            value: 3,
-            label: 'E 300 AMG Line'
-        }
-    ];
-
-    const transmissionlist = [
-        {
-            value: 1,
-            label: 'Manual'
-        },
-        {
-            value: 2,
-            label: 'Automatic '
-        },
-        {
-            value: 3,
-            label: 'Continuously variable'
-        },
-        {
-            value: 4,
-            label: 'Semi-automatic and dual-clutch'
-        }
-    ];
-
-
-    const odmeterlist = [
-        {
-            value: 1,
-            label: '10 - 20k miles'
-        },
-        {
-            value: 2,
-            label: '20 - 30k miles'
-        },
-        {
-            value: 3,
-            label: '30 - 40k miles'
-        },
-        {
-            value: 4,
-            label: '40 - 50k miles'
-        },
-        {
-            value: 5,
-            label: '50 - 60k miles'
-        },
-        {
-            value: 6,
-            label: '60 - 70k miles'
-        },
-        {
-            value: 7,
-            label: '70 - 80k miles'
-        },
-        {
-            value: 8,
-            label: '80 - 90k miles'
-        },
-        {
-            value: 9,
-            label: '90 - 100k miles'
-        }
-    ];
 
     const [showpickeritem, setShowPickerItem] = useState(odmeterlist);
 
@@ -150,8 +86,6 @@ const FinalizeCarPage = ({ navigation }) => {
     }
 
     const onFinalizeCarNext = () => {
-        console.log("odmeter", odmeter);
-        console.log("nextorsave=>", nextorsave, showpicker);
         if (nextorsave == 'Save') {
             switch (showpicker) {
                 case 'odometer': setOdmeter(currentselpicker); break;
@@ -163,9 +97,7 @@ const FinalizeCarPage = ({ navigation }) => {
             setShowPicker(false);
         }
         else {
-            console.log("odmeteraaa", odmeter);
-
-            if (!address || !carname)
+            if (!address || !carname || !odmeter || !transmission || !trim || !style)
                 return Toast.show({ title: "Enter the All Infor", placement: 'top', status: 'success', w: 300 })
             else {
                 let newcar = {
@@ -179,7 +111,6 @@ const FinalizeCarPage = ({ navigation }) => {
                     ipsum: ipsum,
                     branced: branced,
                 };
-                console.log(newcar);
                 dispatch(setCarInfo(newcar));
                 return navigation.navigate("AddCarScreen");
             }
@@ -210,7 +141,6 @@ const FinalizeCarPage = ({ navigation }) => {
 
 
     const onSelSwipePicker = ({ index, item }) => {
-        console.log(item);
         setCurrentSelPicker(Number(item?.value));
     }
 
@@ -226,12 +156,13 @@ const FinalizeCarPage = ({ navigation }) => {
             ipsum: ipsum,
             branced: branced,
         };
-        console.log("newcar==>", newcar);
         dispatch(setCarInfo(newcar));
         return navigation.navigate("SelectCarStylePageScreen");
     }
 
     useEffect(() => {
+        if (car.style != undefined)
+            setStyle(car.style);
         setLoading(false);
     }, [])
     return (
@@ -653,7 +584,6 @@ const FinalizeCarPage = ({ navigation }) => {
                 </HStack>
                 {(() => {
                     if (showpicker) {
-                        console.log('showpicker=>', showpicker);
                         return (
                             <HStack justifyContent="space-between"
                                 bottom={-40}

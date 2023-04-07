@@ -6,9 +6,22 @@ import { useSelector } from 'react-redux'
 import { useApi } from '../../../redux/services'
 
 
-import * as ImagePicker from 'expo-image-picker';
+// import * as ImagePicker from 'expo-image-picker';
+// import { showImagePicker } from 'react-native-image-picker';
+
 
 import { COLOR, Images, LAYOUT, ROOT } from "../../../constants";
+
+
+const options = {
+    title: 'Select Avatar',
+    customButtons: [{ name: 'fb', title: 'Choose Photo from Facebook' }],
+    storageOptions: {
+        skipBackup: false,
+        path: 'images',
+    },
+};
+
 
 const AddCarPage = ({ navigation }) => {
 
@@ -33,53 +46,132 @@ const AddCarPage = ({ navigation }) => {
         return array;
     }
 
-    const onStartUpload = () => {
+    const onStartUpload = (body = { email: "izra" }) => {
         if (imageInfor.selected) {
-            const xhr = new XMLHttpRequest();
-            const formData = new FormData();
-            if (typeof (imageInfor.img) === 'object') {
-                const photos = getImages(imageInfor.img)
-                for (let i = 0; i < photos.length; i++) {
-                    formData.append("photo", photos[i]);
-                }
-            }
-            formData.append("data", JSON.stringify({ email: user.email }));
-            xhr.open("POST", `${ROOT.BACKEND_URL}cars/addCarImage`);
-            xhr.setRequestHeader("Content-Type", "multipart/form-data");
-            xhr.onload = function () {
-                if (xhr.status === 200) {
-                    return navigation.navigate("ConfigurationScreen");
-                }
-            }
 
-            xhr.send(formData);
+            ROOT.Socket.emit("fileupload", imageInfor.img)
+
+
+            var formData = new FormData();
+
+            formData.append('photo', imageInfor.img);
+            console.log(formData);
+
+            formData.append("data", JSON.stringify({ email: "izra" }));
+
+
+            Api.AddCarImage({ formData }).then(({ data }) => {
+                console.log(data);
+
+                // if (data.status) {
+                //     setReload(!reload);
+                //     return Toast.show({ title: "Delete Car!", placement: 'bottom', status: 'error', w: 300 });
+                // }
+                // else {
+                //     return Toast.show({ title: data.message, placement: 'bottom', status: 'error', w: 300 });
+                // }
+            }).catch(error => {
+                console.log("error=>", error)
+                // if (error.response && error.response.status === 400) {
+                //     return Toast.show({ title: error.response.data, placement: 'bottom', status: 'error', wx: 300 })
+                // } else {
+                //     return Toast.show({ title: "Error!", placement: 'bottom', status: 'error', w: 300 })
+                // }
+            })
+
+
+
+            // Object.keys(body).forEach((key) => {
+            //     formData.append(key, body[key]);
+            // });
+
+            // const xhr = new XMLHttpRequest();
+            // var formData = new FormData();
+            // if (typeof (imageInfor.img) === 'object') {
+            //     const photos = getImages(imageInfor.img)
+            //     for (let i = 0; i < photos.length; i++) {
+            //         console.log(i, photos[i]);
+            //         formData.append("photo", photos[i]);
+            //     }
+            // }
+            // console.log("formData=>", formData)
+
+            // xhr.open("POST", `${ROOT.BACKEND_URL}cars/addCarImage`);
+            // console.log("xhr=>", xhr)
+            // xhr.setRequestHeader("Content-Type", "multipart/form-data");
+            // xhr.onload = function () {
+            //     Toast.show({ title: 'User tapped custom button: ' + xhr + "&&&&&" + xhr.status, placement: 'bottom', status: 'error', w: 300 })
+            //     if (xhr.status === 200) {
+            //         return navigation.navigate("ConfigurationScreen");
+            //     }
+            // }
+            // xhr.onload()
+            // Toast.show({ title: 'User tapped custom buttons====: ' + formData, placement: 'bottom', status: 'error', w: 300 })
+
+            // xhr.send(formData);
         }
         else {
             return Toast.show({ title: "Select Car Image!", placement: 'bottom', status: 'error', w: 300 })
         }
     }
     const onUpload = async () => {
-        try {
-            let result = await ImagePicker.launchImageLibraryAsync
-                ({
-                    mediaTypes: ImagePicker.MediaTypeOptions.All,
-                    allowsEditing: false
-                })
-            if (!result.cancelled) {
-                setImageInfor({
-                    ...imageInfor,
-                    img: result,
-                    selected: true
-                });
-            }
-            else {
-                return Toast.show({ title: "Upload error!", placement: 'bottom', status: 'error', w: 300 })
-            }
-        }
-        catch (E) {
-            // console.log(E)
-            return Toast.show({ title: "Upload error!", placement: 'bottom', status: 'error', w: 300 })
-        }
+
+        // ImagePicker.launchImageLibrary();
+        // console.log("ImagePicker.launchImageLibrary", result)
+        // launchImageLibrary({ noData: true }, (response) => {
+        //     console.log(response)
+        //     if (response) {
+        //         setImageInfor({
+        //             ...imageInfor,
+        //             img: response,
+        //             selected: true
+        //         });
+        //     }
+        // });
+
+        // console.log("ImagePicker=>", showImagePicker)
+        // showImagePicker({ noData: true }, (response) => {
+        //     console.log('Response = ', response);
+
+        //     if (response.didCancel) {
+        //         console.log('User cancelled image picker');
+        //         return Toast.show({ title: "User cancelled image picker!", placement: 'bottom', status: 'error', w: 300 })
+        //     } else if (response.error) {
+        //         return Toast.show({ title: "Upload error!", placement: 'bottom', status: 'error', w: 300 })
+        //     } else if (response.customButton) {
+        //         console.log('User tapped custom button: ', response.customButton);
+        //         return Toast.show({ title: 'User tapped custom button: ' + response.customButton, placement: 'bottom', status: 'error', w: 300 })
+        //     } else {
+        //         setImageInfor({
+        //             ...imageInfor,
+        //             img: response,
+        //             selected: true
+        //         });
+        //     }
+        // });
+
+
+        // try {
+        //     let result = await ImagePicker.launchImageLibraryAsync
+        //         ({
+        //             mediaTypes: ImagePicker.MediaTypeOptions.All,
+        //             allowsEditing: false
+        //         })
+        //     if (!result.cancelled) {
+        //         setImageInfor({
+        //             ...imageInfor,
+        //             img: result,
+        //             selected: true
+        //         });
+        //     }
+        //     else {
+        //         return Toast.show({ title: "Upload error!", placement: 'bottom', status: 'error', w: 300 })
+        //     }
+        // }
+        // catch (E) {
+        //     // console.log(E)
+        //     return Toast.show({ title: "Upload error!", placement: 'bottom', status: 'error', w: 300 })
+        // }
     }
 
     return (

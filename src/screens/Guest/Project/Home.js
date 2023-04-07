@@ -26,7 +26,6 @@ const ProjectHomePage = ({ navigation }) => {
     useEffect(() => {
         setLoading(true);
         Api.GetAllCars().then(({ data }) => {
-            console.log("data=>", data)
             if (data.status) {
                 data = data.data;
                 let newcars = [];
@@ -35,8 +34,8 @@ const ProjectHomePage = ({ navigation }) => {
                     for (let j = 0; j < data[i]["review"].length; j++) {
                         stars += data[i]["review"][j]["star"];
                     }
-                    console.log(stars, "-----", stars / Number(data[i]["review"].length));
                     const newcar = {
+                        _id: data[i]._id,
                         name: data[i].name,
                         img: ROOT.IMAGE_URL + "cars/" + data[i].img,
                         days: data[i].daysval,
@@ -44,7 +43,15 @@ const ProjectHomePage = ({ navigation }) => {
                         seats: data[i].seats,
                         doors: data[i].doors,
                         automatic: data[i].automatic,
-                        star: stars / Number(data[i]["review"].length)
+                        star: stars / Number(data[i]["review"].length),
+                        adddate: data[i].adddate,
+                        address: data[i].address,
+                        barcode: data[i].barcode,
+                        email: data[i].email,
+                        odmeter: data[i].odmeter,
+                        review: data[i].review,
+                        style: data[i].style,
+                        trim: data[i].trim,
                     }
                     newcars.push(newcar);
                 }

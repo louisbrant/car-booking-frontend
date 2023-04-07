@@ -1,18 +1,54 @@
 import React, { useCallback, useState } from 'react';
 import { ScrollView, TouchableOpacity, Dimensions } from "react-native";
-import { Image, Text, Box, Stack, HStack, Button, View, Icon, Avatar, VStack, Input, AspectRatio, Center, Actionsheet } from "native-base";
+import { Image, Text, Box, Stack, HStack, Button, View, Icon, Avatar, VStack, Input, AspectRatio, Center, Actionsheet, useToast } from "native-base";
 import { MaterialCommunityIcons, AntDesign, EvilIcons, Entypo, Ionicons, FontAwesome, FontAwesome5 } from "@expo/vector-icons"
 
-import { COLOR, Images, LAYOUT } from "../../../constants";
+import { COLOR, Images, LAYOUT, ROOT } from "../../../constants";
 
-import Swiper from 'react-native-swiper'
+import { useSelector } from 'react-redux'
+import { useApi } from '../../../redux/services'
+
+
 const { width } = Dimensions.get('window')
 
 
 const AddCardPage = ({ navigation }) => {
 
-    const onAddCard = () => {
+    const Toast = useToast()
+    const { user } = useSelector((store) => store.auth)
+    const Api = useApi()
 
+    const [name, setName] = useState('')
+    const [number, setNumber] = useState('')
+    const [expiry, setExpriy] = useState('')
+    const [cvv, setCvv] = useState('')
+
+
+    const onAddCard = () => {
+        const carddata = {
+            email: user?.email,
+            name: name,
+            number: number,
+            expiry: expiry,
+            cvv: cvv
+        };
+        Api.AddCard({ carddata }).then(({ data }) => {
+            console.log("Data", data)
+            if (data.status) {
+                Toast.show({ title: "Success Sign In!", placement: 'bottom', status: 'success', w: 300 })
+                navigation.navigate("CarHomeScreen");
+            }
+            else {
+                return Toast.show({ title: data.message, placement: 'bottom', status: 'error', w: 300 })
+            }
+        }).catch(error => {
+            if (error.response && error.response.status === 400) {
+                return Toast.show({ title: error.response.data, placement: 'bottom', status: 'error', w: 300 })
+            } else {
+                return Toast.show({ title: "Error", placement: 'bottom', status: 'error', w: 300 })
+
+            }
+        })
     }
 
     return (
@@ -86,7 +122,8 @@ const AddCardPage = ({ navigation }) => {
                             }
                             bg={COLOR.white}
                             pl={1.5}
-
+                            value={name}
+                            onChangeText={setName}
                             borderStyle="solid"
                             borderWidth={1}
                             borderColor={COLOR.inpBorderColor}
@@ -119,6 +156,8 @@ const AddCardPage = ({ navigation }) => {
                             bg={COLOR.white}
                             pl={1.5}
 
+                            value={number}
+                            onChangeText={setNumber}
                             borderStyle="solid"
                             borderWidth={1}
                             borderColor={COLOR.inpBorderColor}
@@ -152,6 +191,8 @@ const AddCardPage = ({ navigation }) => {
                                 bg={COLOR.white}
                                 pl={1.5}
 
+                                value={expiry}
+                                onChangeText={setExpriy}
                                 borderStyle="solid"
                                 borderWidth={1}
                                 borderColor={COLOR.inpBorderColor}
@@ -184,6 +225,8 @@ const AddCardPage = ({ navigation }) => {
                                 bg={COLOR.white}
                                 pl={1.5}
 
+                                value={cvv}
+                                onChangeText={setCvv}
                                 borderStyle="solid"
                                 borderWidth={1}
                                 borderColor={COLOR.inpBorderColor}
@@ -201,7 +244,7 @@ const AddCardPage = ({ navigation }) => {
 
             <Box position="absolute" bottom={35} w="full" px={5}>
 
-                <TouchableOpacity>
+                <TouchableOpacity onPress={onAddCard}>
                     <Box
                         style={{
                             width: '100%',

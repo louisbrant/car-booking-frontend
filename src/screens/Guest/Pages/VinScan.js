@@ -8,8 +8,7 @@ import { MaterialCommunityIcons, AntDesign, EvilIcons, Entypo, Feather, FontAwes
 import CalendarList from 'react-native-calendar-list';
 
 import { useDispatch, useSelector } from 'react-redux'
-// import { RNCamera } from 'react-native-camera';
-import { BarCodeScanner } from 'expo-barcode-scanner';
+import BarCodeScanner from 'expo-barcode-scanner';
 
 
 import Thumb from './../Slider/Thumb';
@@ -33,7 +32,6 @@ const VinScanPage = ({ navigation }) => {
     const dispatch = useDispatch()
     const { car } = useSelector((store) => store.auth);
     const [barcodeval, setBarCodeVal] = useState('')
-
     const [loading, setLoading] = useState(false);
 
     const goScreenDescription = () => {
@@ -45,28 +43,17 @@ const VinScanPage = ({ navigation }) => {
         return navigation.navigate("DescriptionScreenPageScreen");
     }
 
-    const [hasPermission, setHasPermission] = useState(null);
+    const [torchMode, setTorchMode] = useState('off');
+    const [cameraType, setCameraType] = useState('back');
     const [scanned, setScanned] = useState(false);
-    useEffect(() => {
-
-        const getBarCodeScannerPermissions = async () => {
-            const { status } = await BarCodeScanner.requestPermissionsAsync();
-            setHasPermission(status === 'granted');
-        };
-
-        getBarCodeScannerPermissions();
-    }, [])
     const handleBarCodeScanned = ({ type, data }) => {
+        console.log(data)
         setScanned(true);
         setBarCodeVal(data);
     };
+    useEffect(async () => {
 
-    if (hasPermission === null) {
-        return <Text>Requesting for camera permission</Text>;
-    }
-    if (hasPermission === false) {
-        return <Text>No access to camera</Text>;
-    }
+    }, [])
     return (
         <ImageBackground source={Vinbg} style={bgstyle} resizeMode="cover" >
             <Box style={{ width: '100%', height: "100%", backgroundColor: COLOR.Homebgcolor }}
@@ -149,9 +136,31 @@ const VinScanPage = ({ navigation }) => {
                     </Box>
                     <Box pt={230} px={4} >
                         <BarCodeScanner
-                            onBarCodeScanned={scanned ? undefined : handleBarCodeScanned}
+                            onBarCodeRead={handleBarCodeScanned}
                             style={StyleSheet.absoluteFillObject}
+                            torchMode={torchMode}
+                            cameraType={cameraType}
                         />
+                        {/* <RNCamera
+                            ref={ref => {
+                                setCamera(ref)
+                            }}
+                            defaultTouchToFocus
+                            flashMode={torchMode}
+                            mirrorImage={false}
+                            onBarCodeRead={handleBarCodeScanned}
+                            onFocusChanged={() => { }}
+                            onZoomChanged={() => { }}
+                            androidCameraPermissionOptions={{
+                                title: 'Permission to use camera',
+                                message: 'We need your permission to use your camera',
+                                buttonPositive: 'Ok',
+                                buttonNegative: 'Cancel',
+                            }}
+                            style={StyleSheet.absoluteFillObject}
+                            type={cameraType}
+                            captureAudio={false}
+                        /> */}
                         {scanned && <Button title={'Tap to Scan Again'} onPress={() => setScanned(false)} />}
                     </Box>
                 </Box>

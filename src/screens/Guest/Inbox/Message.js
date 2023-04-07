@@ -15,7 +15,7 @@ const { width } = Dimensions.get('window')
 const MessagePage = ({ navigation }) => {
 
     const onDetail = () => {
-        navigation.navigate("InboxDetailScreen");
+        navigation.navigate("ChartPageScreen");
     }
 
     return (

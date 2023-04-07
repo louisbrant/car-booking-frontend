@@ -90,7 +90,6 @@ const FirstPage = ({ navigation }) => {
         Api.GetAllCars().then(({ data }) => {
             if (data.status) {
                 data = data.data;
-                console.log("data=>", data)
                 let newcars = [];
                 for (let i = 0; i < data.length; i++) {
                     let stars = 0;
@@ -109,7 +108,6 @@ const FirstPage = ({ navigation }) => {
                     }
                     newcars.push(newcar);
                 }
-                console.log("data=>", newcars)
                 setAllCars(newcars);
                 setLoading(false);
             }

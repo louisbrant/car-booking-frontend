@@ -16,7 +16,7 @@ import { LinearGradient } from 'expo-linear-gradient'
 
 import { setUserInfo } from '../../../redux/actions/authActions';
 
-import * as ImagePicker from 'expo-image-picker';
+// import * as ImagePicker from 'expo-image-picker';
 
 const MyProfilePage = ({ navigation }) => {
 
@@ -35,33 +35,30 @@ const MyProfilePage = ({ navigation }) => {
     // console.log(imageInfor, user.avatar, Images.Profile8);
 
     const onUpload = async () => {
-        console.log("SSSS");
-        try {
-            let result = await ImagePicker.launchImageLibraryAsync
-                ({
-                    mediaTypes: ImagePicker.MediaTypeOptions.All,
-                    allowsEditing: false
-                })
-            let newuser = user;
-            newuser.avatar = result;
-            console.log(result, "DDD");
-            if (!result.cancelled) {
-                setImageInfor({
-                    ...imageInfor,
-                    img: result,
-                    selected: true
-                });
-                console.log(newuser);
-                dispatch(setUserInfo(newuser))
-            }
-            else {
-                return Toast.show({ title: "Upload error!", placement: 'bottom', status: 'error', w: 300 })
-            }
-        }
-        catch (E) {
-            console.log(E)
-            // return Toast.show({ title: "Upload errors!", placement: 'bottom', status: 'error', w: 300 })
-        }
+        // try {
+        //     let result = await ImagePicker.launchImageLibraryAsync
+        //         ({
+        //             mediaTypes: ImagePicker.MediaTypeOptions.All,
+        //             allowsEditing: false
+        //         })
+        //     let newuser = user;
+        //     newuser.avatar = result;
+        //     if (!result.cancelled) {
+        //         setImageInfor({
+        //             ...imageInfor,
+        //             img: result,
+        //             selected: true
+        //         });
+        //         dispatch(setUserInfo(newuser))
+        //     }
+        //     else {
+        //         return Toast.show({ title: "Upload error!", placement: 'bottom', status: 'error', w: 300 })
+        //     }
+        // }
+        // catch (E) {
+        //     console.log(E)
+        //     // return Toast.show({ title: "Upload errors!", placement: 'bottom', status: 'error', w: 300 })
+        // }
     }
 
     const onCheckAddCar = () => {
@@ -87,9 +84,10 @@ const MyProfilePage = ({ navigation }) => {
     const finalRef = React.useRef(null);
 
     useEffect(() => {
-        if (car.currentaddcar) {
-            setModalVisible(true);
-        }
+        if (car)
+            if (car.currentaddcar)
+                setModalVisible(true);
+
     }, [])
     return (
         <Box flex={1}>

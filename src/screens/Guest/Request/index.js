@@ -1,24 +1,41 @@
 import React, { useCallback, useState, useEffect } from 'react';
-import { ScrollView, TouchableOpacity, Dimensions, StatusBar, Pressable, Animated, SafeAreaView } from "react-native";
-import { Image, Text, Box, Stack, HStack, Button, View, Icon, Avatar, VStack, Input, AspectRatio, Center, Actionsheet, useColorModeValue, Select, Modal } from "native-base";
+import { ScrollView, TouchableOpacity, Dimensions, StatusBar, Pressable, Animated, SafeAreaView, StyleSheet } from "react-native";
+import { Image, Text, Box, Stack, HStack, Button, View, Icon, Avatar, VStack, Input, AspectRatio, Center, Actionsheet, useColorModeValue, Select, Modal, useToast } from "native-base";
 import { MaterialCommunityIcons, MaterialIcons, AntDesign, EvilIcons, Entypo, Ionicons, FontAwesome, Feather } from "@expo/vector-icons"
-import { useDispatch, useSelector } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux';
 
-import DatePicker from 'react-native-neat-date-picker'
+import MapView from "react-native-maps";
+
+import { Notification } from "react-native-in-app-message";
+
+
 import DatepickerRange from 'react-native-range-datepicker';
 
 import { TabView, SceneMap } from 'react-native-tab-view';
 
-import SwipePicker from 'react-native-swipe-picker';
+// import SwipePicker from 'react-native-swipe-picker';
 
-import { COLOR, Images, LAYOUT } from "../../../constants";
+import { COLOR, Images, LAYOUT, ROOT } from "../../../constants";
 
+import { setBookInfo } from '../../../redux/actions/authActions';
 
 const RequestBookPage = ({ navigation }) => {
 
     const { car } = useSelector((store) => store.auth);
-    const [currenttime, setCurrentTime] = useState((new Date().toDateString().toString()).replace(" ", ", ") + " 10:00 PM");
+    const dispatch = useDispatch();
+    const Toast = useToast();
 
+
+    let currentyear = new Date().getFullYear();
+    let currentdate = new Date().getDate();
+    let currentday = new Date().getDay() - 1;
+    let currentMon = new Date().getMonth(); - 1
+    let mon = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+    let day = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
+    const { width } = Dimensions.get('window')
+
+
+    const [currenttime, setCurrentTime] = useState((new Date().toDateString().toString()).replace(" ", ", ") + " 10:00 PM");
     const [modalVisible, setModalVisible] = useState(false);
     const initialRef = React.useRef(null);
     const finalRef = React.useRef(null);
@@ -27,11 +44,38 @@ const RequestBookPage = ({ navigation }) => {
     const [startcheckdate, setStartCheckDate] = useState((new Date().toDateString().toString()).replace(" ", ", ") + " 10:00 PM");
     const [endcheckdate, setEndCheckDate] = useState((new Date().toDateString().toString()).replace(" ", ", ") + " 10:00 PM");
 
+
+
+    const [showdays, setShowDays] = useState([]);
+    const [hours, setHours] = useState([]);
+    const [mins, setMins] = useState([]);
+
+    const [position, setPosition] = useState({
+        latitude: 37.78825,
+        longitude: -122.4324,
+        latitudeDelta: 0.0922,
+        longitudeDelta: 0.0421
+    });
+    const [mapaddress, setMapAddress] = useState("");
+    const [currentseldate, setCurrentSelDate] = useState("in");
+
+
+    const ms = [
+        {
+            value: 1,
+            label: 'AM'
+        },
+        {
+            value: 2,
+            label: 'PM'
+        }
+    ];
+
+
+
     const onPayRequest = async () => {
         navigation.navigate("RequestConfirmScreen");
     }
-
-
 
     const onSelectCheckDate = (start, end) => {
         setStartCheckDate((new Date(start).toDateString().toString()).replace(" ", ", ") + " 10:00 PM");
@@ -42,59 +86,82 @@ const RequestBookPage = ({ navigation }) => {
         setModalVisible(false);
     }
 
+    const showCheckPicker = (type) => {
+        setModalVisible(false);
+        setShowPicker(true);
+        setCurrentSelDate(type);;
+    }
+
     const onSelSwipePicker = ({ index, item }, type) => {
-        console.log(item, type);
+        if (currentseldate == "in") {
+            let checkdate = startcheckdate;
+            switch (type) {
+                case 'date': checkdate = checkdate.replace(checkdate.split(" ")[0] + " " + checkdate.split(" ")[1] + " " + checkdate.split(" ")[2], index.item.label); break;
+                case 'hour': checkdate = checkdate.replace(checkdate.split(" ")[4].split(":")[0] + ":", index.item.label + ":"); break;
+                case 'min': checkdate = checkdate.replace(":" + checkdate.split(" ")[4].split(":")[1], ":" + index.item.label); break;
+                case 'ms': checkdate = checkdate.replace(checkdate.split(" ")[5], index.item.label); break;
+            }
+            setStartCheckDate(checkdate);
+        }
+        else {
+            let checkdate = endcheckdate;
+            switch (type) {
+                case 'date': checkdate = checkdate.replace(checkdate.split(" ")[0] + " " + checkdate.split(" ")[1] + " " + checkdate.split(" ")[2], index.item.label); break;
+                case 'hour': checkdate = checkdate.replace(checkdate.split(" ")[4].split(":")[0] + ":", index.item.label + ":"); break;
+                case 'min': checkdate = checkdate.replace(":" + checkdate.split(" ")[4].split(":")[1], ":" + index.item.label); break;
+                case 'ms': checkdate = checkdate.replace(checkdate.split(" ")[5], index.item.label); break;
+            }
+            setEndCheckDate(checkdate);
+        }
+
     }
 
     const onCheckInOutSave = () => {
-        console.log("DDDDD");
         setShowPicker(false);
     }
 
-    const { width } = Dimensions.get('window')
+    const changePosition = (mappos) => {
+        setPosition({
+            latitude: mappos?.latitude,
+            longitude: mappos?.longitude,
+            latitudeDelta: mappos?.latitudeDelta,
+            longitudeDelta: mappos?.longitudeDelta
+        })
 
-    const [showdays, setShowDays] = useState([]);
-    const [hours, setHours] = useState([]);
-    const [mins, setMins] = useState([]);
-    const ms = [
-        {
-            value: 1,
-            label: 'AM'
-        },
-        {
-            value: 2,
-            label: 'PM'
-        },
-        {
-            value: 4,
-            label: 'FM'
-        },
-        {
-            value: 5,
-            label: 'LM'
-        },
-        {
-            value: 6,
-            label: 'SM'
-        },
-        {
-            value: 7,
-            label: 'CM'
+        let request = new XMLHttpRequest();
+        let method = 'GET';
+        // let url = 'https://maps.googleapis.com/maps/api/geocode/json?latlng=' + mappos?.latitude + ',' + mappos?.longitude + '&key=' + ROOT.mapApiKey;
+        // let async = true;
+        // request.open(method, url, async);
+        // request.onreadystatechange = function (datas) {
+        //     if (request.readyState == 4 && request.status == 200) {
+        //         let data = JSON.parse(request.responseText);
+        //         let address = data.results[0];
+        //         setMapAddress(address?.formatted_address);
+        //     }
+        // };
+        // request.send();
+    }
+
+    const requestBook = () => {
+        console.log(new Date(endcheckdate).valueOf(), "-", new Date(startcheckdate).valueOf(), "DDDDDD", endcheckdate, "AND", startcheckdate)
+        if ((new Date(endcheckdate).valueOf() - new Date(startcheckdate).valueOf()) <= 0)
+            return Toast.show({ title: "Please select correctly date.", placement: 'bottom', status: 'error', w: 300 });
+        else {
+            let bookinfor = {
+                mapaddress: mapaddress,
+                startcheckdate: startcheckdate,
+                endcheckdate: endcheckdate,
+            }
+            console.log(bookinfor);
+            dispatch(setBookInfo(bookinfor));
+            navigation.navigate("RequestDetailScreen");
         }
-    ];
+    }
 
-    let currentyear = new Date().getFullYear();
-    let currentdate = new Date().getDate();
-    let currentday = new Date().getDay() - 1;
-    let currentMon = new Date().getMonth(); - 1
-    let mon = ["Jan", "Feb", "Mar", "Apr", "May", "June", "July", "Aug", "Sep", "Oct", "Nov", "Dec"];
-    let day = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
-
+    // Notification.show();
 
     useEffect(() => {
-        console.log('car=>', car);
-
-
         let dates = [], newmins = [], newhours = [];
         for (let i = 0; i < 40; i++) {
             currentday++;
@@ -124,7 +191,7 @@ const RequestBookPage = ({ navigation }) => {
             if (currentMon == 12) {
                 currentyear++;
             }
-            let currentdayval = day[currentday] + " " + currentdate + " " + mon[currentMon];
+            let currentdayval = day[currentday] + ", " + mon[currentMon] + " " + currentdate;
             dates.push({
                 value: i,
                 label: currentdayval
@@ -150,7 +217,7 @@ const RequestBookPage = ({ navigation }) => {
         }
         setMins(newmins);
 
-        for (let i = 0; i < 24; i++) {
+        for (let i = 0; i < 13; i++) {
             let newhouritem = {
                 value: 0,
                 label: 0
@@ -174,7 +241,6 @@ const RequestBookPage = ({ navigation }) => {
 
             {(() => {
                 if (showpicker) {
-                    console.log('showpicker=>', showpicker);
                     return (
                         <HStack position="absolute" style={{
                             zIndex: 1,
@@ -183,7 +249,7 @@ const RequestBookPage = ({ navigation }) => {
                         >
                             <HStack justifyContent="space-between" mb={6}
                             >
-                                <SwipePicker
+                                {/* <SwipePicker
                                     items={showdays}
                                     onChange={(index, item) => onSelSwipePicker({ index, item }, "date")}
                                     initialSelectedIndex={0}
@@ -210,7 +276,7 @@ const RequestBookPage = ({ navigation }) => {
                                     onChange={(index, item) => onSelSwipePicker({ index, item }, "ms")}
                                     height={300}
                                     width={width / 5}
-                                />
+                                /> */}
                             </HStack>
                             <HStack bottom={3} position="absolute" >
                                 <Box px={3}>
@@ -241,6 +307,7 @@ const RequestBookPage = ({ navigation }) => {
                     )
                 }
             })()}
+
             <ScrollView contentContainerStyle={{ justifyContent: "space-around" }} showsVerticalScrollIndicator={false}>
                 <Box>
                     <Image source={{ uri: car.img }} h="250" resizeMode="cover" alt="image" />
@@ -249,11 +316,13 @@ const RequestBookPage = ({ navigation }) => {
 
                         <Stack pt={10} direction="row" alignItems="center">
                             <View style={{ flex: 1, flexDirection: 'row', alignItems: 'center', justifyContent: 'center' }}>
-                                <Text
-                                    color={COLOR.white}
-                                    fontWeight="semibold"
-                                    fontSize="md"
-                                >Request to Book</Text>
+                                <TouchableOpacity onPress={requestBook}>
+                                    <Text
+                                        color={COLOR.white}
+                                        fontWeight="semibold"
+                                        fontSize="md"
+                                    >Request to Book</Text>
+                                </TouchableOpacity>
                             </View>
                         </Stack>
 
@@ -272,7 +341,7 @@ const RequestBookPage = ({ navigation }) => {
                         }}
                     >
                         <HStack alignItems="center" justifyContent="space-between" >
-                            <TouchableOpacity onPress={() => setShowPicker(true)}>
+                            <TouchableOpacity onPress={() => showCheckPicker('in')}>
                                 <VStack space={1} >
                                     <Text color={COLOR.black} fontWeight="semibold" fontSize="xs">Check-in</Text>
                                     <Text color={COLOR.inPlaceholder} fontWeight="medium" fontSize="2xs">
@@ -280,10 +349,10 @@ const RequestBookPage = ({ navigation }) => {
                                     </Text>
                                 </VStack>
                             </TouchableOpacity>
-                            <TouchableOpacity onPress={() => setModalVisible(true)}>
+                            <TouchableOpacity onPress={() => { setShowPicker(false); setModalVisible(true); }}>
                                 <Icon color={COLOR.inIconColor} size="xs" as={<AntDesign name="right" />} />
                             </TouchableOpacity>
-                            <TouchableOpacity onPress={() => setShowPicker(true)}>
+                            <TouchableOpacity onPress={() => showCheckPicker('out')}>
                                 <VStack space={1} >
                                     <Text color={COLOR.black} fontWeight="semibold" fontSize="xs">Checkout</Text>
                                     <Text color={COLOR.inPlaceholder} fontWeight="medium" fontSize="2xs">
@@ -295,7 +364,7 @@ const RequestBookPage = ({ navigation }) => {
                     </Box>
 
                     <VStack my={2} space={2}>
-                        <HStack alignItems="center" space={2} onTouchStart={onPayRequest}>
+                        <HStack alignItems="center" space={2} >
                             <Icon color={COLOR.black} size="sm" as={<Ionicons name="ios-location-sharp" />} />
                             <Box py={2} borderStyle="solid" borderBottomWidth={1} borderColor={COLOR.inpBorderColor} flex={1}>
                                 <HStack alignItems="center" justifyContent="space-between">
@@ -350,7 +419,7 @@ const RequestBookPage = ({ navigation }) => {
                             <HStack alignItems="center" justifyContent="space-between">
                                 <VStack space={1}>
                                     <Text color={COLOR.inPlaceholder} fontWeight="medium" fontSize="2xs">Confirmation code</Text>
-                                    <Text fontWeight="semibold" fontSize="xs">QWERTY12345</Text>
+                                    <Text fontWeight="semibold" fontSize="xs">{car?.barcode}</Text>
                                 </VStack>
                             </HStack>
                         </Box>
@@ -412,30 +481,38 @@ const RequestBookPage = ({ navigation }) => {
                     <Box mt={3}>
                         <Text fontWeight="bold" fontSize="xs">Getting there</Text>
                         <Stack mt={5}>
-                            <Image source={Images.Map} h="185" resizeMode="cover" alt="image" />
+                            {/* <Image source={Images.Map} h="185" resizeMode="cover" alt="image" /> */}
+                            <MapView
+                                style={{ width: width - 40, height: 200 }}
+                                initialRegion={{
+                                    latitude: 37.78825,
+                                    longitude: -122.4324,
+                                    latitudeDelta: 0.0922,
+                                    longitudeDelta: 0.0421
+                                }}
+                                onRegionChangeComplete={changePosition}
+                            >
+                                <MapView.Marker
+                                    coordinate={{
+                                        latitude: position.latitude,
+                                        longitude: position.longitude,
+                                    }}
+                                    centerOffset={{ x: -18, y: -60 }}
+                                    anchor={{ x: 0.69, y: 1 }}
+                                />
+                            </MapView>
+
                         </Stack>
                     </Box>
 
 
-                    {/* <DatePicker
-                        isVisible={checkinout}
-                        mode={'range'}
-                        onCancel={onCheckInOutCancel}
-                        onConfirm={onCheckInOutConfirm}
-                        colorOptions={{
-                            headerColor: '#9DD9D2',
-                            backgroundColor: '#FFF8F0'
-                        }
-                        }
-                    /> */}
                     <Box mt={3}>
                         <VStack>
                             <Box py={2} borderStyle="solid" borderBottomWidth={1} borderColor={COLOR.inpBorderColor}>
                                 <HStack alignItems="center" justifyContent="space-between">
                                     <VStack space={1}>
                                         <Text color={COLOR.inPlaceholder} fontWeight="medium" fontSize="2xs">Address</Text>
-                                        <Text fontWeight="semibold" fontSize="xs">1234 Collins Avenue,</Text>
-                                        <Text fontWeight="semibold" fontSize="xs">Miami Beach, FL, 3345</Text>
+                                        <Text fontWeight="semibold" fontSize="xs">{mapaddress}</Text>
                                     </VStack>
                                 </HStack>
                             </Box>
@@ -470,7 +547,6 @@ const RequestBookPage = ({ navigation }) => {
                                     </Text>
                                 </VStack>
                             </Box>
-
                         </VStack>
                     </Box>
                 </Box>
@@ -534,6 +610,13 @@ const RequestBookPage = ({ navigation }) => {
                     </Modal.Content>
                 </Modal>
             </ScrollView>
+            <Notification duration={1000} text={'Hello world'} style=
+                {{
+                    marginTop: 30,
+                    borderRadius: 10,
+                    borderLeftWidth: 5,
+                    borderLeftColor: COLOR.IBase
+                }} onPress={Notification.hide} />
         </Box >
     )
 }

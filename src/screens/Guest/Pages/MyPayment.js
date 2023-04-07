@@ -11,9 +11,17 @@ const { width } = Dimensions.get('window')
 
 const MyPaymentPage = ({ navigation }) => {
 
+    const [currentcard, setCurrentCard] = useState("visa");
+
     const onAddCard = () => {
         navigation.navigate("AddCardScreen")
     }
+
+    const onTrippage = () => {
+        navigation.navigate("TripPageScreen")
+    }
+
+
 
     return (
         <Box
@@ -65,7 +73,7 @@ const MyPaymentPage = ({ navigation }) => {
             <Box w="full" px={5} py={3} pb={10}>
 
                 <VStack space={1}>
-                    <TouchableOpacity>
+                    <TouchableOpacity onPress={() => { setCurrentCard("visa") }}>
                         <Box
                             style={{
                                 borderStyle: 'solid',
@@ -82,12 +90,22 @@ const MyPaymentPage = ({ navigation }) => {
                                         <Text color={COLOR.inPlaceholder} fontWeight="medium" fontSize="xs">Ending with **** 7180</Text>
                                     </VStack>
                                 </HStack>
-                                <Icon color={COLOR.green} size="md" as={<AntDesign name="checkcircle" />} />
+                                {(() => {
+                                    if (currentcard == "visa")
+                                        return (
+                                            <Icon color={COLOR.green} size="md" as={<AntDesign name="checkcircle" />} />
+                                        )
+                                    else {
+                                        return (
+                                            <Icon color={'rgba(116, 116, 116, 0.2)'} size="md" as={<AntDesign name="checkcircle" />} />
+                                        )
+                                    }
+                                })()}
                             </HStack>
                         </Box>
                     </TouchableOpacity>
 
-                    <TouchableOpacity>
+                    <TouchableOpacity onPress={() => { setCurrentCard("maestro") }}>
                         <Box
                             style={{
                                 borderStyle: 'solid',
@@ -104,7 +122,17 @@ const MyPaymentPage = ({ navigation }) => {
                                         <Text color={COLOR.inPlaceholder} fontWeight="medium" fontSize="xs">Ending with **** 7180</Text>
                                     </VStack>
                                 </HStack>
-                                <Icon color={'rgba(116, 116, 116, 0.2)'} size="md" as={<AntDesign name="checkcircle" />} />
+                                {(() => {
+                                    if (currentcard == "maestro")
+                                        return (
+                                            <Icon color={COLOR.green} size="md" as={<AntDesign name="checkcircle" />} />
+                                        )
+                                    else {
+                                        return (
+                                            <Icon color={'rgba(116, 116, 116, 0.2)'} size="md" as={<AntDesign name="checkcircle" />} />
+                                        )
+                                    }
+                                })()}
                             </HStack>
                         </Box>
                     </TouchableOpacity>
@@ -123,7 +151,7 @@ const MyPaymentPage = ({ navigation }) => {
 
             <Box position="absolute" bottom={35} w="full" px={5}>
 
-                <TouchableOpacity>
+                <TouchableOpacity onPress={onTrippage}>
                     <Box
                         style={{
                             width: '100%',

@@ -35,7 +35,6 @@ const SendCodePage = ({ navigation }) => {
 
     const onSendEmail = () => {
         Api.SendCode({ email: user.email, type: 'email' }).then(({ data }) => {
-            console.log(data);
             if (data.status) {
                 Toast.show({ title: "Send Code in Email!", placement: 'top', status: 'success', w: 300 });
                 navigation.navigate("EnterOTPScreen");
@@ -55,7 +54,6 @@ const SendCodePage = ({ navigation }) => {
 
     const onTextCodeSubmit = () => {
         Api.SendCode({ email: user.email, type: "phone" }).then(({ data }) => {
-            console.log(data);
             if (data.status) {
                 Toast.show({ title: "Send Code in your phone!", placement: 'top', status: 'success', w: 300 })
                 return navigation.navigate("EnterOTPScreen");

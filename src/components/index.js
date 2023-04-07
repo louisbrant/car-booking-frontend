@@ -27,7 +27,6 @@ import { MaterialCommunityIcons, AntDesign, EvilIcons, Entypo, Feather, FontAwes
 
 
 import bottomTabImage from '../assets/bottomTabImage.png';
-import { color } from "react-native-reanimated"
 import { width } from "styled-system"
 
 const screenWidth = Dimensions.get('window').width;
