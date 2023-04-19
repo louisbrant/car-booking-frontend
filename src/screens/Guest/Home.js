@@ -51,7 +51,7 @@ const HomePage = ({ navigation }) => {
     useEffect(() => {
         console.log(user);
         if (user?.roles) {
-            navigation.navigate("CarHomeScreen");
+            // navigation.navigate("CarHomeScreen");
         }
     }, [navigation])
 
