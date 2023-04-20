@@ -1,6 +1,7 @@
 import React, { useState } from 'react'
 import { LogBox, StatusBar, Platform } from 'react-native'
 import { Provider } from 'react-redux'
+import { NavigationContainer } from "@react-navigation/native";
 import { PersistGate } from 'redux-persist/integration/react'
 import Navigation from './src/navigation'
 import { COLOR } from './src/constants'
@@ -74,12 +75,12 @@ const App = () => {
     })
     return (
       <NativeBaseProvider config={config} theme={theme}>
-        <Provider store={store}>
-          <PersistGate persistor={persistor} loading={null}>
-            {Platform.OS === 'ios' && <StatusBar barStyle="default" />}
+        <NavigationContainer>
+          <Provider store={store}>
+            <StatusBar barStyle="default" />
             <Navigation />
-          </PersistGate>
-        </Provider>
+          </Provider>
+        </NavigationContainer>
       </NativeBaseProvider>
     )
   }
