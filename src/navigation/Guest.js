@@ -198,10 +198,6 @@ const Navigator = createStackNavigator(
 			screen: MyPaymentPage,
 			navigationOptions: { headerShown: false },
 		},
-
-
-
-
 		BeforeSignScreen: {
 			screen: BeforeSign,
 			navigationOptions: { headerShown: false },
