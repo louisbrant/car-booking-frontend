@@ -27,7 +27,6 @@ import { MaterialCommunityIcons, AntDesign, EvilIcons, Entypo, Feather, FontAwes
 
 
 import bottomTabImage from '../assets/bottomTabImage.png';
-import { color } from "react-native-reanimated"
 import { width } from "styled-system"
 
 const screenWidth = Dimensions.get('window').width;
@@ -45,6 +44,7 @@ export const BottomTab = ({ navigation }) => {
 
 
   const { user } = useSelector((store) => store.auth);
+  const { tab } = useSelector((store) => store.house);
 
   const onTab = (page) => {
     if (page == 'TellCarScreen') {
@@ -61,8 +61,9 @@ export const BottomTab = ({ navigation }) => {
   const [activeTab, setActiveTab] = useState("MyHomeScreen");
 
   useEffect(() => {
-    if (navigation) {
-      setActiveTab(navigation.state.routeName)
+    let routelength = navigation?.getState()?.routes?.length;
+    if (routelength != undefined && routelength != 0) {
+      setActiveTab(navigation?.getState()?.routes[navigation?.getState()?.routes?.length - 1]?.name)
     }
   }, [navigation])
 
@@ -82,29 +83,58 @@ export const BottomTab = ({ navigation }) => {
       <Center position="absolute" w="full">
         <HStack justifyContent="space-between" w="full">
 
-          <HStack
-            style={{
-              width: '100%',
-              height: 50,
-              '& .active': {
-                borderTopColor: COLOR.IBase,
-              }
-            }}
-            px={5}
-            justifyContent="space-between"
-          >
 
-            <TabButton activeTab={activeTab} screen={"CarHomeScreen"} text={"Search"} onTab={onTab} tabIcon={"SearchIcon"} />
+          {
+            tab == 'car' &&
+            <HStack
+              style={{
+                width: '100%',
+                height: 50,
+                '& .active': {
+                  borderTopColor: COLOR.IBase,
+                }
+              }}
+              px={5}
+              justifyContent="space-between"
+            >
+              <TabButton activeTab={activeTab} screen={"CarHomeScreen"} text={"Search"} onTab={onTab} tabIcon={"SearchIcon"} />
 
-            <TabButton activeTab={activeTab} screen={"TellCarScreen"} text={"Add Car"} onTab={onTab} tabIcon={"AddCarIcon"} />
+              <TabButton activeTab={activeTab} screen={"TellCarScreen"} text={"Add Car"} onTab={onTab} tabIcon={"AddCarIcon"} />
 
-            <TabButton activeTab={activeTab} screen={"TripPageScreen"} text={"Trips"} onTab={onTab} tabIcon={"TripsIcon"} />
+              <TabButton activeTab={activeTab} screen={"TripPageScreen"} text={"Trips"} onTab={onTab} tabIcon={"TripsIcon"} />
 
-            <TabButton activeTab={activeTab} screen={"InboxScreen"} text={"Inbox"} onTab={onTab} tabIcon={"InboxIcon"} />
+              <TabButton activeTab={activeTab} screen={"InboxScreen"} text={"Inbox"} onTab={onTab} tabIcon={"InboxIcon"} />
 
-            <TabButton activeTab={activeTab} screen={"MyProfileScreen"} text={"More"} onTab={onTab} tabIcon={"MoreIcon"} />
+              <TabButton activeTab={activeTab} screen={"MyProfileScreen"} text={"More"} onTab={onTab} tabIcon={"MoreIcon"} />
 
-          </HStack>
+            </HStack>
+          }
+
+          {
+            tab == 'house' &&
+            <HStack
+              style={{
+                width: '100%',
+                height: 50,
+                '& .active': {
+                  borderTopColor: COLOR.IBase,
+                }
+              }}
+              px={5}
+              justifyContent="space-between"
+            >
+              <TabButton activeTab={activeTab} screen={"CarHomeScreen"} text={"Search"} onTab={onTab} tabIcon={"SearchIcon"} />
+
+              <TabButton activeTab={activeTab} screen={"GetHouseScreen"} text={"Add House"} onTab={onTab} tabIcon={"AddCarIcon"} />
+
+              <TabButton activeTab={activeTab} screen={"TripPageScreen"} text={"Trips"} onTab={onTab} tabIcon={"TripsIcon"} />
+
+              <TabButton activeTab={activeTab} screen={"InboxScreen"} text={"Inbox"} onTab={onTab} tabIcon={"InboxIcon"} />
+
+              <TabButton activeTab={activeTab} screen={"MyProfileScreen"} text={"More"} onTab={onTab} tabIcon={"MoreIcon"} />
+
+            </HStack>
+          }
 
         </HStack>
       </Center>

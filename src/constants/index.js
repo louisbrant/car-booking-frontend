@@ -668,3 +668,106 @@ export const Styles = StyleSheet.create({
     },
 
 })
+
+export const CarStyle = {
+    odmeteritems: [
+        'Select',
+        '10 - 20k miles',
+        '20 - 30k miles',
+        '30 - 40k miles',
+        '40 - 50k miles',
+        '50 - 60k miles',
+        '60 - 70k miles',
+        '70 - 80k miles',
+        '80 - 90k miles',
+        '90 - 100k miles'
+    ],
+    transmissionitems: [
+        'Select',
+        'Manual',
+        'Automatic',
+        'Continuously variable',
+        'Semi-automatic and dual-clutch'
+    ],
+    trimitems: [
+        'Select',
+        'AMG E 43 4MATIC',
+        'AMG E 63 4MATIC',
+        'E 300 AMG Line'
+    ],
+    carstyleitems: [
+        'Select',
+        '4dr Sedan AWD(3.0L 6cyl Turbo 9A)',
+        '4dr Sedan AWD(3.0L 6cyl Turbo 9A)'
+    ],
+    trimlist: [
+        {
+            value: 1,
+            label: 'AMG E 43 4MATIC'
+        },
+        {
+            value: 2,
+            label: 'AMG E 63 4MATIC'
+        },
+        {
+            value: 3,
+            label: 'E 300 AMG Line'
+        }
+    ],
+    transmissionlist: [
+        {
+            value: 1,
+            label: 'Manual'
+        },
+        {
+            value: 2,
+            label: 'Automatic '
+        },
+        {
+            value: 3,
+            label: 'Continuously variable'
+        },
+        {
+            value: 4,
+            label: 'Semi-automatic and dual-clutch'
+        }
+    ],
+    odmeterlist: [
+        {
+            value: 1,
+            label: '10 - 20k miles'
+        },
+        {
+            value: 2,
+            label: '20 - 30k miles'
+        },
+        {
+            value: 3,
+            label: '30 - 40k miles'
+        },
+        {
+            value: 4,
+            label: '40 - 50k miles'
+        },
+        {
+            value: 5,
+            label: '50 - 60k miles'
+        },
+        {
+            value: 6,
+            label: '60 - 70k miles'
+        },
+        {
+            value: 7,
+            label: '70 - 80k miles'
+        },
+        {
+            value: 8,
+            label: '80 - 90k miles'
+        },
+        {
+            value: 9,
+            label: '90 - 100k miles'
+        }
+    ],
+}

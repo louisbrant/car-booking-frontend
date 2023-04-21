@@ -1,5 +1,5 @@
 import { createAppContainer } from "react-navigation"
-import { createStackNavigator } from 'react-navigation-stack'
+import { createStackNavigator } from '@react-navigation/stack'
 import { createMaterialBottomTabNavigator } from "react-navigation-material-bottom-tabs";
 
 import HomePage from '../screens/Guest/Home'
@@ -22,15 +22,16 @@ import PaymentPage from '../screens/Guest/Project/Payment';
 import AddCardPage from '../screens/Guest/Project/AddCard';
 
 import InboxPage from '../screens/Guest/Inbox';
-import InBoxDetailPage from '../screens/Guest/Inbox/Detail';
 import MyProfilePage from '../screens/Guest/Inbox/MyProfile';
 import EditProfilePage from '../screens/Guest/Inbox/EditProfile';
 import WhereProfilePage from '../screens/Guest/Inbox/WhereProfile';
+import ChartPage from '../screens/Guest/Inbox/chart';
 
 import TripPage from '../screens/Guest/Trip';
 
 import RequestBookPage from '../screens/Guest/Request/index';
 import RequestConfirmPage from '../screens/Guest/Request/Confirm';
+import RequestDetailPage from '../screens/Guest/Request/Detail';
 
 import ProfilePage from '../screens/Guest/Pages/Profile';
 import InfoPage from '../screens/Guest/Pages/Info';
@@ -105,10 +106,6 @@ const Navigator = createStackNavigator(
 			screen: InboxPage,
 			navigationOptions: { headerShown: false },
 		},
-		InboxDetailScreen: {
-			screen: InBoxDetailPage,
-			navigationOptions: { headerShown: false },
-		},
 		MyProfileScreen: {
 			screen: MyProfilePage,
 			navigationOptions: { headerShown: false },
@@ -127,6 +124,10 @@ const Navigator = createStackNavigator(
 		},
 		RequestConfirmScreen: {
 			screen: RequestConfirmPage,
+			navigationOptions: { headerShown: false },
+		},
+		RequestDetailScreen: {
+			screen: RequestDetailPage,
 			navigationOptions: { headerShown: false },
 		},
 		SignInScreen: {
@@ -197,10 +198,6 @@ const Navigator = createStackNavigator(
 			screen: MyPaymentPage,
 			navigationOptions: { headerShown: false },
 		},
-
-
-
-
 		BeforeSignScreen: {
 			screen: BeforeSign,
 			navigationOptions: { headerShown: false },
@@ -257,13 +254,17 @@ const Navigator = createStackNavigator(
 			screen: TripPage,
 			navigationOptions: { headerShown: false },
 		},
+		ChartPageScreen: {
+			screen: ChartPage,
+			navigationOptions: { headerShown: false },
+		},
 	},
 	{
-		initialRouteName: 'TripPageScreen'
-		// initialRouteName: 'RequestBookScreen'
+		initialRouteName: 'HomeScreen'
+		// initialRouteName: 'ChartPageScreen'
 		// initialRouteName: 'MyPaymentScreen'
 
-		// initialRouteName: 'BeforeSignScreen'
+		// initialRouteName: 'AllCarsScreen'
 	}
 )
 

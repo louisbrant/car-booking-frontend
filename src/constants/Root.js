@@ -9,13 +9,14 @@ const ApiList = {
   ThirdSignIn: 'auth/thirdsignin',
   SignUp: 'users/signup',
   ResetPassword: 'users/resetPassword',
-  UpdateUserInfo: 'users/updateUser',
-  userInfo: 'users/',
+  UpdateUserInfor: 'users/updateUser',
+  GetUserInfor: 'users/getuserinfor',
   EmailCheck: "users/emailCheck",
   RecendCode: 'users/recendcode',
   SendCode: 'users/sendcode',
   ForgotPass: 'users/forgotpass',
   VerifyCode: 'users/verifycode',
+  AddCard: "users/addcard",
   RegisterService: "shop/setup-Service",
   GetService: "shop/getService",
   Edit_service: "shop/editService",
@@ -45,17 +46,21 @@ const ApiList = {
 
   AddCar: "cars/addCar",
   GetMyCars: "cars/getMyCars",
+  AddCarImage: "cars/addCarImage",
   DeleteMyCar: "cars/deletecar",
-  GetAllCars: "cars/getAllCars"
+  GetAllCars: "cars/getAllCars",
+  RentCar: "cars/rentcar",
+
+  mapApiKey: "AIzaSyBQjTfzE_m26y8-jSYTVPvwbkuebEUOCTM",
 }
 
 const dev = {
-  BACKEND_URL: "http://192.168.114.59:10040/",
-  SOCKET_URL: "https://192.168.114.59:10040/",
-  IMAGE_URL: "http://192.168.114.59:10040/",
+  BACKEND_URL: "http://192.168.114.58:10040/",
+  SOCKET_URL: "http://192.168.114.58:10040/",
+  IMAGE_URL: "http://192.168.114.58:10040/",
   ...ApiList
 }
-
+//
 const production = {
   BACKEND_URL: "https://pet.spaw.ibluday.com/api/",
   SOCKET_URL: "https://pet.spaw.ibluday.com/",

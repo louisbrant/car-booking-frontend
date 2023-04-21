@@ -27,12 +27,14 @@
       "package": "com.ibluday.IZRA",
       "config": {
         "googleMaps": {
-          "apiKey": "AIzaSyBXJiFMPFrDc1Q2hlsRG-evFpGAnOf07O0"
+          "apiKey": "AIzaSyB0uPdSl2KFqBETm8gGdfgdAwsUxEjVXho"
         }
       }
     },
-    "web": {
-      "favicon": "./src/assets/icon.png"
+    "extra": {
+      "eas": {
+        "projectId": "8a034e5e-2906-4772-9348-a827f08b316e"
+      }
     }
   }
 }
