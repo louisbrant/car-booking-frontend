@@ -15,13 +15,14 @@ import { TabView, SceneMap } from 'react-native-tab-view';
 
 // import SwipePicker from 'react-native-swipe-picker';
 
-import { COLOR, Images, LAYOUT, ROOT } from "../../../constants";
+import { COLOR, Images, LAYOUT, ROOT } from "../../constants";
 
-import { setBookInfo } from '../../../redux/actions/authActions';
+import { setBookInfo } from '../../redux/actions/authActions';
 
-const RequestBookPage = ({ navigation }) => {
+const HouseRequestPage = ({ navigation }) => {
 
-    const { car } = useSelector((store) => store.auth);
+    const { house } = useSelector((store) => store.house);
+    console.log('car=>', house)
     const dispatch = useDispatch();
     const Toast = useToast();
 
@@ -308,9 +309,9 @@ const RequestBookPage = ({ navigation }) => {
                 }
             })()}
 
-            <ScrollView contentContainerStyle={{ justifyContent: "space-around" }} showsVerticalScrollIndicator={false}>
+            <ScrollView contentContainerStyle={{ justifyContent: "space-around" }} showsVerticalScrollIndicator={false} style={{ backgroundColor: COLOR.InputBlackWhiteBg }}>
                 <Box>
-                    <Image source={{ uri: car.img }} h="250" resizeMode="cover" alt="image" />
+                    <Image source={{ uri: house?.img }} h="250" resizeMode="cover" alt="image" />
 
                     <Center position="absolute" w="full">
 
@@ -419,7 +420,7 @@ const RequestBookPage = ({ navigation }) => {
                             <HStack alignItems="center" justifyContent="space-between">
                                 <VStack space={1}>
                                     <Text color={COLOR.inPlaceholder} fontWeight="medium" fontSize="2xs">Confirmation code</Text>
-                                    <Text fontWeight="semibold" fontSize="xs">{car?.barcode}</Text>
+                                    <Text fontWeight="semibold" fontSize="xs">{house?.barcode}</Text>
                                 </VStack>
                             </HStack>
                         </Box>
@@ -539,14 +540,264 @@ const RequestBookPage = ({ navigation }) => {
                             </VStack>
 
                             <Box mt={5}>
-                                <Text fontWeight="bold" fontSize="xs">Where you're staying</Text>
-                                <VStack mt={2} space={1}>
-                                    <Text color={COLOR.inPlaceholder} fontWeight="medium" fontSize="2xs">House Rules</Text>
-                                    <Text color={COLOR.black} fontWeight="semibold" fontSize="xs">
-                                        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Praesent interdum aliquet tincidunt. Morbi sed molestie orci. Ut eu augue velit. Proin vulputate nunc odio.
+                                <Text fontWeight="medium" fontSize="sm">What this place offers</Text>
+                            </Box>
+                            <HStack justifyContent="space-between" pb={2}>
+
+                                <VStack>
+                                    <Text
+                                        color={COLOR.black}
+                                        fontWeight="medium"
+                                        fontSize="sm"
+                                        textAlign="center"
+                                    >
+                                        {LAYOUT.BayIcon}
+                                        <Text color={COLOR.black} mt={5} fontWeight="semibold" fontSize="sm">
+                                            &nbsp;&nbsp;Bay view
+                                        </Text>
                                     </Text>
                                 </VStack>
-                            </Box>
+                                <VStack mr={0} pt={1} space={1} >
+                                    <Text
+                                        color={COLOR.IBase}
+                                        fontWeight="medium"
+                                        fontSize="sm"
+                                    >
+                                        Edit
+                                    </Text>
+                                </VStack>
+                            </HStack>
+                            <HStack justifyContent="space-between" pb={2}>
+                                <VStack>
+                                    <Text
+                                        color={COLOR.black}
+                                        fontWeight="medium"
+                                        fontSize="sm"
+                                        textAlign="center"
+                                    >
+                                        {LAYOUT.CityIcon}
+                                        <Text color={COLOR.black} mt={5} fontWeight="semibold" fontSize="sm">
+                                            &nbsp;&nbsp;City view
+                                        </Text>
+                                    </Text>
+                                </VStack>
+                                <VStack mr={0} pt={1} space={1} >
+                                    <Text
+                                        color={COLOR.IBase}
+                                        fontWeight="medium"
+                                        fontSize="sm"
+                                    >
+                                        Edit
+                                    </Text>
+                                </VStack>
+                            </HStack>
+                            <HStack justifyContent="space-between" pb={2}>
+                                <VStack>
+                                    <Text
+                                        color={COLOR.black}
+                                        fontWeight="medium"
+                                        fontSize="sm"
+                                        textAlign="center"
+                                    >
+                                        {LAYOUT.BeachIcon}
+                                        <Text color={COLOR.black} mt={5} fontWeight="semibold" fontSize="sm">
+                                            &nbsp;&nbsp;Beach view
+                                        </Text>
+                                    </Text>
+                                </VStack>
+                                <VStack mr={0} pt={1} space={1} >
+                                    <Text
+                                        color={COLOR.IBase}
+                                        fontWeight="medium"
+                                        fontSize="sm"
+                                    >
+                                        Edit
+                                    </Text>
+                                </VStack>
+                            </HStack>
+                            <HStack justifyContent="space-between" pb={2}>
+                                <VStack>
+                                    <Text
+                                        color={COLOR.black}
+                                        fontWeight="medium"
+                                        fontSize="sm"
+                                        textAlign="center"
+                                    >
+                                        {LAYOUT.CutleryIcon}
+                                        <Text color={COLOR.black} mt={5} fontWeight="semibold" fontSize="sm">
+                                            &nbsp;&nbsp;Kitchen
+                                        </Text>
+                                    </Text>
+                                </VStack>
+                                <VStack mr={0} pt={1} space={1} >
+                                    <Text
+                                        color={COLOR.IBase}
+                                        fontWeight="medium"
+                                        fontSize="sm"
+                                    >
+                                        Edit
+                                    </Text>
+                                </VStack>
+                            </HStack>
+                            <HStack justifyContent="space-between" pb={2}>
+                                <VStack>
+                                    <Text
+                                        color={COLOR.black}
+                                        fontWeight="medium"
+                                        fontSize="sm"
+                                        textAlign="center"
+                                    >
+                                        {LAYOUT.FreeWifiIcon}
+                                        <Text color={COLOR.black} mt={5} fontWeight="semibold" fontSize="sm">
+                                            &nbsp;&nbsp;Free Wifi
+                                        </Text>
+                                    </Text>
+                                </VStack>
+                                <VStack mr={0} pt={1} space={1} >
+                                    <Text
+                                        color={COLOR.IBase}
+                                        fontWeight="medium"
+                                        fontSize="sm"
+                                    >
+                                        Edit
+                                    </Text>
+                                </VStack>
+                            </HStack>
+
+                            <ScrollView contentContainerStyle={{ justifyContent: "space-around" }} showsVerticalScrollIndicator={false}>
+                                <Box w="full" >
+                                    <VStack space={2}>
+                                        <HStack space={2} style={{ alignItems: 'center' }}>
+                                            <FontAwesome name="star" size={14} color={COLOR.yellow} />
+                                            <HStack space={1}>
+                                                <Text
+                                                    color={COLOR.black}
+                                                    fontWeight="semibold"
+                                                    fontSize="xs"
+                                                >{`5`}</Text>
+                                                <Text
+                                                    color={COLOR.inPlaceholder}
+                                                    fontWeight="semibold"
+                                                    fontSize="xs"
+                                                >(24.2k)</Text>
+                                            </HStack>
+                                        </HStack>
+                                        <ScrollView
+                                            horizontal={true}
+                                            style={{
+                                                flex: 1
+                                            }}>
+                                            <HStack justifyContent="space-between">
+                                                <Box
+                                                    w={300}
+                                                    pr={4}
+                                                >
+                                                    <VStack space={2}
+                                                        p={3}
+                                                        style={{
+                                                            backgroundColor: COLOR.smBoxColor,
+                                                            borderStyle: 'solid',
+                                                            borderWidth: 1,
+                                                            borderColor: COLOR.smBoxBoderColor,
+                                                            borderRadius: 10,
+                                                        }}>
+                                                        <View style={{ flex: 1, flexDirection: 'row', alignItems: 'center', justifyContent: 'flex-start' }} >
+                                                            <HStack space={2}>
+                                                                <Avatar bg="white" alignSelf="center" size={"36"} source={Images.Profile1} />
+                                                                <VStack space={1}>
+                                                                    <Text fontWeight="semibold" fontSize="xs">Name here</Text>
+                                                                    <Text color={COLOR.inPlaceholder} fontWeight="medium" fontSize="2xs">Response Time: 1 hour</Text>
+                                                                </VStack>
+                                                            </HStack>
+                                                        </View>
+                                                        <HStack alignItems="center" justifyContent="space-between">
+                                                            <VStack space={1}>
+                                                                <Text fontWeight="semibold" fontSize="xs">Lorem ipsum dolor sit amet, con sectetur adipiscing elit. Vestibulum pellentesque justo eget justo sagittis, eu accumsan quam consectetur. Morbi sed quam varius.</Text>
+                                                            </VStack>
+                                                        </HStack>
+                                                    </VStack>
+                                                </Box>
+                                                <Box
+                                                    style={{
+                                                        backgroundColor: COLOR.smBoxColor,
+                                                        borderStyle: 'solid',
+                                                        borderWidth: 1,
+                                                        borderColor: COLOR.smBoxBoderColor,
+                                                        borderRadius: 10,
+                                                    }}
+                                                    p={3}
+                                                    w={300}
+                                                >
+                                                    <VStack space={2}>
+                                                        <View style={{ flex: 1, flexDirection: 'row', alignItems: 'center', justifyContent: 'flex-start' }} >
+                                                            <HStack space={2}>
+                                                                <Avatar bg="white" alignSelf="center" size={"36"} source={Images.Profile1} />
+                                                                <VStack space={1}>
+                                                                    <Text fontWeight="semibold" fontSize="xs">Name here</Text>
+                                                                    <Text color={COLOR.inPlaceholder} fontWeight="medium" fontSize="2xs">Response Time: 1 hour</Text>
+                                                                </VStack>
+                                                            </HStack>
+                                                        </View>
+                                                        <HStack alignItems="center" justifyContent="space-between">
+                                                            <VStack space={1}>
+                                                                <Text fontWeight="semibold" fontSize="xs">Lorem ipsum dolor sit amet, con sectetur adipiscing elit. Vestibulum pellentesque justo eget justo sagittis, eu accumsan quam consectetur. Morbi sed quam varius.</Text>
+                                                            </VStack>
+                                                        </HStack>
+                                                    </VStack>
+                                                </Box>
+                                            </HStack>
+                                        </ScrollView>
+                                    </VStack>
+                                </Box>
+                            </ScrollView>
+
+                            <HStack justifyContent="space-between" pt={3}>
+                                <VStack borderColor={COLOR.black} borderWidth={1} borderRadius={5} w="full">
+                                    <VStack p={1} space={1} >
+                                        <Text
+                                            color={COLOR.black}
+                                            fontWeight="medium"
+                                            fontSize='18px'
+                                            textAlign="center"
+                                        >
+                                            Show all 39 reviews
+                                        </Text>
+                                    </VStack>
+                                </VStack>
+                            </HStack>
+                            <HStack justifyContent="space-between" pt={3}>
+                                <Box >
+                                    <VStack>
+
+                                        <Text fontWeight="semibold" fontSize="sm" color={COLOR.black}>$450/night</Text>
+                                        <Text color={COLOR.inPlaceholder} fontWeight="medium" fontSize="xs" pt={1}>Sat, 11 - Mon, 13</Text>
+                                    </VStack>
+                                </Box>
+                                <Box >
+                                    <TouchableOpacity >
+                                        <Box
+                                            style={{
+                                                height: 39,
+                                                backgroundColor: COLOR.IBase,
+                                                borderRadius: 8,
+                                                display: 'flex',
+                                                justifyContent: 'center',
+                                                alignItems: 'center',
+                                            }}
+                                            py={3}
+                                            px={4}
+                                        >
+                                            <Text
+                                                color={COLOR.white}
+                                                fontWeight="bold"
+                                                fontSize="17px"
+                                            >
+                                                Reserve
+                                            </Text>
+                                        </Box>
+                                    </TouchableOpacity>
+                                </Box>
+                            </HStack>
                         </VStack>
                     </Box>
                 </Box>
@@ -621,4 +872,4 @@ const RequestBookPage = ({ navigation }) => {
     )
 }
 
-export default RequestBookPage;
+export default HouseRequestPage;

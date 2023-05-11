@@ -48,7 +48,7 @@ const HouseImageAddPage = ({ navigation }) => {
             xhr.setRequestHeader("Content-Type", "multipart/form-data");
             xhr.onload = function () {
                 if (xhr.status === 200) {
-                    return navigation.navigate("AllCarsScreen");
+                    return navigation.navigate("MyHousesScreen");
                 }
             }
 
@@ -129,7 +129,7 @@ const HouseImageAddPage = ({ navigation }) => {
                     borderRadius={5}
                 >
                     <VStack justifyContent="center" alignItems="center" space={1}>
-                        <Image source={imageInfor.img} w={185} height={200} resizeMode="contain" alt="car" />
+                        <Image source={imageInfor.img} w={185} height={200} alt="car" />
                         <Text color={COLOR.inPlaceholder} fontWeight="medium" fontSize="2xs">Image or PNG (min. 50kb and max. 5mb)</Text>
                         <TouchableOpacity onPress={onUpload}>
                             <Text fontWeight="semibold" fontSize="xs" underline>Upload</Text>

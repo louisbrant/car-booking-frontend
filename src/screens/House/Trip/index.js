@@ -12,9 +12,11 @@ const { width } = Dimensions.get('window')
 
 import HistoryPage from './History';
 import BookedPage from './Booked';
+import HouseWhereProfilePage from './WhereProfile';
 import { BottomTab } from '../../../components';
+import WhereProfilePage from '../../Car/Trip/WhereProfile';
 
-const TripPage = ({ navigation }) => {
+const HouseTripPage = ({ navigation }) => {
 
     const [activeTab, setActiveTab] = useState(1);
 
@@ -153,7 +155,10 @@ const TripPage = ({ navigation }) => {
                     {activeTab === 1 ?
                         <BookedPage navigation={navigation} />
                         :
-                        <HistoryPage navigation={navigation} />
+                        activeTab === 2 ?
+                            <HistoryPage navigation={navigation} />
+                            :
+                            <WhereProfilePage navigation={navigation} />
                     }
                 </Box>
             </ScrollView>
@@ -164,4 +169,4 @@ const TripPage = ({ navigation }) => {
     )
 }
 
-export default TripPage;
+export default HouseTripPage;

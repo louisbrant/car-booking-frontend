@@ -51,13 +51,18 @@ const ApiList = {
   GetAllCars: "cars/getAllCars",
   RentCar: "cars/rentcar",
 
+  GetMyHouses: "houses/getMyHouses",
+  GetAllHouses: "houses/getAllHouses",
+  DeleteMyHouse: "houses/deleteHouse",
+
+
   mapApiKey: "AIzaSyBQjTfzE_m26y8-jSYTVPvwbkuebEUOCTM",
 }
 
 const dev = {
-  BACKEND_URL: "http://103.179.142.171:10040/",
-  SOCKET_URL: "http://103.179.142.171:10040/",
-  IMAGE_URL: "http://103.179.142.171:10040/",
+  BACKEND_URL: "http://192.168.114.58:10040/",
+  SOCKET_URL: "http://192.168.114.58:10040/",
+  IMAGE_URL: "http://192.168.114.58:10040/",
   ...ApiList
 }
 //

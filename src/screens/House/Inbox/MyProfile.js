@@ -32,33 +32,33 @@ const MyProfilePage = ({ navigation }) => {
         img: user.avatar != "" ? typeof (user.avatar) == 'string' ? { uri: ROOT.IMAGE_URL + "users/" + user.avatar } : user.avatar : Images.Profile8,
         selected: false
     });
-    // console.log(imageInfor, user.avatar, Images.Profile8);
+    console.log(imageInfor, user.avatar, Images.Profile8);
 
     const onUpload = async () => {
-        // try {
-        //     let result = await ImagePicker.launchImageLibraryAsync
-        //         ({
-        //             mediaTypes: ImagePicker.MediaTypeOptions.All,
-        //             allowsEditing: false
-        //         })
-        //     let newuser = user;
-        //     newuser.avatar = result;
-        //     if (!result.cancelled) {
-        //         setImageInfor({
-        //             ...imageInfor,
-        //             img: result,
-        //             selected: true
-        //         });
-        //         dispatch(setUserInfo(newuser))
-        //     }
-        //     else {
-        //         return Toast.show({ title: "Upload error!", placement: 'bottom', status: 'error', w: 300 })
-        //     }
-        // }
-        // catch (E) {
-        //     console.log(E)
-        //     // return Toast.show({ title: "Upload errors!", placement: 'bottom', status: 'error', w: 300 })
-        // }
+        try {
+            let result = await ImagePicker.launchImageLibraryAsync
+                ({
+                    mediaTypes: ImagePicker.MediaTypeOptions.All,
+                    allowsEditing: false
+                })
+            let newuser = user;
+            newuser.avatar = result;
+            if (!result.cancelled) {
+                setImageInfor({
+                    ...imageInfor,
+                    img: result,
+                    selected: true
+                });
+                dispatch(setUserInfo(newuser))
+            }
+            else {
+                return Toast.show({ title: "Upload error!", placement: 'bottom', status: 'error', w: 300 })
+            }
+        }
+        catch (E) {
+            console.log(E)
+            // return Toast.show({ title: "Upload errors!", placement: 'bottom', status: 'error', w: 300 })
+        }
     }
 
     const onCheckAddCar = () => {
@@ -84,6 +84,7 @@ const MyProfilePage = ({ navigation }) => {
     const finalRef = React.useRef(null);
 
     useEffect(() => {
+        console.log('car=>', car);
         if (car)
             if (car.currentaddcar)
                 setModalVisible(true);

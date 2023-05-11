@@ -7,7 +7,7 @@ import { COLOR, Images, LAYOUT } from "../../../constants";
 
 import { BottomTab } from '../../../components';
 
-const WhereProfilePage = ({ navigation }) => {
+const HouseWhereProfilePage = ({ navigation }) => {
 
     const onShowProfile = () => {
         navigation.navigate("EditProfileScreen")
@@ -59,7 +59,7 @@ const WhereProfilePage = ({ navigation }) => {
                             return (
                                 <TouchableOpacity key={idx}>
                                     <HStack space={2}>
-                                        <Image source={idx > 0 ? Images.Wh2 : Images.Wh1} rounded="5" w="58px" h="58px" bg={"white"} resizeMode="cover" opacity={0.8} alt="car" />
+                                        <Image source={idx > 0 ? Images.HWh2 : Images.HWh1} rounded="5" w="58px" h="58px" bg={"white"} resizeMode="cover" opacity={0.8} alt="car" />
 
                                         <VStack
                                             flex={1}
@@ -72,8 +72,8 @@ const WhereProfilePage = ({ navigation }) => {
                                             }}
                                         >
                                             <HStack justifyContent="space-between" alignItems="center">
-                                                <Text fontWeight="semibold" fontSize="xs">Name here</Text>
-                                                <Text color={COLOR.inPlaceholder} fontWeight="medium" fontSize="2xs">09:00AM</Text>
+                                                <Text fontWeight="semibold" fontSize="xs" >Name here</Text>
+                                                <Text fontWeight="medium" fontSize="2xs" color={COLOR.IBase}>$450/night</Text>
                                             </HStack>
                                             <Text color={COLOR.inPlaceholder} fontWeight="medium" fontSize="2xs">Lorem ipsum dolor sit amet, consectetur.</Text>
                                             <Text color={COLOR.inPlaceholder} fontWeight="medium" fontSize="2xs">Trip Completed: Mar 23 -30</Text>
@@ -92,4 +92,4 @@ const WhereProfilePage = ({ navigation }) => {
     )
 }
 
-export default WhereProfilePage;
+export default HouseWhereProfilePage;

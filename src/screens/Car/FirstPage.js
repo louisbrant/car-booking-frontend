@@ -442,7 +442,7 @@ const FirstPage = ({ navigation }) => {
                                             borderRadius={5}
                                             bg={COLOR.white}
                                         >
-                                            <Image source={{ uri: item.img }} resizeMode="contain" alt="car" style={{ width: 250, height: 100 }} />
+                                            <Image source={{ uri: item.img }} alt="car" style={{ width: 250, height: 100 }} />
                                         </Box>
                                     </HStack>
                                 </TouchableOpacity>

@@ -88,7 +88,7 @@ const Request = ({ navigation }) => {
                             w={140}
                             h={75}
                         >
-                            <Image source={Images.Car1} resizeMode="contain" style={{ width: '100%', height: '100%' }} alt="car" />
+                            <Image source={Images.Car1} style={{ width: '100%', height: '100%' }} alt="car" />
                         </Box>
                     </HStack>
                 </Box>

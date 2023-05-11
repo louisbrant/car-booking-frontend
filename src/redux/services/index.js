@@ -210,6 +210,19 @@ class ApiService {
     return axios.post(ROOT.GetAllCars, ...args)
   }
 
+
+  GetMyHouses(...args) {
+    return axios.post(ROOT.GetMyHouses, ...args)
+  }
+  GetAllHouses(...args) {
+    return axios.post(ROOT.GetAllHouses, ...args)
+  }
+  DeleteMyHouse(...args) {
+    return axios.post(ROOT.DeleteMyHouse, ...args)
+  }
+
+
+
   /**
    * tron load apis
    */

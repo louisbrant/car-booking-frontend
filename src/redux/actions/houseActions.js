@@ -8,3 +8,10 @@ export const setTab = (tab) => {
         payload: { tab },
     }
 }
+
+export const setHouseInfor = (house) => {
+    return {
+        type: 'SET_HouseInfor',
+        payload: { house },
+    }
+}

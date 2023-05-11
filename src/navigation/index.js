@@ -37,10 +37,10 @@ import AddCardPage from '../screens/Car/Project/AddCard';
 import InboxPage from '../screens/Car/Inbox';
 import MyProfilePage from '../screens/Car/Inbox/MyProfile';
 import EditProfilePage from '../screens/Car/Inbox/EditProfile';
-import WhereProfilePage from '../screens/Car/Inbox/WhereProfile';
 import ChartPage from '../screens/Car/Inbox/chart';
 
 import TripPage from '../screens/Car/Trip';
+import WhereProfilePage from '../screens/Car/Trip/WhereProfile';
 
 import RequestBookPage from '../screens/Car/Request/index';
 import RequestConfirmPage from '../screens/Car/Request/Confirm';
@@ -74,6 +74,10 @@ import HouseDescribesPage from '../screens/House/HouseDescribes';
 import HouseGuestPage from '../screens/House/HouseGuest';
 import HouseTellPage from '../screens/House/HouseTell';
 import HouseImageAddPage from '../screens/House/HouseImageAdd';
+import MyHousesPage from '../screens/House/MyHouse';
+import HouseRequestPage from '../screens/House/HouseRequest';
+import HouseTripPage from '../screens/House/Trip/index';
+import HouseWhereProfilePage from '../screens/House/Trip/WhereProfile';
 
 
 const navigation = () => {
@@ -455,6 +459,34 @@ const navigation = () => {
             <Stack.Screen
                 name="HouseImageAddScreen"
                 component={HouseImageAddPage}
+                options={{
+                    header: () => { },
+                }}
+            />
+            <Stack.Screen
+                name="MyHousesScreen"
+                component={MyHousesPage}
+                options={{
+                    header: () => { },
+                }}
+            />
+            <Stack.Screen
+                name="HouseRequestScreen"
+                component={HouseRequestPage}
+                options={{
+                    header: () => { },
+                }}
+            />
+            <Stack.Screen
+                name="HouseTripScreen"
+                component={HouseTripPage}
+                options={{
+                    header: () => { },
+                }}
+            />
+            <Stack.Screen
+                name="HouseWhereProfileScreen"
+                component={HouseWhereProfilePage}
                 options={{
                     header: () => { },
                 }}

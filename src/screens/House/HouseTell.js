@@ -194,7 +194,7 @@ const HouseTellPage = ({ navigation }) => {
                             fontWeight="medium"
                             style={{ fontSize: 18 }}
                         >
-                            Tell us about your car
+                            Tell us about your House
                         </Text>
                     </VStack>
                 </HStack>
