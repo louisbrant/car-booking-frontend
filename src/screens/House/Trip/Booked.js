@@ -51,15 +51,15 @@ const BookedPage = ({ navigation }) => {
                     )
                 })} */}
             <HStack space={2}>
-                <Image source={Images.CarTripbg} h="250" resizeMode="cover" alt="image" />
+                <Image source={Images.HouseTripbg} h="250" resizeMode="cover" alt="image" />
             </HStack>
-            <HStack space={2} alignItems="center">
+            <HStack space={2} alignItems="center" onTouchStart={() => { navigation.navigate("HouseWhereProfileScreen") }}>
                 <View style={{ flex: 1, flexDirection: 'row', alignItems: 'center', justifyContent: 'center' }}>
                     <Text
                         color={COLOR.black}
                         fontWeight="semibold"
                         fontSize="md"
-                    >No Trips</Text>
+                    >No History</Text>
                 </View>
             </HStack>
         </Box>

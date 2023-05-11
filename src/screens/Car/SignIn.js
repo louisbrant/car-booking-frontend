@@ -296,7 +296,7 @@ const LogInScreen = ({ navigation }) => {
                                     py={2}
                                 >
                                     <HStack space={2} alignItems="center" justifyContent="center">
-                                        <Image source={Images.Facebook} resizeMode="contain" alt="facebook" style={{ width: 20, height: 20 }} />
+                                        <Image source={Images.Facebook} alt="facebook" style={{ width: 20, height: 20 }} />
                                         <Text fontWeight="semibold" fontSize="xs">Facebook</Text>
                                     </HStack>
                                 </Box>
@@ -312,7 +312,7 @@ const LogInScreen = ({ navigation }) => {
                                     py={2}
                                 >
                                     <HStack space={2} alignItems="center" justifyContent="center">
-                                        <Image source={Images.Google} resizeMode="contain" alt="facebook" style={{ width: 20, height: 20 }} />
+                                        <Image source={Images.Google} alt="facebook" style={{ width: 20, height: 20 }} />
                                         <Text fontWeight="semibold" fontSize="xs">Google</Text>
                                     </HStack>
                                 </Box>

@@ -67,4 +67,9 @@ export const Images = {
     Checkbox: require('../assets/check.png'),
     MARKER1: require("../assets/map/marker1.png"),
     CarTripbg: require("../assets/img/car-trip-bg.png"),
+    HouseTripbg: require("../assets/img/house-trip.png"),
+
+    HWh1: require('../assets/img/hwh1.png'),
+    HWh2: require('../assets/img/hwh2.png'),
+    HWh3: require('../assets/img/hwh3.png'),
 }

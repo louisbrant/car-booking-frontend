@@ -8,6 +8,7 @@ import { BottomTab } from '../../../components';
 import { useApi } from '../../../redux/services'
 import { Footers, Headers, Loading, MainCurrency, MarketsItem } from '../../../components'
 import { setCarInfo } from '../../../redux/actions/authActions';
+import { setHouseInfor } from '../../../redux/actions/houseActions';
 import { setTab } from '../../../redux/actions/houseActions';
 import { useDispatch, useSelector } from 'react-redux'
 
@@ -17,21 +18,79 @@ const ProjectHomePage = ({ navigation }) => {
     const Api = useApi()
     const [loading, setLoading] = useState(false);
     const [allCars, setAllCars] = useState([]);
+    const [allHouses, setAllHouses] = useState([]);
     const dispatch = useDispatch()
     const [activeTab, setActiveTab] = useState("car");
 
     const onDatail = (item) => {
-        dispatch(setCarInfo(item))
-        navigation.navigate("RequestBookScreen")
+        if (activeTab == 'car') {
+            dispatch(setCarInfo(item))
+            navigation.navigate("RequestBookScreen")
+        }
+        else {
+            dispatch(setHouseInfor(item))
+            navigation.navigate("HouseRequestScreen")
+        }
     }
 
     const tabChange = (tab) => {
         setActiveTab(tab);
         dispatch(setTab(tab));
+        if (tab == 'car') {
+            getCars();
+        }
+        else {
+            getHouses();
+        }
     }
-    useEffect(() => {
-        setLoading(true);
-
+    const getHouses = () => {
+        Api.GetAllHouses().then(({ data }) => {
+            if (data.status) {
+                data = data.data;
+                let newhouses = [];
+                for (let i = 0; i < data.length; i++) {
+                    let stars = 0;
+                    for (let j = 0; j < data[i]["review"].length; j++) {
+                        stars += data[i]["review"][j]["star"];
+                    }
+                    const newhouse = {
+                        _id: data[i]._id,
+                        name: data[i].name,
+                        img: ROOT.IMAGE_URL + "houses/" + data[i].img,
+                        days: data[i].daysval,
+                        engine: data[i].engine,
+                        seats: data[i].seats,
+                        doors: data[i].doors,
+                        automatic: data[i].automatic,
+                        star: stars / Number(data[i]["review"].length),
+                        adddate: data[i].adddate,
+                        address: data[i].address,
+                        barcode: data[i].barcode,
+                        email: data[i].email,
+                        odmeter: data[i].odmeter,
+                        review: data[i].review,
+                        style: data[i].style,
+                        trim: data[i].trim,
+                    }
+                    newhouses.push(newhouse);
+                }
+                setAllHouses(newhouses);
+                setLoading(false);
+            }
+            else {
+                setLoading(false);
+                return Toast.show({ title: data.message, placement: 'bottom', status: 'error', w: 300 });
+            }
+        }).catch(error => {
+            setLoading(false);
+            if (error.response && error.response.status === 400) {
+                return Toast.show({ title: error.response.data, placement: 'bottom', status: 'error', w: 300 })
+            } else {
+                return Toast.show({ title: "Error!", placement: 'bottom', status: 'error', w: 300 })
+            }
+        })
+    }
+    const getCars = () => {
         Api.GetAllCars().then(({ data }) => {
             if (data.status) {
                 data = data.data;
@@ -77,6 +136,10 @@ const ProjectHomePage = ({ navigation }) => {
                 return Toast.show({ title: "Error!", placement: 'bottom', status: 'error', w: 300 })
             }
         })
+    }
+    useEffect(() => {
+        setLoading(true);
+        getCars();
     }, [])
     return (
         <Box
@@ -301,13 +364,14 @@ const ProjectHomePage = ({ navigation }) => {
                     }
                 </Box>
                 <VStack py={3} px={5} space={3}>
-                    {allCars.map((item, idx) => {
+
+                    {activeTab == 'car' && allCars.map((item, idx) => {
                         return (
                             <Box key={idx}>
                                 <TouchableOpacity onPress={() => onDatail(item)}>
                                     <VStack space={2}>
                                         <Box borderRadius={10} w="full">
-                                            <Image source={{ uri: item.img }} resizeMode="contain" alt="car" style={{ width: 450, height: 190 }} />
+                                            <Image source={{ uri: item.img }} borderRadius={10} alt="car" style={{ width: 450, height: 190 }} />
                                         </Box>
                                         <HStack justifyContent="space-between" alignItems="center">
                                             <Text color={COLOR.black} fontWeight="semibold" fontSize="sm"> {`${item.name}`}</Text>
@@ -326,6 +390,38 @@ const ProjectHomePage = ({ navigation }) => {
                                                     fontWeight="semibold"
                                                     fontSize="xs"
                                                 >(24.2k)</Text>
+                                            </HStack>
+                                        </HStack>
+                                    </VStack>
+                                </TouchableOpacity>
+                            </Box>
+                        )
+                    })}
+                    {activeTab == 'house' && allHouses.map((item, idx) => {
+                        return (
+                            <Box key={idx}>
+                                <TouchableOpacity onPress={() => onDatail(item)}>
+                                    <VStack space={2}>
+                                        <Box borderRadius={10} w="full">
+                                            <Image source={{ uri: item.img }} borderRadius={10} alt="car" style={{ width: 450, height: 190 }} />
+                                        </Box>
+                                        <HStack justifyContent="space-between" alignItems="center">
+                                            <Text color={COLOR.black} fontWeight="semibold" fontSize="sm"> {`Park Square, NY`}</Text>
+                                            <Text color={COLOR.IBase} fontWeight="bold" fontSize="sm">${`${item.days}`}/night</Text>
+                                        </HStack>
+                                        <HStack space={2} style={{ alignItems: 'center' }}>
+                                            <FontAwesome name="star" size={14} color={COLOR.yellow} />
+                                            <HStack space={1}>
+                                                <Text
+                                                    color={COLOR.black}
+                                                    fontWeight="semibold"
+                                                    fontSize="xs"
+                                                >{`${item.star}`}</Text>
+                                                <Text
+                                                    color={COLOR.inPlaceholder}
+                                                    fontWeight="semibold"
+                                                    fontSize="xs"
+                                                >3BHK</Text>
                                             </HStack>
                                         </HStack>
                                     </VStack>

@@ -59,12 +59,13 @@ export const BottomTab = ({ navigation }) => {
     setModalVisible(false);
   }
   const [activeTab, setActiveTab] = useState("MyHomeScreen");
-
+  console.log('activeTab62=?', activeTab)
   useEffect(() => {
     let routelength = navigation?.getState()?.routes?.length;
     if (routelength != undefined && routelength != 0) {
       setActiveTab(navigation?.getState()?.routes[navigation?.getState()?.routes?.length - 1]?.name)
     }
+    console.log('activeTab68=?', activeTab)
   }, [navigation])
 
   return (
@@ -97,15 +98,15 @@ export const BottomTab = ({ navigation }) => {
               px={5}
               justifyContent="space-between"
             >
-              <TabButton activeTab={activeTab} screen={"CarHomeScreen"} text={"Search"} onTab={onTab} tabIcon={"SearchIcon"} />
+              <TabButton activeTab={activeTab} screen={["CarHomeScreen"]} text={"Search"} onTab={onTab} tabIcon={"SearchIcon"} />
 
-              <TabButton activeTab={activeTab} screen={"TellCarScreen"} text={"Add Car"} onTab={onTab} tabIcon={"AddCarIcon"} />
+              <TabButton activeTab={activeTab} screen={["TellCarScreen"]} text={"Add Car"} onTab={onTab} tabIcon={"AddCarIcon"} />
 
-              <TabButton activeTab={activeTab} screen={"TripPageScreen"} text={"Trips"} onTab={onTab} tabIcon={"TripsIcon"} />
+              <TabButton activeTab={activeTab} screen={["TripPageScreen"]} text={"Trips"} onTab={onTab} tabIcon={"TripsIcon"} />
 
-              <TabButton activeTab={activeTab} screen={"InboxScreen"} text={"Inbox"} onTab={onTab} tabIcon={"InboxIcon"} />
+              <TabButton activeTab={activeTab} screen={["InboxScreen"]} text={"Inbox"} onTab={onTab} tabIcon={"InboxIcon"} />
 
-              <TabButton activeTab={activeTab} screen={"MyProfileScreen"} text={"More"} onTab={onTab} tabIcon={"MoreIcon"} />
+              <TabButton activeTab={activeTab} screen={["MyProfileScreen"]} text={"More"} onTab={onTab} tabIcon={"MoreIcon"} />
 
             </HStack>
           }
@@ -123,15 +124,15 @@ export const BottomTab = ({ navigation }) => {
               px={5}
               justifyContent="space-between"
             >
-              <TabButton activeTab={activeTab} screen={"CarHomeScreen"} text={"Search"} onTab={onTab} tabIcon={"SearchIcon"} />
+              <TabButton activeTab={activeTab} screen={["CarHomeScreen"]} text={"Search"} onTab={onTab} tabIcon={"SearchIcon"} />
 
-              <TabButton activeTab={activeTab} screen={"GetHouseScreen"} text={"Add House"} onTab={onTab} tabIcon={"AddCarIcon"} />
+              <TabButton activeTab={activeTab} screen={["GetHouseScreen"]} text={"Add House"} onTab={onTab} tabIcon={"AddCarIcon"} />
 
-              <TabButton activeTab={activeTab} screen={"TripPageScreen"} text={"Trips"} onTab={onTab} tabIcon={"TripsIcon"} />
+              <TabButton activeTab={activeTab} screen={["HouseTripScreen", "HouseWhereProfileScreen"]} text={"Trips"} onTab={onTab} tabIcon={"TripsIcon"} />
 
-              <TabButton activeTab={activeTab} screen={"InboxScreen"} text={"Inbox"} onTab={onTab} tabIcon={"InboxIcon"} />
+              <TabButton activeTab={activeTab} screen={["InboxScreen"]} text={"Inbox"} onTab={onTab} tabIcon={"InboxIcon"} />
 
-              <TabButton activeTab={activeTab} screen={"MyProfileScreen"} text={"More"} onTab={onTab} tabIcon={"MoreIcon"} />
+              <TabButton activeTab={activeTab} screen={["MyProfileScreen"]} text={"More"} onTab={onTab} tabIcon={"MoreIcon"} />
 
             </HStack>
           }
@@ -204,7 +205,7 @@ export const BottomTab = ({ navigation }) => {
 }
 
 export const TabButton = ({ activeTab, screen, onTab, tabIcon, text }) => {
-
+  console.log('screen', screen)
   return (
     <Stack
       style={{
@@ -218,7 +219,7 @@ export const TabButton = ({ activeTab, screen, onTab, tabIcon, text }) => {
       }}
       mt={2}
     >
-      <TouchableOpacity onPress={() => onTab(screen)}>
+      <TouchableOpacity onPress={() => onTab(screen[0])}>
         <Box
           style={{
             width: 45,
@@ -230,13 +231,13 @@ export const TabButton = ({ activeTab, screen, onTab, tabIcon, text }) => {
         >
           {tabIcon == "MoreIcon" ? <Text mt={-0.8} mb={2}
             style={{
-              color: activeTab === screen ? COLOR.IBase : COLOR.BottomFontcolor,
+              color: activeTab === screen[0] || activeTab === screen[1] ? COLOR.IBase : COLOR.BottomFontcolor,
               fontSize: 20
-            }}>...</Text> : LAYOUT[tabIcon](activeTab === screen ? activeStyle : hiddenStyle)
+            }}>...</Text> : LAYOUT[tabIcon](activeTab === screen[0] || activeTab === screen[1] ? activeStyle : hiddenStyle)
           }
           <Text
             style={{
-              color: activeTab === screen ? COLOR.IBase : COLOR.BottomFontcolor,
+              color: activeTab === screen[0] || activeTab === screen[1] ? COLOR.IBase : COLOR.BottomFontcolor,
               fontSize: 8
             }}
             mt={-1.5}

@@ -2,17 +2,17 @@ import React, { useCallback, useState, useEffect } from 'react';
 import { Image, ScrollView, TouchableOpacity, Dimensions, StatusBar, Pressable, Animated } from "react-native";
 import { Text, Box, Stack, HStack, Button, View, Icon, Avatar, VStack, Input, AspectRatio, Center, Actionsheet, useColorModeValue, Modal, useToast } from "native-base";
 import { MaterialCommunityIcons, MaterialIcons, AntDesign, EvilIcons, Entypo, Ionicons, FontAwesome, SimpleLineIcons } from "@expo/vector-icons"
-import { Footers, Headers, Loading, MainCurrency, MarketsItem } from '../../../components'
-import { COLOR, Images, LAYOUT, ROOT, CarStyle } from "../../../constants";
+import { Footers, Headers, Loading, MainCurrency, MarketsItem } from '../../components'
+import { COLOR, Images, LAYOUT, ROOT, CarStyle } from "../../constants";
 
-import { BottomTab } from '../../../components';
-import { useApi } from '../../../redux/services'
+import { BottomTab } from '../../components';
+import { useApi } from '../../redux/services'
 import { useSelector } from 'react-redux'
 import { borderRadius, height } from 'styled-system';
 
 const transmissionitems = CarStyle.transmissionitems;
 
-const AllCarsPage = ({ navigation }) => {
+const MyHousesPage = ({ navigation }) => {
     const { user } = useSelector((store) => store.auth)
     const Toast = useToast()
     const Api = useApi()
@@ -29,17 +29,17 @@ const AllCarsPage = ({ navigation }) => {
         navigation.navigate("EditProfileScreen")
     }
 
-    const [allCars, setAllCars] = useState([]);
+    const [allHouses, setAllHouses] = useState([]);
 
     const onSetDeleteCarId = (_id) => {
         setCarId(_id);
         setModalVisible(true);
     }
 
-    const onDeleteCar = (_id) => {
+    const onDeleteHouse = (_id) => {
         setModalVisible(false);
         setLoading(true);
-        Api.DeleteMyCar({ _id }).then(({ data }) => {
+        Api.DeleteMyHouse({ _id }).then(({ data }) => {
             if (data.status) {
                 setReload(!reload);
                 return Toast.show({ title: "Delete Car!", placement: 'bottom', status: 'error', w: 300 });
@@ -58,7 +58,7 @@ const AllCarsPage = ({ navigation }) => {
 
     useEffect(() => {
         setLoading(true);
-        Api.GetMyCars({ email: user.email }).then(({ data }) => {
+        Api.GetMyHouses({ email: user.email }).then(({ data }) => {
             if (data.status) {
                 data = data.data;
                 let newcars = [];
@@ -80,7 +80,7 @@ const AllCarsPage = ({ navigation }) => {
                     }
                     newcars.push(newcar);
                 }
-                setAllCars(newcars);
+                setAllHouses(newcars);
                 setLoading(false);
             }
             else {
@@ -129,7 +129,7 @@ const AllCarsPage = ({ navigation }) => {
                             color={COLOR.black}
                             fontWeight="semibold"
                             fontSize="md"
-                        >All Cars</Text>
+                        >All Houses</Text>
                     </View>
                 </Stack>
 
@@ -138,7 +138,7 @@ const AllCarsPage = ({ navigation }) => {
             <ScrollView contentContainerStyle={{ justifyContent: "space-around" }} showsVerticalScrollIndicator={false}>
                 <Box w="full" px={5} py={3} pb={10}>
                     <VStack space={2}>
-                        {allCars.map((item, idx) => {
+                        {allHouses.map((item, idx) => {
                             return (
                                 <ScrollView
                                     key={idx}
@@ -156,102 +156,26 @@ const AllCarsPage = ({ navigation }) => {
                                                 borderRadius: 10,
                                             }}
                                             p={3}
-                                            w={325}
+                                            w={300}
                                         >
-                                            <HStack justifyContent="space-between">
-                                                <Text
-                                                    color={COLOR.IBase}
-                                                    fontWeight="bold"
-                                                    fontSize="sm"
-                                                >
-                                                    ${`${item.days}`}/day
-                                                </Text>
-                                                <Text
-                                                    color={COLOR.black}
-                                                    fontWeight="semibold"
-                                                    fontSize="sm"
-                                                >
-                                                    {`${item.name}`}
-                                                </Text>
-                                            </HStack>
-                                            <HStack mt={2}>
-                                                <VStack space={1} w="1/2">
-                                                    <Stack space={2} direction="row" justifyContent="flex-start" alignItems="center">
-                                                        <Icon color={COLOR.IBase} size="xs">
-                                                            {LAYOUT.engineIcon}
-                                                        </Icon>
-                                                        <Text
-                                                            color={COLOR.inPlaceholder}
-                                                            fontWeight="medium"
-                                                            fontSize="xs"
-                                                        >
-                                                            {`${item.engine}`}
-                                                        </Text>
-                                                    </Stack>
-                                                    <Stack space={2} direction="row" justifyContent="flex-start" alignItems="center">
-                                                        <Icon color={COLOR.IBase} size="xs">
-                                                            {LAYOUT.seatIcon}
-                                                        </Icon>
-                                                        <Text
-                                                            color={COLOR.inPlaceholder}
-                                                            fontWeight="medium"
-                                                            fontSize="xs"
-                                                        >
-                                                            {`${item.seats}`} Seats
-                                                        </Text>
-                                                    </Stack>
-                                                    <Stack space={2} direction="row" justifyContent="flex-start" alignItems="center">
-                                                        <Icon color={COLOR.IBase} size="xs">
-                                                            {LAYOUT.doorIcon}
-                                                        </Icon>
-                                                        <Text
-                                                            color={COLOR.inPlaceholder}
-                                                            fontWeight="medium"
-                                                            fontSize="xs"
-                                                        >
-                                                            {`${item.doors}`} Doors
-                                                        </Text>
-                                                    </Stack>
-                                                    <Stack space={2} direction="row" justifyContent="flex-start" alignItems="center">
-                                                        <Icon color={COLOR.IBase} size="xs">
-                                                            {LAYOUT.autoIcon}
-                                                        </Icon>
-                                                        <Text
-                                                            color={COLOR.inPlaceholder}
-                                                            fontWeight="medium"
-                                                            fontSize="xs"
-                                                        >
-                                                            {transmissionitems[item.automatic]}
-                                                        </Text>
-                                                    </Stack>
-                                                    <HStack space={2} style={{ alignItems: 'center' }}>
-                                                        <FontAwesome name="star" size={14} color={COLOR.yellow} />
-                                                        <HStack space={1}>
-                                                            <Text
-                                                                color={COLOR.black}
-                                                                fontWeight="semibold"
-                                                                fontSize="xs"
-                                                            >{`${item.star}`}</Text>
-                                                            <Text
-                                                                color={COLOR.inPlaceholder}
-                                                                fontWeight="semibold"
-                                                                fontSize="xs"
-                                                            >(24.2k)</Text>
-                                                        </HStack>
-                                                    </HStack>
-                                                </VStack>
-                                                <Box
-                                                    w="1/2"
-                                                    // borderStyle="solid"
-                                                    // borderWidth={1}
-                                                    // borderColor={COLOR.inpBorderColor}
-                                                    borderRadius={5}
-                                                    // bg={COLOR.white}
-                                                    mt={-3}
-                                                >
-                                                    <Image source={{ uri: item.img }} alt="car" style={{ width: 150, height: 130 }} />
+                                            <VStack space={2}>
+                                                <Box borderRadius={10} w="full" >
+                                                    <Image source={{ uri: item.img }} alt="car" style={{ width: 290, height: 150 }} />
                                                 </Box>
-                                            </HStack>
+                                                <HStack justifyContent="space-between" alignItems="center">
+                                                    <Text color={COLOR.black} pl={3} fontWeight="semibold" fontSize="sm"> {`Park Square, NY`}</Text>
+                                                    <Text color={COLOR.IBase} fontWeight="bold" fontSize="sm">${`450`}/night</Text>
+                                                </HStack>
+                                                <HStack space={2} pl={3} style={{ alignItems: 'center' }}>
+                                                    <HStack space={1}>
+                                                        <Text
+                                                            color={COLOR.inPlaceholder}
+                                                            fontWeight="semibold"
+                                                            fontSize="xs"
+                                                        >3BHK</Text>
+                                                    </HStack>
+                                                </HStack>
+                                            </VStack>
                                         </Box>
                                         <Box
                                             px={5}
@@ -280,6 +204,35 @@ const AllCarsPage = ({ navigation }) => {
                                         </Box>
                                     </HStack>
                                 </ScrollView>
+
+                                // <Box key={idx}>
+                                //     <TouchableOpacity onPress={() => onDatail(item)}>
+                                //         <VStack space={2}>
+                                //             <Box borderRadius={10} w="full">
+                                //                 <Image source={{ uri: item.img }}  alt="car" style={{ width: 450, height: 190 }} />
+                                //             </Box>
+                                //             <HStack justifyContent="space-between" alignItems="center">
+                                //                 <Text color={COLOR.black} fontWeight="semibold" fontSize="sm"> {`Park Square, NY`}</Text>
+                                //                 <Text color={COLOR.IBase} fontWeight="bold" fontSize="sm">${`450`}/night</Text>
+                                //             </HStack>
+                                //             <HStack space={2} style={{ alignItems: 'center' }}>
+                                //                 <FontAwesome name="star" size={14} color={COLOR.yellow} />
+                                //                 <HStack space={1}>
+                                //                     <Text
+                                //                         color={COLOR.black}
+                                //                         fontWeight="semibold"
+                                //                         fontSize="xs"
+                                //                     >{`${item.star}`}</Text>
+                                //                     <Text
+                                //                         color={COLOR.inPlaceholder}
+                                //                         fontWeight="semibold"
+                                //                         fontSize="xs"
+                                //                     >3BHK</Text>
+                                //                 </HStack>
+                                //             </HStack>
+                                //         </VStack>
+                                //     </TouchableOpacity>
+                                // </Box>
                             )
                         })}
                     </VStack>
@@ -372,7 +325,7 @@ const AllCarsPage = ({ navigation }) => {
                                 width: '50%',
                             }}
                             p={2}>
-                            <TouchableOpacity onPress={() => onDeleteCar(carid)}>
+                            <TouchableOpacity onPress={() => onDeleteHouse(carid)}>
                                 <Box
                                     style={{
                                         justifyContent: 'center',
@@ -396,4 +349,4 @@ const AllCarsPage = ({ navigation }) => {
     )
 }
 
-export default AllCarsPage;
+export default MyHousesPage;
