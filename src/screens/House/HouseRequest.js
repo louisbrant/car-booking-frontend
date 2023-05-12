@@ -159,6 +159,9 @@ const HouseRequestPage = ({ navigation }) => {
             navigation.navigate("RequestDetailScreen");
         }
     }
+    const houseReserve = () => {
+        navigation.navigate("HouseRentSelectDateScreen");
+    }
 
     // Notification.show();
 
@@ -342,7 +345,7 @@ const HouseRequestPage = ({ navigation }) => {
                         }}
                     >
                         <HStack alignItems="center" justifyContent="space-between" >
-                            <TouchableOpacity onPress={() => showCheckPicker('in')}>
+                            <TouchableOpacity >
                                 <VStack space={1} >
                                     <Text color={COLOR.black} fontWeight="semibold" fontSize="xs">Check-in</Text>
                                     <Text color={COLOR.inPlaceholder} fontWeight="medium" fontSize="2xs">
@@ -350,10 +353,10 @@ const HouseRequestPage = ({ navigation }) => {
                                     </Text>
                                 </VStack>
                             </TouchableOpacity>
-                            <TouchableOpacity onPress={() => { setShowPicker(false); setModalVisible(true); }}>
+                            <TouchableOpacity >
                                 <Icon color={COLOR.inIconColor} size="xs" as={<AntDesign name="right" />} />
                             </TouchableOpacity>
-                            <TouchableOpacity onPress={() => showCheckPicker('out')}>
+                            <TouchableOpacity >
                                 <VStack space={1} >
                                     <Text color={COLOR.black} fontWeight="semibold" fontSize="xs">Checkout</Text>
                                     <Text color={COLOR.inPlaceholder} fontWeight="medium" fontSize="2xs">
@@ -705,8 +708,8 @@ const HouseRequestPage = ({ navigation }) => {
                                                             <HStack space={2}>
                                                                 <Avatar bg="white" alignSelf="center" size={"36"} source={Images.Profile1} />
                                                                 <VStack space={1}>
-                                                                    <Text fontWeight="semibold" fontSize="xs">Name here</Text>
-                                                                    <Text color={COLOR.inPlaceholder} fontWeight="medium" fontSize="2xs">Response Time: 1 hour</Text>
+                                                                    <Text fontWeight="semibold" fontSize="xs">John Smith</Text>
+                                                                    <Text color={COLOR.inPlaceholder} fontWeight="medium" fontSize="2xs">2 months ago</Text>
                                                                 </VStack>
                                                             </HStack>
                                                         </View>
@@ -786,6 +789,7 @@ const HouseRequestPage = ({ navigation }) => {
                                             }}
                                             py={3}
                                             px={4}
+                                            onTouchStart={houseReserve}
                                         >
                                             <Text
                                                 color={COLOR.white}

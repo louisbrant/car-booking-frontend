@@ -5,7 +5,8 @@ import produce from 'immer'
 
 const initialState = {
   tab: 'car',
-  house: {}
+  house: {},
+  renthouse: {}
 }
 
 export default function reducer(state = initialState, action) {
@@ -17,6 +18,9 @@ export default function reducer(state = initialState, action) {
         return
       case 'SET_HouseInfor':
         draft.house = action.payload.house
+        return
+      case 'SET_RentHouseInfor':
+        draft.renthouse = action.payload.renthouse
         return
       default:
         return state
