@@ -59,13 +59,11 @@ export const BottomTab = ({ navigation }) => {
     setModalVisible(false);
   }
   const [activeTab, setActiveTab] = useState("MyHomeScreen");
-  console.log('activeTab62=?', activeTab)
   useEffect(() => {
     let routelength = navigation?.getState()?.routes?.length;
     if (routelength != undefined && routelength != 0) {
       setActiveTab(navigation?.getState()?.routes[navigation?.getState()?.routes?.length - 1]?.name)
     }
-    console.log('activeTab68=?', activeTab)
   }, [navigation])
 
   return (
@@ -205,7 +203,6 @@ export const BottomTab = ({ navigation }) => {
 }
 
 export const TabButton = ({ activeTab, screen, onTab, tabIcon, text }) => {
-  console.log('screen', screen)
   return (
     <Stack
       style={{
@@ -282,7 +279,6 @@ export const Footers = ({ routeName }) => {
       }
       setBadgeNum(bgn);
     }).catch(error => {
-      console.log(`LoadAppointData`, error)
     })
   }, []);
 
