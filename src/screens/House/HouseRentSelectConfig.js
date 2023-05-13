@@ -28,7 +28,7 @@ import { Footers, Headers, Loading, MainCurrency, MarketsItem } from '../../comp
 
 const markStyle = { dayTextStyle: { color: 'white', fontSize: 14, fontWeight: 'bold' }, dayBackgroundColor: '#08a' };
 
-const HouseRentSelectDatePage = ({ navigation }) => {
+const HouseRentSelectConfigPage = ({ navigation }) => {
     const { user } = useSelector((store) => store.auth)
     const dispatch = useDispatch()
 
@@ -63,7 +63,7 @@ const HouseRentSelectDatePage = ({ navigation }) => {
             };
             console.log('house64=>', house)
             dispatch(setRentHouseInfor(house))
-            return navigation.navigate("HouseRentSelectConfigScreen");
+            return navigation.navigate("VecificationCarScreen");
         }
     }
 
@@ -212,4 +212,4 @@ const HouseRentSelectDatePage = ({ navigation }) => {
         </Box>
     );
 };
-export default HouseRentSelectDatePage;
+export default HouseRentSelectConfigPage;
