@@ -79,6 +79,7 @@ import HouseRequestPage from '../screens/House/HouseRequest';
 import HouseTripPage from '../screens/House/Trip/index';
 import HouseWhereProfilePage from '../screens/House/Trip/WhereProfile';
 import HouseRentSelectDatePage from '../screens/House/HouseRentSelectDate';
+import HouseRentSelectConfigPage from '../screens/House/HouseRentSelectConfig';
 
 
 const navigation = () => {
@@ -495,6 +496,13 @@ const navigation = () => {
             <Stack.Screen
                 name="HouseRentSelectDateScreen"
                 component={HouseRentSelectDatePage}
+                options={{
+                    header: () => { },
+                }}
+            />
+            <Stack.Screen
+                name="HouseRentSelectConfigScreen"
+                component={HouseRentSelectConfigPage}
                 options={{
                     header: () => { },
                 }}
