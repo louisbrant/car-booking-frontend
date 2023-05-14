@@ -156,31 +156,75 @@ const HouseRentSelectConfigPage = ({ navigation }) => {
                     </VStack>
                 </HStack>
 
-                <HStack pb={3}>
-                    <Box>
-                        <VStack w="100%" space={1} height={300} >
-                            <ScrollView >
-                                <DatepickerRange
-                                    buttonText="Save date"
-                                    closeButtonText=""
-                                    chosenDateTextColor='red'
-                                    showDaysHeader={false}
-                                    placeHolderStart=''
-                                    placeHolderUntil=''
-                                    buttonColor={COLOR.IBase}
-                                    showClose={false}
-                                    showReset={false}
-                                    onSelect={onSelectCheckDate}
-                                    showButton={false}
-                                    selectedBackgroundColor={COLOR.IBase}
-                                    infoContainerStyle={{ marginRight: 2, paddingHorizontal: 2, paddingVertical: 5, backgroundColor: 'green', borderRadius: 2, alignSelf: 'flex-end' }}
-                                // onConfirm={(startDate, untilDate) => this.setState({ startDate, untilDate })}
-                                />
-                            </ScrollView>
-                        </VStack>
-
-                    </Box>
+                <HStack justifyContent="flex-start" pb={3}>
+                    <VStack w="full" space={1}>
+                        <Input
+                            w="full"
+                            onChangeText={setAddress}
+                            bg={COLOR.white}
+                            p={2}
+                            borderStyle="solid"
+                            borderWidth={1}
+                            borderColor={COLOR.inPlaceholder}
+                            bgColor={COLOR.white}
+                            color={COLOR.black}
+                        />
+                    </VStack>
                 </HStack>
+
+                <HStack justifyContent="space-between" pb={3}>
+                    <VStack w="100%" space={1}>
+                        <Text
+                            color={COLOR.inPlaceholder}
+                            fontWeight="medium"
+                            fontSize="sm"
+                        >
+                            WHEN IS YOUR TRIP?
+                        </Text>
+                    </VStack>
+                </HStack>
+
+                <Box w="full" px={5} py={3} pb={10}>
+                    <VStack space={3}>
+                        <HStack space={2}>
+                            <VStack
+                                flex={1}
+                                space={1}
+                                pb={2}
+                                style={{
+                                    borderStyle: 'solid',
+                                    borderWidth: 1,
+                                    borderColor: COLOR.inpBorderColor,
+                                }}
+                            >
+                                <HStack justifyContent="space-between" alignItems="center">
+                                    <Text fontWeight="semibold" color={COLOR.black} fontSize="sm" >Adults</Text>
+                                </HStack>
+                                <Text color={COLOR.inPlaceholder} fontWeight="medium" fontSize="xs">Ages 13 or above</Text>
+                            </VStack>
+                            <Box
+                                style={{
+                                    borderStyle: 'solid',
+                                    borderBottomWidth: 1,
+                                    borderColor: COLOR.inpBorderColor,
+                                }}
+                                justifyContent={'center'}
+                            >
+                                <VStack >
+                                    <Text fontWeight="semibold" fontSize="xs" >-</Text>
+                                </VStack>
+
+                                <VStack >
+                                    <Text fontWeight="semibold" fontSize="xs" >0</Text>
+                                </VStack>
+
+                                <VStack >
+                                    <Text fontWeight="semibold" fontSize="xs" >+</Text>
+                                </VStack>
+                            </Box>
+                        </HStack>
+                    </VStack>
+                </Box>
 
                 <HStack pb={3} justifyContent={'center'} >
                     <Box w={'100%'}>

@@ -153,217 +153,217 @@ const ProjectHomePage = ({ navigation }) => {
             }}
         >
             {loading && <Loading />}
-            <ScrollView contentContainerStyle={{ justifyContent: "space-around" }} showsVerticalScrollIndicator={false}>
-                <Box
-                    pt={10}
-                    px={5}
-                    bg={COLOR.white}
-                    w="full"
-                    style={{
-                        shadowColor: "#B1A9A9",
-                        shadowOffset: {
-                            width: 0,
-                            height: 4,
-                        },
-                        shadowOpacity: 0.15,
-                        shadowRadius: 24,
-                        // elevation: 1,
-                    }}
-                >
-                    <HStack justifyContent="space-between">
-                        <Input
-                            w="85%"
-                            InputLeftElement={
-                                <Icon
-                                    as={<EvilIcons name="search" />}
-                                    size="md"
-                                    ml="2"
-                                    color={COLOR.searchIconColor}
-                                />
-                            }
-                            p={.5}
-                            pl={1.5}
+            <Box
+                pt={10}
+                px={5}
+                bg={COLOR.white}
+                w="full"
+                style={{
+                    shadowColor: "#B1A9A9",
+                    shadowOffset: {
+                        width: 0,
+                        height: 4,
+                    },
+                    shadowOpacity: 0.15,
+                    shadowRadius: 24,
+                    // elevation: 1,
+                }}
+            >
+                <HStack justifyContent="space-between">
+                    <Input
+                        w="85%"
+                        InputLeftElement={
+                            <Icon
+                                as={<EvilIcons name="search" />}
+                                size="md"
+                                ml="2"
+                                color={COLOR.searchIconColor}
+                            />
+                        }
+                        p={.5}
+                        pl={1.5}
 
-                            bg={COLOR.white}
-                            color={COLOR.black}
+                        bg={COLOR.white}
+                        color={COLOR.black}
 
-                            borderStyle="solid"
-                            borderWidth={1}
-                            borderColor={COLOR.inpBorderColor}
-                            borderRadius={5}
+                        borderStyle="solid"
+                        borderWidth={1}
+                        borderColor={COLOR.inpBorderColor}
+                        borderRadius={5}
 
-                            placeholder="Search Jets, Yacht and Car"
-                        // onFocus={onFocus}
-                        />
-                        <Box px={2}
+                        placeholder="Search Jets, Yacht and Car"
+                    // onFocus={onFocus}
+                    />
+                    <Box px={2}
+                        style={{
+                            backgroundColor: COLOR.IBase,
+                            display: 'flex',
+                            justifyContent: 'center',
+                            alignItems: 'center',
+                            borderRadius: 5
+                        }}
+                    >
+                        <Icon color={COLOR.IBase} size="md">
+                            {LAYOUT.filterIcon}
+                        </Icon>
+                    </Box>
+                </HStack>
+                {
+                    activeTab == "house" &&
+                    <HStack>
+                        <Box
+                            w="1/3"
+                            py={2}
                             style={{
-                                backgroundColor: COLOR.IBase,
                                 display: 'flex',
                                 justifyContent: 'center',
                                 alignItems: 'center',
-                                borderRadius: 5
+                            }}
+                            onTouchStart={() => { tabChange('house') }}
+                        >
+                            <VStack justifyContent="center" alignItems="center" >
+                                <Box>
+                                    {LAYOUT.basehomeIcon}
+                                </Box>
+                                <Text color={COLOR.IBase} fontWeight="medium" fontSize={9}>Home</Text>
+                            </VStack>
+
+                            <Box
+                                style={{
+                                    position: 'absolute',
+                                    bottom: 0,
+
+                                    width: '100%',
+                                    height: 3,
+                                    backgroundColor: COLOR.IBase,
+
+                                    shadowColor: COLOR.inPlaceholder,
+                                    shadowOffset: {
+                                        width: 0,
+                                        height: 4,
+                                    },
+                                    shadowOpacity: 0.15,
+                                    shadowRadius: 24,
+
+                                    borderTopLeftRadius: 30,
+                                    borderTopRightRadius: 50,
+                                }}
+                            />
+                        </Box>
+                        <Box
+                            w="1/3"
+                            py={2}
+                            style={{
+                                display: 'flex',
+                                justifyContent: 'center',
+                                alignItems: 'center',
+                            }}
+                            onTouchStart={() => { tabChange('car') }}
+                        >
+                            <VStack justifyContent="center" alignItems="center">
+                                <Box>
+                                    {LAYOUT.carIcon}
+                                </Box>
+                                <Text color={COLOR.inPlaceholder} fontWeight="medium" fontSize={9}>Cars</Text>
+                            </VStack>
+                        </Box>
+                        <Box
+                            w="1/3"
+                            py={2}
+                            style={{
+                                display: 'flex',
+                                justifyContent: 'center',
+                                alignItems: 'center',
                             }}
                         >
-                            <Icon color={COLOR.IBase} size="md">
-                                {LAYOUT.filterIcon}
-                            </Icon>
+                            <VStack justifyContent="center" alignItems="center">
+                                <Box>
+                                    {LAYOUT.boatIcon}
+                                </Box>
+                                <Text color={COLOR.inPlaceholder} fontWeight="medium" fontSize={9}>Yacht</Text>
+                            </VStack>
                         </Box>
                     </HStack>
-                    {
-                        activeTab == "house" &&
-                        <HStack>
+                }
+                {
+                    activeTab == "car" &&
+                    <HStack>
+                        <Box
+                            w="1/3"
+                            py={2}
+                            style={{
+                                display: 'flex',
+                                justifyContent: 'center',
+                                alignItems: 'center',
+                            }}
+                            onTouchStart={() => { tabChange('house') }}
+                        >
+                            <VStack justifyContent="center" alignItems="center" >
+                                <Box>
+                                    {LAYOUT.homeIcon}
+                                </Box>
+                                <Text color={COLOR.inPlaceholder} fontWeight="medium" fontSize={9}>Home</Text>
+                            </VStack>
+                        </Box>
+                        <Box
+                            w="1/3"
+                            py={2}
+                            style={{
+                                display: 'flex',
+                                justifyContent: 'center',
+                                alignItems: 'center',
+                            }}
+                            onTouchStart={() => { tabChange('car') }}
+                        >
+                            <VStack justifyContent="center" alignItems="center">
+                                <Box>
+                                    {LAYOUT.basecarIcon}
+                                </Box>
+                                <Text color={COLOR.IBase} fontWeight="medium" fontSize={9}>Cars</Text>
+                            </VStack>
                             <Box
-                                w="1/3"
-                                py={2}
                                 style={{
-                                    display: 'flex',
-                                    justifyContent: 'center',
-                                    alignItems: 'center',
+                                    position: 'absolute',
+                                    bottom: 0,
+
+                                    width: '100%',
+                                    height: 3,
+                                    backgroundColor: COLOR.IBase,
+
+                                    shadowColor: COLOR.inPlaceholder,
+                                    shadowOffset: {
+                                        width: 0,
+                                        height: 4,
+                                    },
+                                    shadowOpacity: 0.15,
+                                    shadowRadius: 24,
+
+                                    borderTopLeftRadius: 30,
+                                    borderTopRightRadius: 50,
                                 }}
-                                onTouchStart={() => { tabChange('house') }}
-                            >
-                                <VStack justifyContent="center" alignItems="center" >
-                                    <Box>
-                                        {LAYOUT.basehomeIcon}
-                                    </Box>
-                                    <Text color={COLOR.IBase} fontWeight="medium" fontSize={9}>Home</Text>
-                                </VStack>
-
-                                <Box
-                                    style={{
-                                        position: 'absolute',
-                                        bottom: 0,
-
-                                        width: '100%',
-                                        height: 3,
-                                        backgroundColor: COLOR.IBase,
-
-                                        shadowColor: COLOR.inPlaceholder,
-                                        shadowOffset: {
-                                            width: 0,
-                                            height: 4,
-                                        },
-                                        shadowOpacity: 0.15,
-                                        shadowRadius: 24,
-
-                                        borderTopLeftRadius: 30,
-                                        borderTopRightRadius: 50,
-                                    }}
-                                />
-                            </Box>
-                            <Box
-                                w="1/3"
-                                py={2}
-                                style={{
-                                    display: 'flex',
-                                    justifyContent: 'center',
-                                    alignItems: 'center',
-                                }}
-                                onTouchStart={() => { tabChange('car') }}
-                            >
-                                <VStack justifyContent="center" alignItems="center">
-                                    <Box>
-                                        {LAYOUT.carIcon}
-                                    </Box>
-                                    <Text color={COLOR.inPlaceholder} fontWeight="medium" fontSize={9}>Cars</Text>
-                                </VStack>
-                            </Box>
-                            <Box
-                                w="1/3"
-                                py={2}
-                                style={{
-                                    display: 'flex',
-                                    justifyContent: 'center',
-                                    alignItems: 'center',
-                                }}
-                            >
-                                <VStack justifyContent="center" alignItems="center">
-                                    <Box>
-                                        {LAYOUT.boatIcon}
-                                    </Box>
-                                    <Text color={COLOR.inPlaceholder} fontWeight="medium" fontSize={9}>Yacht</Text>
-                                </VStack>
-                            </Box>
-                        </HStack>
-                    }
-                    {
-                        activeTab == "car" &&
-                        <HStack>
-                            <Box
-                                w="1/3"
-                                py={2}
-                                style={{
-                                    display: 'flex',
-                                    justifyContent: 'center',
-                                    alignItems: 'center',
-                                }}
-                                onTouchStart={() => { tabChange('house') }}
-                            >
-                                <VStack justifyContent="center" alignItems="center" >
-                                    <Box>
-                                        {LAYOUT.homeIcon}
-                                    </Box>
-                                    <Text color={COLOR.inPlaceholder} fontWeight="medium" fontSize={9}>Home</Text>
-                                </VStack>
-                            </Box>
-                            <Box
-                                w="1/3"
-                                py={2}
-                                style={{
-                                    display: 'flex',
-                                    justifyContent: 'center',
-                                    alignItems: 'center',
-                                }}
-                                onTouchStart={() => { tabChange('car') }}
-                            >
-                                <VStack justifyContent="center" alignItems="center">
-                                    <Box>
-                                        {LAYOUT.basecarIcon}
-                                    </Box>
-                                    <Text color={COLOR.IBase} fontWeight="medium" fontSize={9}>Cars</Text>
-                                </VStack>
-                                <Box
-                                    style={{
-                                        position: 'absolute',
-                                        bottom: 0,
-
-                                        width: '100%',
-                                        height: 3,
-                                        backgroundColor: COLOR.IBase,
-
-                                        shadowColor: COLOR.inPlaceholder,
-                                        shadowOffset: {
-                                            width: 0,
-                                            height: 4,
-                                        },
-                                        shadowOpacity: 0.15,
-                                        shadowRadius: 24,
-
-                                        borderTopLeftRadius: 30,
-                                        borderTopRightRadius: 50,
-                                    }}
-                                />
-                            </Box>
-                            <Box
-                                w="1/3"
-                                py={2}
-                                style={{
-                                    display: 'flex',
-                                    justifyContent: 'center',
-                                    alignItems: 'center',
-                                }}
-                            >
-                                <VStack justifyContent="center" alignItems="center">
-                                    <Box>
-                                        {LAYOUT.boatIcon}
-                                    </Box>
-                                    <Text color={COLOR.inPlaceholder} fontWeight="medium" fontSize={9}>Yacht</Text>
-                                </VStack>
-                            </Box>
-                        </HStack>
-                    }
-                </Box>
-                <VStack py={3} px={5} space={3}>
+                            />
+                        </Box>
+                        <Box
+                            w="1/3"
+                            py={2}
+                            style={{
+                                display: 'flex',
+                                justifyContent: 'center',
+                                alignItems: 'center',
+                            }}
+                        >
+                            <VStack justifyContent="center" alignItems="center">
+                                <Box>
+                                    {LAYOUT.boatIcon}
+                                </Box>
+                                <Text color={COLOR.inPlaceholder} fontWeight="medium" fontSize={9}>Yacht</Text>
+                            </VStack>
+                        </Box>
+                    </HStack>
+                }
+            </Box>
+            <ScrollView contentContainerStyle={{ justifyContent: "space-around" }} showsVerticalScrollIndicator={false}>
+                <VStack py={3} px={5} space={3} pb={10}>
 
                     {activeTab == 'car' && allCars.map((item, idx) => {
                         return (
