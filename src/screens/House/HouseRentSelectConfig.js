@@ -26,20 +26,21 @@ import { setRentHouseInfor } from '../../redux/actions/houseActions';
 
 import { Footers, Headers, Loading, MainCurrency, MarketsItem } from '../../components'
 
-const markStyle = { dayTextStyle: { color: 'white', fontSize: 14, fontWeight: 'bold' }, dayBackgroundColor: '#08a' };
+const radius = { dayTextStyle: { borderWidth: 1, borderColor: COLOR.IBasePlaceholder } };
 
 const HouseRentSelectConfigPage = ({ navigation }) => {
-    const { user } = useSelector((store) => store.auth)
+    const { renthouse } = useSelector((store) => store.renthouse)
     const dispatch = useDispatch()
 
     const Toast = useToast()
     const Api = useApi()
     const [loading, setLoading] = useState(false);
-    const [address, setAddress] = useState('')
-
-    const [startcheckdate, setStartCheckDate] = useState((new Date().toDateString().toString()).replace(" ", ", ") + " 10:00 PM");
-    const [endcheckdate, setEndCheckDate] = useState((new Date().toDateString().toString()).replace(" ", ", ") + " 10:00 PM");
-
+    const [address, setAddress] = useState(renthouse?.address)
+    const startcheckdateval = (new Date(renthouse?.startcheckdate)).toString('mm dd yyyy').split(" ");
+    const endcheckdateval = (new Date(renthouse?.endcheckdate)).toString('mm dd yyyy').split(" ");
+    const [startcheckdate, setStartCheckDate] = useState(startcheckdateval[1] + " " + startcheckdateval[2] + " " + startcheckdateval[3]);
+    const [endcheckdate, setEndCheckDate] = useState(endcheckdateval[1] + " " + endcheckdateval[2] + " " + endcheckdateval[3]);
+    const [rentDate, setRentDate] = useState(startcheckdate + " - " + endcheckdate);
     const onIdentifyStart = () => {
         if (!address)
             return Toast.show({ title: "Enter the Adress", placement: 'top', status: 'success', w: 300 })
@@ -52,14 +53,14 @@ const HouseRentSelectConfigPage = ({ navigation }) => {
         }
     }
 
-    const onSelectDateHouseNext = () => {
-        if (!address || !startcheckdate || !endcheckdate)
+    const onSelectConfirmHouseNext = () => {
+        if (!address || !rentDate)
             return Toast.show({ title: "Enter the All data", placement: 'top', status: 'success', w: 300 })
         else {
             let house = {
-                address,
-                startcheckdate,
-                endcheckdate
+                address: renthouse?.address,
+                startcheckdate: renthouse?.startcheckdate,
+                endcheckdate: renthouse?.endcheckdate
             };
             console.log('house64=>', house)
             dispatch(setRentHouseInfor(house))
@@ -77,6 +78,8 @@ const HouseRentSelectConfigPage = ({ navigation }) => {
     }
 
     useEffect(() => {
+        console.log('renthouse=>', renthouse);
+        console.log('address=>', address);
         setLoading(false);
     }, [])
     return (
@@ -92,7 +95,7 @@ const HouseRentSelectConfigPage = ({ navigation }) => {
         >
             {loading && <Loading />}
             <Box
-                pt={10}
+                pt={5}
                 pb={2}
                 px={5}
                 style={{
@@ -132,14 +135,18 @@ const HouseRentSelectConfigPage = ({ navigation }) => {
                     <VStack w="full" space={1}>
                         <Input
                             w="full"
+                            value={address}
                             onChangeText={setAddress}
                             bg={COLOR.white}
                             p={2}
                             borderStyle="solid"
+                            fontSize={'sm'}
                             borderWidth={1}
                             borderColor={COLOR.inPlaceholder}
                             bgColor={COLOR.white}
                             color={COLOR.black}
+                            height={'40px'}
+                        // isDisabled={true}
                         />
                     </VStack>
                 </HStack>
@@ -160,14 +167,18 @@ const HouseRentSelectConfigPage = ({ navigation }) => {
                     <VStack w="full" space={1}>
                         <Input
                             w="full"
-                            onChangeText={setAddress}
+                            value={rentDate}
+                            onChangeText={setRentDate}
                             bg={COLOR.white}
+                            fontSize={'sm'}
                             p={2}
                             borderStyle="solid"
                             borderWidth={1}
                             borderColor={COLOR.inPlaceholder}
                             bgColor={COLOR.white}
                             color={COLOR.black}
+                            height={'40px'}
+                        // isDisabled={true}
                         />
                     </VStack>
                 </HStack>
@@ -179,56 +190,183 @@ const HouseRentSelectConfigPage = ({ navigation }) => {
                             fontWeight="medium"
                             fontSize="sm"
                         >
-                            WHEN IS YOUR TRIP?
+                            WHO IS COMING?
                         </Text>
                     </VStack>
                 </HStack>
 
-                <Box w="full" px={5} py={3} pb={10}>
+                <Box w="full" >
                     <VStack space={3}>
-                        <HStack space={2}>
-                            <VStack
-                                flex={1}
-                                space={1}
-                                pb={2}
-                                style={{
-                                    borderStyle: 'solid',
-                                    borderWidth: 1,
-                                    borderColor: COLOR.inpBorderColor,
-                                }}
-                            >
-                                <HStack justifyContent="space-between" alignItems="center">
-                                    <Text fontWeight="semibold" color={COLOR.black} fontSize="sm" >Adults</Text>
-                                </HStack>
-                                <Text color={COLOR.inPlaceholder} fontWeight="medium" fontSize="xs">Ages 13 or above</Text>
-                            </VStack>
+                        <VStack space={3}
+                            borderColor={COLOR.inpBorderColor}
+                            borderWidth={1}
+                            borderRadius={5}
+                        >
                             <Box
-                                style={{
-                                    borderStyle: 'solid',
-                                    borderBottomWidth: 1,
-                                    borderColor: COLOR.inpBorderColor,
-                                }}
-                                justifyContent={'center'}
+                                p={3}
+                                pb={0}
                             >
-                                <VStack >
-                                    <Text fontWeight="semibold" fontSize="xs" >-</Text>
-                                </VStack>
+                                <HStack
+                                    style={{
+                                        borderStyle: 'solid',
+                                        borderBottomWidth: 1,
+                                        borderColor: COLOR.inpBorderColor,
+                                    }}
+                                    justifyContent="space-between"
+                                    alignItems="center"
+                                    pb={2}
+                                >
+                                    <VStack
+                                        flex={1}
+                                        space={1}
+                                    >
+                                        <HStack justifyContent="space-between" alignItems="center">
+                                            <Text fontWeight="semibold" color={COLOR.black} fontSize="sm" >Adults</Text>
+                                        </HStack>
+                                        <Text color={COLOR.inPlaceholder} fontWeight="medium" fontSize="xs">Ages 13 or above</Text>
+                                    </VStack>
+                                    <HStack
+                                        py={3}
+                                    >
+                                        <VStack >
+                                            <AntDesign name="minuscircleo" size={20} color={COLOR.inPlaceholder} />
+                                        </VStack>
 
-                                <VStack >
-                                    <Text fontWeight="semibold" fontSize="xs" >0</Text>
-                                </VStack>
+                                        <VStack px={2} >
+                                            <Text fontWeight="semibold" fontSize={16} >0</Text>
+                                        </VStack>
 
-                                <VStack >
-                                    <Text fontWeight="semibold" fontSize="xs" >+</Text>
-                                </VStack>
+                                        <VStack >
+                                            <AntDesign name="pluscircleo" size={20} color={COLOR.inPlaceholder} />
+                                        </VStack>
+                                    </HStack>
+                                </HStack>
                             </Box>
-                        </HStack>
+                            <Box
+                                p={3}
+                                pb={0}
+                                pt={0}
+                            >
+                                <HStack
+                                    style={{
+                                        borderStyle: 'solid',
+                                        borderBottomWidth: 1,
+                                        borderColor: COLOR.inpBorderColor,
+                                    }}
+                                    justifyContent="space-between"
+                                    alignItems="center"
+                                    pb={2}
+                                >
+                                    <VStack
+                                        flex={1}
+                                        space={1}
+                                    >
+                                        <HStack justifyContent="space-between" alignItems="center">
+                                            <Text fontWeight="semibold" color={COLOR.black} fontSize="sm" >Children</Text>
+                                        </HStack>
+                                        <Text color={COLOR.inPlaceholder} fontWeight="medium" fontSize="xs">Ages 2 - 12</Text>
+                                    </VStack>
+                                    <HStack
+                                        py={3}
+                                    >
+                                        <VStack >
+                                            <AntDesign name="minuscircleo" size={20} color={COLOR.inPlaceholder} />
+                                        </VStack>
+
+                                        <VStack px={2} >
+                                            <Text fontWeight="semibold" fontSize={16} >0</Text>
+                                        </VStack>
+
+                                        <VStack >
+                                            <AntDesign name="pluscircleo" size={20} color={COLOR.inPlaceholder} />
+                                        </VStack>
+                                    </HStack>
+                                </HStack>
+                            </Box>
+                            <Box
+                                p={3}
+                                pb={0}
+                                pt={0}
+                            >
+                                <HStack
+                                    style={{
+                                        borderStyle: 'solid',
+                                        borderBottomWidth: 1,
+                                        borderColor: COLOR.inpBorderColor,
+                                    }}
+                                    justifyContent="space-between"
+                                    alignItems="center"
+                                    pb={2}
+                                >
+                                    <VStack
+                                        flex={1}
+                                        space={1}
+                                    >
+                                        <HStack justifyContent="space-between" alignItems="center">
+                                            <Text fontWeight="semibold" color={COLOR.black} fontSize="sm" >Infants</Text>
+                                        </HStack>
+                                        <Text color={COLOR.inPlaceholder} fontWeight="medium" fontSize="xs">Under 2</Text>
+                                    </VStack>
+                                    <HStack
+                                        py={3}
+                                    >
+                                        <VStack >
+                                            <AntDesign name="minuscircleo" size={20} color={COLOR.inPlaceholder} />
+                                        </VStack>
+
+                                        <VStack px={2} >
+                                            <Text fontWeight="semibold" fontSize={16} >0</Text>
+                                        </VStack>
+
+                                        <VStack >
+                                            <AntDesign name="pluscircleo" size={20} color={COLOR.inPlaceholder} />
+                                        </VStack>
+                                    </HStack>
+                                </HStack>
+                            </Box>
+                            <Box
+                                p={3}
+                                pb={0}
+                                pt={0}
+                            >
+                                <HStack
+                                    justifyContent="space-between"
+                                    alignItems="center"
+                                    pb={2}
+                                >
+                                    <VStack
+                                        flex={1}
+                                        space={1}
+                                    >
+                                        <HStack justifyContent="space-between" alignItems="center">
+                                            <Text fontWeight="semibold" color={COLOR.black} fontSize="sm" >Pets</Text>
+                                        </HStack>
+                                        <Text color={COLOR.inPlaceholder} fontWeight="medium" fontSize="xs">Bringing a service animal?</Text>
+                                    </VStack>
+                                    <HStack
+                                        py={3}
+                                    >
+                                        <VStack >
+                                            <AntDesign name="minuscircleo" size={20} color={COLOR.inPlaceholder} />
+                                        </VStack>
+
+                                        <VStack px={2} >
+                                            <Text fontWeight="semibold" fontSize={16} >0</Text>
+                                        </VStack>
+
+                                        <VStack >
+                                            <AntDesign name="pluscircleo" size={20} color={COLOR.inPlaceholder} />
+                                        </VStack>
+                                    </HStack>
+                                </HStack>
+                            </Box>
+                        </VStack>
                     </VStack>
                 </Box>
 
                 <HStack pb={3} justifyContent={'center'} >
                     <Box w={'100%'}>
-                        <TouchableOpacity onPress={onSelectDateHouseNext}>
+                        <TouchableOpacity onPress={onSelectConfirmHouseNext}>
                             <Box
                                 style={{
                                     height: 45,
@@ -253,7 +391,7 @@ const HouseRentSelectConfigPage = ({ navigation }) => {
                     </Box>
                 </HStack>
             </Box>
-        </Box>
+        </Box >
     );
 };
 export default HouseRentSelectConfigPage;
