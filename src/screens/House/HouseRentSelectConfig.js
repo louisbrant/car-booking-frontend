@@ -57,13 +57,6 @@ const HouseRentSelectConfigPage = ({ navigation }) => {
         if (!address || !rentDate)
             return Toast.show({ title: "Enter the All data", placement: 'top', status: 'success', w: 300 })
         else {
-            let house = {
-                address: renthouse?.address,
-                startcheckdate: renthouse?.startcheckdate,
-                endcheckdate: renthouse?.endcheckdate
-            };
-            console.log('house64=>', house)
-            dispatch(setRentHouseInfor(house))
             return navigation.navigate("VecificationCarScreen");
         }
     }
