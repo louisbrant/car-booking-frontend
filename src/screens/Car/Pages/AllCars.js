@@ -249,7 +249,7 @@ const AllCarsPage = ({ navigation }) => {
                                                     // bg={COLOR.white}
                                                     mt={-3}
                                                 >
-                                                    <Image source={{ uri: item.img }} alt="car" style={{ width: 150, height: 130 }} />
+                                                    <Image source={{ uri: item.img }} borderRadius={10} alt="car" style={{ width: 150, height: 130 }} />
                                                 </Box>
                                             </HStack>
                                         </Box>

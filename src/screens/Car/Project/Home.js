@@ -225,7 +225,7 @@ const ProjectHomePage = ({ navigation }) => {
                                 <Box>
                                     {LAYOUT.basehomeIcon}
                                 </Box>
-                                <Text color={COLOR.IBase} fontWeight="medium" fontSize={9}>Home</Text>
+                                <Text color={COLOR.IBase} fontWeight="medium" fontSize={9}>Homes</Text>
                             </VStack>
 
                             <Box
@@ -280,7 +280,7 @@ const ProjectHomePage = ({ navigation }) => {
                                 <Box>
                                     {LAYOUT.boatIcon}
                                 </Box>
-                                <Text color={COLOR.inPlaceholder} fontWeight="medium" fontSize={9}>Yacht</Text>
+                                <Text color={COLOR.inPlaceholder} fontWeight="medium" fontSize={9}>Yachts</Text>
                             </VStack>
                         </Box>
                     </HStack>
@@ -302,7 +302,7 @@ const ProjectHomePage = ({ navigation }) => {
                                 <Box>
                                     {LAYOUT.homeIcon}
                                 </Box>
-                                <Text color={COLOR.inPlaceholder} fontWeight="medium" fontSize={9}>Home</Text>
+                                <Text color={COLOR.inPlaceholder} fontWeight="medium" fontSize={9}>Homes</Text>
                             </VStack>
                         </Box>
                         <Box
@@ -356,7 +356,7 @@ const ProjectHomePage = ({ navigation }) => {
                                 <Box>
                                     {LAYOUT.boatIcon}
                                 </Box>
-                                <Text color={COLOR.inPlaceholder} fontWeight="medium" fontSize={9}>Yacht</Text>
+                                <Text color={COLOR.inPlaceholder} fontWeight="medium" fontSize={9}>Yachts</Text>
                             </VStack>
                         </Box>
                     </HStack>

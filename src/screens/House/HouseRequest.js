@@ -163,6 +163,9 @@ const HouseRequestPage = ({ navigation }) => {
         navigation.navigate("HouseRentSelectDateScreen");
     }
 
+    const onClose = () => {
+        return navigation.navigate("CarHomeScreen");
+    }
     // Notification.show();
 
     useEffect(() => {
@@ -319,7 +322,12 @@ const HouseRequestPage = ({ navigation }) => {
                     <Center position="absolute" w="full">
 
                         <Stack pt={10} direction="row" alignItems="center">
-                            <View style={{ flex: 1, flexDirection: 'row', alignItems: 'center', justifyContent: 'center' }}>
+                            <HStack justifyContent="space-between" pl={5}>
+                                <TouchableOpacity onPress={onClose}>
+                                    <Icon color={COLOR.black} size="md" as={<Ionicons name="arrow-back" />} />
+                                </TouchableOpacity>
+                            </HStack>
+                            <View pr={5} style={{ flex: 1, flexDirection: 'row', alignItems: 'center', justifyContent: 'center' }}>
                                 <TouchableOpacity onPress={requestBook}>
                                     <Text
                                         color={COLOR.white}

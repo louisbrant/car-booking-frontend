@@ -7,6 +7,8 @@ import { useSelector } from 'react-redux';
 
 import { COLOR, Images, LAYOUT, ROOT } from "../../../constants";
 
+import * as ImagePicker from 'expo-image-picker';
+
 
 const { width, height } = Dimensions.get('window')
 
@@ -23,6 +25,73 @@ const ChartPage = ({ navigation }) => {
     const [backendtime, setBackendTime] = useState();
     const [currenttime, setCurrentTime] = useState();
 
+
+    const [file, setAddfile] = useState({
+        data: "",
+        selected: false
+    });
+
+    const getImages = (para) => {
+        const array = [];
+        const uri = para.uri;
+        const name = uri.split("/").pop();
+        const match = /\.(\w+)$/.exec(name);
+        const type = match ? `image/${match[1]}` : `image`;
+        array.push({
+            uri, name, type
+        });
+        return array;
+    }
+
+    const onStartUpload = () => {
+        if (file.selected) {
+            const xhr = new XMLHttpRequest();
+            const formData = new FormData();
+            if (typeof (file.data) === 'object') {
+                const photos = getImages(file.data)
+                for (let i = 0; i < photos.length; i++) {
+                    formData.append("photo", photos[i]);
+                }
+            }
+            formData.append("data", JSON.stringify({ email: user.email }));
+            xhr.open("POST", `${ROOT.BACKEND_URL}houses/addHousesImage`);
+            xhr.setRequestHeader("Content-Type", "multipart/form-data");
+            xhr.onload = function () {
+                if (xhr.status === 200) {
+
+                }
+            }
+
+            xhr.send(formData);
+        }
+        else {
+            return Toast.show({ title: "Select Car Image!", placement: 'bottom', status: 'error', w: 300 })
+        }
+    }
+    const onUpload = async () => {
+        console.log('ddd');
+        try {
+            let result = await ImagePicker.launchImageLibraryAsync
+                ({
+                    mediaTypes: ImagePicker.MediaTypeOptions.All,
+                    allowsEditing: false
+                })
+            if (!result.cancelled) {
+                setAddfile({
+                    ...file,
+                    data: result,
+                    selected: true
+                });
+            }
+            else {
+                return Toast.show({ title: "Upload error!", placement: 'bottom', status: 'error', w: 300 })
+            }
+        }
+        catch (E) {
+            // console.log(E)
+            return Toast.show({ title: "Upload error!", placement: 'bottom', status: 'error', w: 300 })
+        }
+    }
 
     const Send = () => {
         if (sendData) {
@@ -170,8 +239,8 @@ const ChartPage = ({ navigation }) => {
                 </Stack>
             </Box>
 
-            <Box w="full" px={2} pb={0}>
-                <Box py={0} h={height - 150}>
+            <Box w="full" pb={0}>
+                <Box py={0} h={height - 180}>
                     <FlatList
                         flex={1}
                         px={4}
@@ -248,18 +317,58 @@ const ChartPage = ({ navigation }) => {
                         keyExtractor={(item, index) => `${index}`}
                     />
                 </Box>
-                <HStack alignItems="center" justifyContent="space-between" py={2} px={1}>
 
+                <Box position={'absolute'} mt={height - 250} zIndex={1}>
+                    <ScrollView horizontal={true} style={{ flex: 1 }} >
+                        <HStack justifyContent="space-between">
+                            <Box>
+                                <Image resizeMode="contain" borderRadius={10} source={Images.Profile} w={75} height={75} alt="car" />
+                            </Box>
+                        </HStack>
+                        <HStack justifyContent="space-between">
+                            <Box>
+                                <Image resizeMode="contain" borderRadius={10} source={Images.Profile} w={75} height={75} alt="car" />
+                            </Box>
+                        </HStack>
+                        <HStack justifyContent="space-between">
+                            <Box>
+                                <Image resizeMode="contain" borderRadius={10} source={Images.Profile} w={75} height={75} alt="car" />
+                            </Box>
+                        </HStack>
+                        <HStack justifyContent="space-between">
+                            <Box>
+                                <Image resizeMode="contain" borderRadius={10} source={Images.Profile} w={75} height={75} alt="car" />
+                            </Box>
+                        </HStack>
+                        <HStack justifyContent="space-between">
+                            <Box>
+                                <Image resizeMode="contain" borderRadius={10} source={Images.Profile} w={75} height={75} alt="car" />
+                            </Box>
+                        </HStack>
+                        <HStack justifyContent="space-between">
+                            <Box>
+                                <Image resizeMode="contain" borderRadius={10} source={Images.Profile} w={75} height={75} alt="car" />
+                            </Box>
+                        </HStack>
+                        <HStack justifyContent="space-between">
+                            <Box>
+                                <Image resizeMode="contain" borderRadius={10} source={Images.Profile} w={75} height={75} alt="car" />
+                            </Box>
+                        </HStack>
+                    </ScrollView>
+                </Box>
+                <HStack alignItems="center" justifyContent="space-between" py={2} px={2}>
                     <Input
                         value={sendData}
                         onChangeText={setsendData}
                         w="80%"
                         h="37"
                         InputRightElement={
-                            <Icon size="md" mr={2} color={COLOR.ChatInputMessageIconcolor}>
-                                {LAYOUT.attachmenticon}
-                            </Icon>
-                        }
+                            <Pressable onPress={() => onUpload()}>
+                                <Icon size="md" mr={2} color={COLOR.ChatInputMessageIconcolor}>
+                                    {LAYOUT.attachmenticon}
+                                </Icon>
+                            </Pressable>}
                         bg={COLOR.ChatInputMessagebg}
                         pl={1.5}
                         borderStyle="solid"
