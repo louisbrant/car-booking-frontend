@@ -64,5 +64,6 @@ export const COLOR = {
 	ModalBordercolor: 'rgba(84, 84, 88, 0.65)',
 	ModalBlackBgcolor: 'rgba(30, 30, 30, 1) !important',
 	SwiperBgcolor: '#F7F7FA !important',
-
+	ChatInputMessageIconcolor: '#898A8D',
+	ChatInputMessagebg: 'rgba(177, 169, 169, 0.2)',
 }

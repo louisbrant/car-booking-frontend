@@ -168,7 +168,7 @@ const FinalizeCarPage = ({ navigation }) => {
     return (
         <Box flex={1}>
             <Box
-                pt={10}
+                pt={5}
                 pb={2}
                 px={3}
                 style={{
@@ -586,7 +586,7 @@ const FinalizeCarPage = ({ navigation }) => {
                     if (showpicker) {
                         return (
                             <HStack justifyContent="space-between"
-                                bottom={-40}
+                                bottom={-10}
                                 style={{
                                     position: 'absolute',
                                     zIndex: 1,

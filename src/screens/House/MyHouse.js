@@ -70,7 +70,7 @@ const MyHousesPage = ({ navigation }) => {
                     const newcar = {
                         _id: data[i]._id,
                         name: data[i].name,
-                        img: ROOT.IMAGE_URL + "cars/" + data[i].img,
+                        img: ROOT.IMAGE_URL + "houses/" + data[i].img,
                         days: data[i].daysval,
                         engine: data[i].engine,
                         seats: data[i].seats,
@@ -160,7 +160,7 @@ const MyHousesPage = ({ navigation }) => {
                                         >
                                             <VStack space={2}>
                                                 <Box borderRadius={10} w="full" >
-                                                    <Image source={{ uri: item.img }} alt="car" style={{ width: 290, height: 150 }} />
+                                                    <Image source={{ uri: item.img }} borderRadius={10} alt="car" style={{ width: 275, height: 150 }} />
                                                 </Box>
                                                 <HStack justifyContent="space-between" alignItems="center">
                                                     <Text color={COLOR.black} pl={3} fontWeight="semibold" fontSize="sm"> {`Park Square, NY`}</Text>
@@ -283,7 +283,7 @@ const MyHousesPage = ({ navigation }) => {
                                         alignItems: 'center',
                                     }}
                                 >
-                                    Areyou sure you want to delete?
+                                    Are you sure you want to delete?
                                 </Text>
                             </VStack>
                         </HStack>

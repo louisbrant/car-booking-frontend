@@ -112,37 +112,6 @@ const HouseRentSelectConfigPage = ({ navigation }) => {
             </Box>
 
             <Box py={3} px={5} bg={COLOR.white}>
-                <HStack justifyContent="space-between" pb={3}>
-                    <VStack w="100%" space={1}>
-                        <Text
-                            color={COLOR.inPlaceholder}
-                            fontWeight="medium"
-                            fontSize="sm"
-                        >
-                            WHERE IS THIS PLACE LOCATED?
-                        </Text>
-                    </VStack>
-                </HStack>
-
-                <HStack justifyContent="flex-start" pb={3}>
-                    <VStack w="full" space={1}>
-                        <Input
-                            w="full"
-                            value={address}
-                            onChangeText={setAddress}
-                            bg={COLOR.white}
-                            p={2}
-                            borderStyle="solid"
-                            fontSize={'sm'}
-                            borderWidth={1}
-                            borderColor={COLOR.inPlaceholder}
-                            bgColor={COLOR.white}
-                            color={COLOR.black}
-                            height={'40px'}
-                        // isDisabled={true}
-                        />
-                    </VStack>
-                </HStack>
 
                 <HStack justifyContent="space-between" pb={3}>
                     <VStack w="100%" space={1}>

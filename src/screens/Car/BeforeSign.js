@@ -14,8 +14,8 @@ const BeforeSignScreen = ({ navigation }) => {
                         <Text textAlign="center" color={COLOR.black} fontSize={11}>Same-day pet grooming in your own home,</Text>
                         <Text textAlign="center" color={COLOR.black} fontSize={11}>book & pay securely through the app.</Text>
                     </View>
-                    <View  flex={1} justifyContent="center">
-                        <Image resizeMode="contain" source={Images.Welcome2}  mb={12}/>
+                    <View flex={1} justifyContent="center">
+                        <Image resizeMode="contain" source={Images.Welcome2} mb={12} />
                         <Text textAlign="center" color={COLOR.base} fontSize="sm"> Expert Groomers </Text>
                         <Text textAlign="center" color={COLOR.black} fontSize={11}>Our groomers are experienced and certified,</Text>
                         <Text textAlign="center" color={COLOR.black} fontSize={11}>We only use organic products on your pets.</Text>
