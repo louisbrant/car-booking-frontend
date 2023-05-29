@@ -1,21 +1,27 @@
-import React, { useCallback, useState, useEffect } from 'react';
+import React, { useCallback, useState, useEffect, useRef } from 'react';
 import { ScrollView, TouchableOpacity, Dimensions, StatusBar, Pressable, Animated } from "react-native";
-import { Image, Text, Box, Stack, HStack, Button, View, Icon, Avatar, VStack, Input, AspectRatio, Center, Actionsheet, useColorModeValue, TextArea, FlatList, IconButton } from "native-base";
+import { Image, Text, Box, Stack, HStack, Button, View, Icon, Avatar, VStack, Input, AspectRatio, Center, Actionsheet, useColorModeValue, TextArea, FlatList, useToast, IconButton } from "native-base";
 import { Ionicons, FontAwesome5, Foundation } from "@expo/vector-icons";
 import { useSelector } from 'react-redux';
+
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 
 import { COLOR, Images, LAYOUT, ROOT } from "../../../constants";
 
 import * as ImagePicker from 'expo-image-picker';
 
-
+import { Video, ResizeMode } from "expo-av";
+import { useApi } from '../../../redux/services'
 const { width, height } = Dimensions.get('window')
 
 const ChartPage = ({ navigation }) => {
 
     const { user } = useSelector((store) => store.auth);
-
+    const [receiver, setReceiver] = useState("");
+    const Toast = useToast();
+    const video = React.useRef(null);
+    const Api = useApi();
     const [loading, setLoading] = useState(false)
     const [flatList, setflatList] = useState()
     const [AppointData, setAppointData] = useState(false)
@@ -25,9 +31,8 @@ const ChartPage = ({ navigation }) => {
     const [backendtime, setBackendTime] = useState();
     const [currenttime, setCurrentTime] = useState();
 
-
     const [file, setAddfile] = useState({
-        data: "",
+        data: [],
         selected: false
     });
 
@@ -43,31 +48,6 @@ const ChartPage = ({ navigation }) => {
         return array;
     }
 
-    const onStartUpload = () => {
-        if (file.selected) {
-            const xhr = new XMLHttpRequest();
-            const formData = new FormData();
-            if (typeof (file.data) === 'object') {
-                const photos = getImages(file.data)
-                for (let i = 0; i < photos.length; i++) {
-                    formData.append("photo", photos[i]);
-                }
-            }
-            formData.append("data", JSON.stringify({ email: user.email }));
-            xhr.open("POST", `${ROOT.BACKEND_URL}houses/addHousesImage`);
-            xhr.setRequestHeader("Content-Type", "multipart/form-data");
-            xhr.onload = function () {
-                if (xhr.status === 200) {
-
-                }
-            }
-
-            xhr.send(formData);
-        }
-        else {
-            return Toast.show({ title: "Select Car Image!", placement: 'bottom', status: 'error', w: 300 })
-        }
-    }
     const onUpload = async () => {
         console.log('ddd');
         try {
@@ -77,9 +57,12 @@ const ChartPage = ({ navigation }) => {
                     allowsEditing: false
                 })
             if (!result.cancelled) {
+                let newFile = file.data;
+                newFile.push(result);
+                console.log(newFile);
                 setAddfile({
                     ...file,
-                    data: result,
+                    data: newFile,
                     selected: true
                 });
             }
@@ -88,24 +71,60 @@ const ChartPage = ({ navigation }) => {
             }
         }
         catch (E) {
-            // console.log(E)
-            return Toast.show({ title: "Upload error!", placement: 'bottom', status: 'error', w: 300 })
+            console.log(E)
         }
     }
 
-    const Send = () => {
+
+    const Send = async () => {
+        let msg = {
+            sender: user.email,
+            receiver: receiver,
+            text: sendData,
+            file: file.data
+        };
         if (sendData) {
-            let msg = {
-                sender: user.email,
-                receiver: 'groomer.email',
-                text: sendData
-            };
+            const promises = file.data
+                .filter(({ type }) => type)
+                .map(onStartUpload);
+
+            const results = await Promise.all(promises);
+            console.log('results91', results); // array of resolved data values
+
             ROOT.Socket.emit("send msg", msg)
-            setMessages(prev => (
-                [...prev, msg]
-            ))
+            setMessages(prev => [...prev, msg])
             setsendData();
         }
+    }
+
+    const onStartUpload = (add_file) => {
+        console.log('add_file100=>', add_file);
+        return new Promise((resolve, reject) => {
+            if (add_file.type) {
+                const formData = new FormData();
+                if (typeof (add_file.data) === 'object') {
+                    const photos = getImages(add_file.data)
+                    photos.forEach(photo => formData.append("photo", photo));
+                }
+                formData.append("data", JSON.stringify({ email: user.email }));
+
+                fetch(`${ROOT.BACKEND_URL}chat/addFile`, {
+                    method: "POST",
+                    body: formData,
+                })
+                    .then(response => {
+                        console.log('response=>', response);
+                        if (response.ok) {
+                            resolve(1);
+                        } else {
+                            reject(0);
+                        }
+                    })
+                    .catch(error => {
+                        reject(0);
+                    });
+            }
+        })
     }
 
     const convertTZ = (date) => {
@@ -173,30 +192,53 @@ const ChartPage = ({ navigation }) => {
             return "";
     }
 
-    const LoadAppointData = () => {
-        let msg = {
-            sender: user.email,
-            receiver: 'groomer.email',
-        };
-        ROOT.Socket.emit("get msg", msg);
+    const delete_file = (i) => {
+        let file_data = file.data;
+        delete file_data[i];
+        setAddfile({
+            ...file,
+            data: file_data
+        });
     }
 
-    useEffect(() => {
-        ROOT.Socket.emit("get user");
+    const LoadAppointData = () => {
+        if (receiver) {
+            let msg = {
+                sender: user.email,
+                receiver: receiver,
+            };
+            ROOT.Socket.emit("get msg", msg);
+        }
+    }
+
+    const fetchData = async () => {
+        const receiver = await AsyncStorage.getItem('withchat');
+        setReceiver(receiver);
+
         ROOT.Socket.on("new user", function (data) {
             setOnlineUsers(data);
         });
+
         ROOT.Socket.on("receive msg", (data) => {
+            console.log('data=>', data);
             setMessages(data?.data);
             setBackendTime(data?.time);
             setCurrentTime(new Date().valueOf());
         })
-        LoadAppointData()
+
+        const [appointData] = await Promise.all([
+            LoadAppointData()
+        ]);
+
+        setAppointData(appointData);
+    }
+
+    useEffect(() => {
+        fetchData();
+
         return () => {
-            ROOT.Socket.off("get user");
             ROOT.Socket.off("new user");
             ROOT.Socket.off("receive msg");
-            ROOT.Socket.off("get msg");
         }
     }, []);
 
@@ -286,8 +328,7 @@ const ChartPage = ({ navigation }) => {
                                     <HStack style={{ flexDirection: 'row', justifyContent: 'flex-start' }} ml={2}>
                                         <VStack space={1} maxW={width - 50} background={COLOR.inPlaceholder} p={3} pb={1} borderTopRadius={20} borderBottomRightRadius={20}>
                                             <Text color={COLOR.black} fontWeight="medium" >
-                                                Lorem ipsum dolor sit amet{"\n"}
-                                                Lorem ipsum dolor sit amet{"\n"}
+                                                {item?.text}
                                             </Text>
                                         </VStack>
                                     </HStack>
@@ -308,7 +349,7 @@ const ChartPage = ({ navigation }) => {
                                     <HStack style={{ flexDirection: 'row', justifyContent: 'flex-start' }}>
                                         <VStack space={5}>
                                             <Text color={COLOR.inPlaceholder} fontWeight="medium" >
-                                                09:00AM
+                                                {convertTZ(item?.senddate)}
                                             </Text>
                                         </VStack>
                                     </HStack>
@@ -318,43 +359,51 @@ const ChartPage = ({ navigation }) => {
                     />
                 </Box>
 
-                <Box position={'absolute'} mt={height - 250} zIndex={1}>
-                    <ScrollView horizontal={true} style={{ flex: 1 }} >
-                        <HStack justifyContent="space-between">
-                            <Box>
-                                <Image resizeMode="contain" borderRadius={10} source={Images.Profile} w={75} height={75} alt="car" />
-                            </Box>
-                        </HStack>
-                        <HStack justifyContent="space-between">
-                            <Box>
-                                <Image resizeMode="contain" borderRadius={10} source={Images.Profile} w={75} height={75} alt="car" />
-                            </Box>
-                        </HStack>
-                        <HStack justifyContent="space-between">
-                            <Box>
-                                <Image resizeMode="contain" borderRadius={10} source={Images.Profile} w={75} height={75} alt="car" />
-                            </Box>
-                        </HStack>
-                        <HStack justifyContent="space-between">
-                            <Box>
-                                <Image resizeMode="contain" borderRadius={10} source={Images.Profile} w={75} height={75} alt="car" />
-                            </Box>
-                        </HStack>
-                        <HStack justifyContent="space-between">
-                            <Box>
-                                <Image resizeMode="contain" borderRadius={10} source={Images.Profile} w={75} height={75} alt="car" />
-                            </Box>
-                        </HStack>
-                        <HStack justifyContent="space-between">
-                            <Box>
-                                <Image resizeMode="contain" borderRadius={10} source={Images.Profile} w={75} height={75} alt="car" />
-                            </Box>
-                        </HStack>
-                        <HStack justifyContent="space-between">
-                            <Box>
-                                <Image resizeMode="contain" borderRadius={10} source={Images.Profile} w={75} height={75} alt="car" />
-                            </Box>
-                        </HStack>
+                <Box position={'absolute'} mt={height - 250} zIndex={1} px={2}>
+                    <ScrollView horizontal={true} style={{ flex: 1 }}  >
+                        {file.data.map((file_data, i) => {
+                            console.log("file_data=>", file_data.type);
+                            if (file_data?.type == "video")
+                                return (
+                                    <HStack justifyContent="space-between" key={i}>
+                                        <Box opacity={0.7}>
+                                            <Video
+                                                style={{
+                                                    width: 100,
+                                                    height: 100,
+                                                    borderRadius: 10
+                                                }}
+                                                ref={video}
+                                                source={{
+                                                    uri: file_data?.uri,
+                                                }}
+                                                useNativeControls
+                                                resizeMode={ResizeMode.CONTAIN}
+                                                isLooping
+                                            />
+                                        </Box>
+                                        <View ml={-5}>
+                                            <TouchableOpacity onPress={() => delete_file(i)}>
+                                                <Icon color={COLOR.slowblack} size="md" as={<Ionicons name="close" />} />
+                                            </TouchableOpacity>
+                                        </View>
+                                    </HStack>
+                                )
+                            else if (file_data?.type == "image") {
+                                return (
+                                    <HStack justifyContent="space-between" key={i}>
+                                        <Box opacity={0.7}>
+                                            <Image borderRadius={10} source={{ uri: file_data.uri }} w={75} height={75} alt="car" />
+                                        </Box>
+                                        <View ml={-5}>
+                                            <TouchableOpacity onPress={() => delete_file(i)}>
+                                                <Icon color={COLOR.slowblack} size="md" as={<Ionicons name="close" />} />
+                                            </TouchableOpacity>
+                                        </View>
+                                    </HStack>
+                                )
+                            }
+                        })}
                     </ScrollView>
                 </Box>
                 <HStack alignItems="center" justifyContent="space-between" py={2} px={2}>

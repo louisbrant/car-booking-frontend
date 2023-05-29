@@ -1,5 +1,6 @@
 import React, { useCallback, useState, useEffect } from 'react';
 import { ScrollView, TouchableOpacity, Dimensions, StatusBar, Pressable, Animated, SafeAreaView, StyleSheet } from "react-native";
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import { Image, Text, Box, Stack, HStack, Button, View, Icon, Avatar, VStack, Input, AspectRatio, Center, Actionsheet, useColorModeValue, Select, Modal, useToast } from "native-base";
 import { MaterialCommunityIcons, MaterialIcons, AntDesign, EvilIcons, Entypo, Ionicons, FontAwesome, Feather } from "@expo/vector-icons"
 import { useDispatch, useSelector } from 'react-redux';
@@ -13,17 +14,21 @@ import DatepickerRange from 'react-native-range-datepicker';
 
 import { TabView, SceneMap } from 'react-native-tab-view';
 
-// import SwipePicker from 'react-native-swipe-picker';
+import SwipePicker from 'react-native-swipe-picker';
 
 import { COLOR, Images, LAYOUT, ROOT } from "../../../constants";
 
 import { setBookInfo } from '../../../redux/actions/authActions';
 
+import { useApi } from '../../../redux/services'
+
 const RequestBookPage = ({ navigation }) => {
 
     const { car } = useSelector((store) => store.auth);
+    const { user } = useSelector((store) => store.auth);
     const dispatch = useDispatch();
     const Toast = useToast();
+    const Api = useApi();
 
 
     let currentyear = new Date().getFullYear();
@@ -159,6 +164,35 @@ const RequestBookPage = ({ navigation }) => {
         }
     }
 
+    const sendMessage = () => {
+        console.log('car=>', car);
+        console.log('user=>', user);
+        if (car?.email) {
+            if (car?.email == user?.email) {
+                return Toast.show({ title: "This is your car!", placement: 'bottom', status: 'warning', w: 300 });
+            }
+            Api.SendFirstMessage({ rend: car.email, renter: user.email }).then(async ({ data }) => {
+                if (data.status) {
+                    await AsyncStorage.setItem('withchat', car.email);
+                    navigation.navigate("ChartPageScreen");
+                }
+                else {
+                    return Toast.show({ title: data.message, placement: 'bottom', status: 'error', w: 300 });
+                }
+            }).catch(error => {
+                if (error.response && error.response.status === 400) {
+                    return Toast.show({ title: error.response.data, placement: 'bottom', status: 'error', w: 300 })
+                } else {
+                    return Toast.show({ title: "Error!", placement: 'bottom', status: 'error', w: 300 })
+                }
+            })
+        }
+    }
+
+    const onClose = () => {
+        return navigation.navigate("CarHomeScreen");
+    }
+
     // Notification.show();
 
     useEffect(() => {
@@ -249,7 +283,7 @@ const RequestBookPage = ({ navigation }) => {
                         >
                             <HStack justifyContent="space-between" mb={6}
                             >
-                                {/* <SwipePicker
+                                <SwipePicker
                                     items={showdays}
                                     onChange={(index, item) => onSelSwipePicker({ index, item }, "date")}
                                     initialSelectedIndex={0}
@@ -276,7 +310,7 @@ const RequestBookPage = ({ navigation }) => {
                                     onChange={(index, item) => onSelSwipePicker({ index, item }, "ms")}
                                     height={300}
                                     width={width / 5}
-                                /> */}
+                                />
                             </HStack>
                             <HStack bottom={3} position="absolute" >
                                 <Box px={3}>
@@ -315,6 +349,11 @@ const RequestBookPage = ({ navigation }) => {
                     <Center position="absolute" w="full">
 
                         <Stack pt={10} direction="row" alignItems="center">
+                            <HStack justifyContent="space-between" pl={5}>
+                                <TouchableOpacity onPress={onClose}>
+                                    <Icon color={COLOR.black} size="md" as={<Ionicons name="arrow-back" />} />
+                                </TouchableOpacity>
+                            </HStack>
                             <View style={{ flex: 1, flexDirection: 'row', alignItems: 'center', justifyContent: 'center' }}>
                                 <TouchableOpacity onPress={requestBook}>
                                     <Text
@@ -382,7 +421,7 @@ const RequestBookPage = ({ navigation }) => {
                                 </HStack>
                             </Box>
                         </HStack>
-                        <HStack alignItems="center" space={2}>
+                        <HStack alignItems="center" space={2} onTouchStart={sendMessage}>
                             <Icon color={COLOR.black} size="sm" as={<Ionicons name="chatbubble-ellipses" />} />
                             <Box py={2} borderStyle="solid" borderBottomWidth={1} borderColor={COLOR.inpBorderColor} flex={1}>
                                 <HStack alignItems="center" justifyContent="space-between">
