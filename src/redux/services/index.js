@@ -192,6 +192,14 @@ class ApiService {
     return axios.post(ROOT.SetGroomer, ...args)
   }
 
+  SendFirstMessage(...args) {
+    return axios.post(ROOT.SendFirstMessage, ...args)
+  }
+
+  getChatList(...args) {
+    return axios.post(ROOT.getChatList, ...args)
+  }
+
 
 
   AddCar(...args) {

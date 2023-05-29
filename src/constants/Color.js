@@ -53,6 +53,7 @@ export const COLOR = {
 	green: '#4BAE4F',
 	red: '#ED1C2E',
 	IRed: '#F14336',
+	slowblack: '#3e3e3e',
 	Transparent: 'transparent',
 	Homebgcolor: 'rgba(0, 0, 0, 0.3);',
 	BottomFontcolor: 'rgba(0, 0, 0, 0.3);',

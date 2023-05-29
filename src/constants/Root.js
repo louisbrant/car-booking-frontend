@@ -42,7 +42,8 @@ const ApiList = {
   UpdateState: "shop/updateState",
   BookComplete: "shop/bookComplete",
   SetGroomer: "shop/setgroomer",
-
+  SendFirstMessage: 'users/sendFirstMessage',
+  getChatList: 'users/getChatList',
 
   AddCar: "cars/addCar",
   GetMyCars: "cars/getMyCars",
