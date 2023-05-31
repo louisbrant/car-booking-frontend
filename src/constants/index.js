@@ -771,3 +771,71 @@ export const CarStyle = {
         }
     ],
 }
+
+export const convertTZ = (date, backendtime) => {
+    let currenttime = new Date().valueOf();
+    if (new Date(date) != "Invalid Date") {
+        console.log(typeof date);
+        let senddateval = new Date(date).valueOf();
+        let timestring = new Date().toString().split(new Date().toString().split("T")[1][0])[1].split(" ")[0];
+        if (new Date().toString().split("T")[1][0] == "-") {
+            if (timestring[0] != 0) {
+                senddateval += timestring[0] * 12 * 3600 * 1000;
+            }
+            if (timestring[1] != 0) {
+                senddateval += timestring[1] * 3600 * 1000;
+            }
+            if (timestring[2] != 0) {
+                senddateval += timestring[2] * 60 * 1000;
+            }
+            if (timestring[3] != 0) {
+                senddateval += timestring[3] * 1000;
+            }
+        }
+        else if (new Date().toString().split("T")[1][0] == "+") {
+            if (timestring[0] != 0) {
+                senddateval -= timestring[0] * 12 * 3600 * 1000;
+            }
+            if (timestring[1] != 0) {
+                senddateval -= timestring[1] * 3600 * 1000;
+            }
+            if (timestring[2] != 0) {
+                senddateval -= timestring[2] * 60 * 1000;
+            }
+            if (timestring[3] != 0) {
+                senddateval -= timestring[3] * 1000;
+            }
+        }
+
+        if (Number(backendtime) > Number(currenttime))
+            senddateval -= (Number(backendtime) - Number(currenttime));
+        else
+            senddateval += (Number(currenttime) - Number(backendtime));
+        let sendyear = (new Date(senddateval)).getFullYear();
+        let sendmonth = (new Date(senddateval)).getMonth() + 1;
+        let senddate = (new Date(senddateval)).getDate();
+
+        let currentyear = (new Date()).getFullYear();
+        let currentmonth = (new Date()).getMonth() + 1;
+        let currentdate = (new Date()).getDate();
+        if (sendyear == currentyear) {
+            if (sendmonth != currentmonth) {
+                return sendmonth + "." + senddate + "  " + new Date(senddateval).getHours() + ":" + new Date(senddateval).getMinutes();
+            }
+            else {
+                if (senddate == currentdate) {
+                    return new Date(senddateval).getHours() + ":" + new Date(senddateval).getMinutes();
+                }
+                else {
+                    return sendmonth + "." + senddate + "  " + new Date(senddateval).getHours() + ":" + new Date(senddateval).getMinutes();
+                }
+            }
+        }
+        else {
+            return sendyear + "." + sendmonth + "." + senddate + "  " + new Date(senddateval).getHours() + ":" + new Date(senddateval).getMinutes();
+        }
+    }
+    else {
+        return "";
+    }
+}

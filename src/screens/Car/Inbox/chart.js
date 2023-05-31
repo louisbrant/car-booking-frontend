@@ -7,7 +7,7 @@ import { useSelector } from 'react-redux';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 
-import { COLOR, Images, LAYOUT, ROOT } from "../../../constants";
+import { COLOR, Images, LAYOUT, ROOT, convertTZ } from "../../../constants";
 
 import * as ImagePicker from 'expo-image-picker';
 
@@ -127,71 +127,6 @@ const ChartPage = ({ navigation }) => {
         })
     }
 
-    const convertTZ = (date) => {
-        if (typeof date === "string") {
-            let senddateval = new Date(date).valueOf();
-            let timestring = new Date().toString().split(new Date().toString().split("T")[1][0])[1].split(" ")[0];
-            if (new Date().toString().split("T")[1][0] == "-") {
-                if (timestring[0] != 0) {
-                    senddateval += timestring[0] * 12 * 3600 * 1000;
-                }
-                if (timestring[1] != 0) {
-                    senddateval += timestring[1] * 3600 * 1000;
-                }
-                if (timestring[2] != 0) {
-                    senddateval += timestring[2] * 60 * 1000;
-                }
-                if (timestring[3] != 0) {
-                    senddateval += timestring[3] * 1000;
-                }
-            }
-            else if (new Date().toString().split("T")[1][0] == "+") {
-                if (timestring[0] != 0) {
-                    senddateval -= timestring[0] * 12 * 3600 * 1000;
-                }
-                if (timestring[1] != 0) {
-                    senddateval -= timestring[1] * 3600 * 1000;
-                }
-                if (timestring[2] != 0) {
-                    senddateval -= timestring[2] * 60 * 1000;
-                }
-                if (timestring[3] != 0) {
-                    senddateval -= timestring[3] * 1000;
-                }
-            }
-
-            if (Number(backendtime) > Number(currenttime))
-                senddateval -= (Number(backendtime) - Number(currenttime));
-            else
-                senddateval += (Number(currenttime) - Number(backendtime));
-            let sendyear = (new Date(senddateval)).getFullYear();
-            let sendmonth = (new Date(senddateval)).getMonth() + 1;
-            let senddate = (new Date(senddateval)).getDate();
-
-            let currentyear = (new Date()).getFullYear();
-            let currentmonth = (new Date()).getMonth() + 1;
-            let currentdate = (new Date()).getDate();
-            if (sendyear == currentyear) {
-                if (sendmonth != currentmonth) {
-                    return sendmonth + "." + senddate + "  " + new Date(senddateval).getHours() + ":" + new Date(senddateval).getMinutes();
-                }
-                else {
-                    if (senddate == currentdate) {
-                        return new Date(senddateval).getHours() + ":" + new Date(senddateval).getMinutes();
-                    }
-                    else {
-                        return sendmonth + "." + senddate + "  " + new Date(senddateval).getHours() + ":" + new Date(senddateval).getMinutes();
-                    }
-                }
-            }
-            else {
-                return sendyear + "." + sendmonth + "." + senddate + "  " + new Date(senddateval).getHours() + ":" + new Date(senddateval).getMinutes();
-            }
-        }
-        else
-            return "";
-    }
-
     const delete_file = (i) => {
         let file_data = file.data;
         delete file_data[i];
@@ -220,7 +155,6 @@ const ChartPage = ({ navigation }) => {
         });
 
         ROOT.Socket.on("receive msg", (data) => {
-            console.log('data=>', data);
             setMessages(data?.data);
             setBackendTime(data?.time);
             setCurrentTime(new Date().valueOf());
@@ -318,7 +252,7 @@ const ChartPage = ({ navigation }) => {
                                     <HStack style={{ flexDirection: 'row', justifyContent: 'flex-end' }}>
                                         <VStack space={5}>
                                             <Text color={COLOR.inPlaceholder} fontWeight="medium" >
-                                                {convertTZ(item?.senddate)}
+                                                {convertTZ(item?.senddate, backendtime)}
                                             </Text>
                                         </VStack>
                                     </HStack>

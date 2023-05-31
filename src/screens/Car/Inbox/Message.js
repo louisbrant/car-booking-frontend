@@ -7,7 +7,7 @@ import { useDispatch, useSelector } from 'react-redux';
 
 import { TabView, SceneMap } from 'react-native-tab-view';
 
-import { COLOR, Images, LAYOUT } from "../../../constants";
+import { COLOR, Images, LAYOUT, ROOT, convertTZ } from "../../../constants";
 import { useApi } from '../../../redux/services'
 
 import Swiper from 'react-native-swiper'
@@ -20,61 +20,102 @@ const MessagePage = ({ navigation }) => {
 
     const Toast = useToast();
     const Api = useApi();
-
+    const [backendtime, setBackendTime] = useState("");
     const [chatList, setChatList] = useState([]);
     const onDetail = () => {
         navigation.navigate("ChartPageScreen");
     }
 
-    const getChatList = () => {
-        Api.getChatList({ email: user.email }).then(async ({ data }) => {
-            if (data.status) {
-                if (data?.list) {
-                    console.log('data?.list=>', data?.list);
-                    const promises = data?.list
-                        .map(getUserInfor);
+    const getChatList = async () => {
+        try {
+            const { data } = await Api.getChatList({ email: user.email });
+            if (data.status && data?.list) {
+                const promises = data.list.map(getUserInfo);
+                const results = await Promise.all(promises);
+                setBackendTime(data?.time);
+                setChatList(results);
+                console.log('results36', results);
+            } else {
+                Toast.show({
+                    title: data.message || "Error!",
+                    placement: "bottom",
+                    status: "error",
+                    w: 300,
+                });
+            }
+        } catch (error) {
+            console.log("error=>", error);
+            if (error.response && error.response.status === 400) {
+                Toast.show({
+                    title: error.response.data,
+                    placement: "bottom",
+                    status: "error",
+                    w: 300,
+                });
+            } else {
+                Toast.show({
+                    title: "Error!",
+                    placement: "bottom",
+                    status: "error",
+                    w: 300,
+                });
+            }
+        }
+    };
 
-                    const results = await Promise.all(promises);
-                    console.log('results91', results); // array of resolved data values
-                    setChatList(results);
+    const getUserInfo = async (data) => {
+        try {
+            let email = data.sender;
+            if (email == user.email) email = data.receiver;
+            let userData = await Api.GetUserInfor({ email });
+            console.log('userData70=>', userData);
+            if (userData?.status == 200 && userData?.data?.status) {
+                userData = userData.data?.data;
+                userData.avatar = ROOT.IMAGE_URL + "users/" + userData.avatar;
+                let chat_data = await Api.getEndChatInfor({
+                    sender: data.sender,
+                    receiver: data.receiver,
+                });
+                if (chat_data?.status == 200 && chat_data?.data?.status) {
+                    chat_data = chat_data.data?.data;
+                    return { ...data, userData, chat_data };
+                }
+                else {
+                    Toast.show({
+                        title: "Error!",
+                        placement: "bottom",
+                        status: "error",
+                        w: 300,
+                    });
                 }
             }
             else {
-                return Toast.show({ title: data.message, placement: 'bottom', status: 'error', w: 300 });
+                Toast.show({
+                    title: "Error!",
+                    placement: "bottom",
+                    status: "error",
+                    w: 300,
+                });
             }
-        }).catch(error => {
-            console.log('error=>', error);
+        } catch (error) {
             if (error.response && error.response.status === 400) {
-                return Toast.show({ title: error.response.data, placement: 'bottom', status: 'error', w: 300 })
+                Toast.show({
+                    title: error.response.data,
+                    placement: "bottom",
+                    status: "error",
+                    w: 300,
+                });
             } else {
-                return Toast.show({ title: "Error!", placement: 'bottom', status: 'error', w: 300 })
+                Toast.show({
+                    title: "Error!",
+                    placement: "bottom",
+                    status: "error",
+                    w: 300,
+                });
             }
-        })
-    }
-
-    const getUserInfor = (data) => {
-        let email = data.sender;
-        if (email == user.email)
-            email = data.receiver;
-        return new Promise((resolve, reject) => {
-            Api.GetUserInfor({ email }).then(async ({ data }) => {
-                if (data.status) {
-                    resolve(data.data);
-                }
-                else {
-                    reject([]);
-                }
-            }).catch(error => {
-                if (error.response && error.response.status === 400) {
-                    Toast.show({ title: error.response.data, placement: 'bottom', status: 'error', w: 300 });
-                    reject([]);
-                } else {
-                    Toast.show({ title: "Error!", placement: 'bottom', status: 'error', w: 300 })
-                    reject([]);
-                }
-            })
-        })
-    }
+        }
+        return {};
+    };
 
     useEffect(() => {
         getChatList();
@@ -83,11 +124,11 @@ const MessagePage = ({ navigation }) => {
     return (
         <Box w="full">
             <VStack space={3}>
-                {new Array(7).fill().map((item, idx) => {
+                {chatList.map((item, idx) => {
                     return (
                         <TouchableOpacity key={idx} onPress={onDetail}>
                             <HStack space={2}>
-                                <Avatar bg="white" alignSelf="center" size="md" source={Images[`Profile${idx + 1}`]} />
+                                <Avatar bg="white" alignSelf="center" size="md" source={{ uri: item?.userData?.avatar }} />
                                 <VStack
                                     flex={1}
                                     space={1}
@@ -100,10 +141,9 @@ const MessagePage = ({ navigation }) => {
                                 >
                                     <HStack justifyContent="space-between" alignItems="center">
                                         <Text fontWeight="semibold" fontSize="xs">Name here</Text>
-                                        <Text color={COLOR.inPlaceholder} fontWeight="medium" fontSize="2xs">09:00AM</Text>
+                                        <Text color={COLOR.inPlaceholder} fontWeight="medium" fontSize="2xs">{convertTZ(item?.chat_data?.senddate, backendtime)}</Text>
                                     </HStack>
                                     <Text color={COLOR.inPlaceholder} fontWeight="medium" fontSize="2xs">Lorem ipsum dolor sit amet, consectetur.</Text>
-                                    <Text color={COLOR.inPlaceholder} fontWeight="medium" fontSize="2xs">Trip Completed: Mar 23 -30</Text>
                                 </VStack>
                             </HStack>
                         </TouchableOpacity>

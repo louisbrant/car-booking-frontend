@@ -200,7 +200,9 @@ class ApiService {
     return axios.post(ROOT.getChatList, ...args)
   }
 
-
+  getEndChatInfor(...args) {
+    return axios.post(ROOT.getEndChatInfor, ...args)
+  }
 
   AddCar(...args) {
     return axios.post(ROOT.AddCar, ...args)

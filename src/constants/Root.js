@@ -44,6 +44,7 @@ const ApiList = {
   SetGroomer: "shop/setgroomer",
   SendFirstMessage: 'users/sendFirstMessage',
   getChatList: 'users/getChatList',
+  getEndChatInfor: 'users/getEndChatInfor',
 
   AddCar: "cars/addCar",
   GetMyCars: "cars/getMyCars",
