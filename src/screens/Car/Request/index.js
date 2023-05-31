@@ -165,8 +165,6 @@ const RequestBookPage = ({ navigation }) => {
     }
 
     const sendMessage = () => {
-        console.log('car=>', car);
-        console.log('user=>', user);
         if (car?.email) {
             if (car?.email == user?.email) {
                 return Toast.show({ title: "This is your car!", placement: 'bottom', status: 'warning', w: 300 });
