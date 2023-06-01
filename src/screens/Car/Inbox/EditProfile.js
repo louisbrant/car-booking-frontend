@@ -1,8 +1,9 @@
 import React, { useCallback, useState } from 'react';
 import { ScrollView, TouchableOpacity, Dimensions, StatusBar, Pressable, Animated } from "react-native";
-import { Image, Text, Box, Stack, HStack, Button, View, Icon, Avatar, VStack, Input, AspectRatio, Center, Actionsheet, useColorModeValue, Select, CheckIcon } from "native-base";
+import { Image, Text, Box, Stack, HStack, Button, View, Icon, Avatar, VStack, Input, AspectRatio, Center, Actionsheet, useToast, useColorModeValue, Select, CheckIcon } from "native-base";
 import { MaterialCommunityIcons, MaterialIcons, AntDesign, EvilIcons, Entypo, Ionicons, FontAwesome } from "@expo/vector-icons"
 import { useSelector, useDispatch } from 'react-redux'
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 import { COLOR, Images, LAYOUT, ROOT } from "../../../constants";
 
@@ -13,8 +14,10 @@ import { BottomTab } from '../../../components';
 const EditProfilePage = ({ navigation }) => {
     const { user } = useSelector((store) => store.auth);
     const dispatch = useDispatch()
+    const Toast = useToast()
 
-    const [service, setService] = useState(user.gender == undefined ? 0 : user.gender.toString());
+    const [sex, setSex] = useState(user.gender == undefined ? 0 : user.gender.toString());
+    console.log(user, 'sex=>', sex)
 
     const [firstname, setFirstName] = useState(user.username.toString().split(" ")[0] != undefined && user.username.toString().split(" ")[0] != "" ? user.username.split(" ")[0] : "");
 
@@ -26,7 +29,7 @@ const EditProfilePage = ({ navigation }) => {
 
     const getImages = (para) => {
         const array = [];
-        const uri = para.uri;
+        const uri = para;
         const name = uri.split("/").pop();
         const match = /\.(\w+)$/.exec(name);
         const type = match ? `image/${match[1]}` : `image`;
@@ -36,33 +39,47 @@ const EditProfilePage = ({ navigation }) => {
         return array;
     }
 
-    const onEdit = () => {
+    const onEdit = async () => {
         const xhr = new XMLHttpRequest();
         const formData = new FormData();
-        if (user.avatar?.cancelled == false) {
-            if (typeof (user.avatar) === 'object') {
-                const photos = getImages(user.avatar)
+        let avatarImage = await AsyncStorage.getItem('avatarImage');
+        console.log('avatarImage46', avatarImage);
+        if (avatarImage) {
+            if (typeof (avatarImage) === 'string') {
+                const photos = getImages(avatarImage)
                 for (let i = 0; i < photos.length; i++) {
+                    console.log('photos=>', photos[i]);
                     formData.append("photo", photos[i]);
                 }
             }
         }
-        formData.append("data", JSON.stringify({ email: user.email, username: firstname + " " + secondname, gender: service }));
+        formData.append("data", JSON.stringify({ email: user.email, username: firstname + " " + secondname, gender: sex }));
         xhr.open("POST", `${ROOT.BACKEND_URL}users/updateUser`);
         xhr.setRequestHeader("Content-Type", "multipart/form-data");
         xhr.onload = function () {
             if (xhr.status === 200) {
-                // return navigation.navigate("ConfigurationScreen");
+                let updatedUser = JSON.parse(xhr?.response);
+                console.log('updatedUser=>', updatedUser);
+                dispatch(setUserInfo(updatedUser));
+                Toast.show({ title: "Successfully Update!", placement: 'bottom', status: 'success', w: 300 })
+            }
+            else {
+                return Toast.show({ title: "Personal Info Faild!", placement: 'bottom', status: 'error', w: 300 })
             }
         }
         xhr.send(formData);
     }
+
+    const saveProfile = () => {
+        onEdit();
+    }
+
     return (
         <Box flex={1}>
             <Box
                 px={5}
                 pb={3}
-                pt={10}
+                pt={5}
                 bg={COLOR.white}
                 w="full"
                 style={{
@@ -162,7 +179,7 @@ const EditProfilePage = ({ navigation }) => {
                             <VStack w="full" space={1}>
 
                                 <Select
-                                    selectedValue={service}
+                                    selectedValue={sex}
                                     h="35"
                                     w="full"
                                     bg={COLOR.white}
@@ -182,7 +199,8 @@ const EditProfilePage = ({ navigation }) => {
                                         endIcon: <CheckIcon size="5" />
                                     }}
                                     mt={1}
-                                    onValueChange={itemValue => setService(itemValue)}
+                                    onValueChange={itemValue => setSex(itemValue)}
+                                    defaultValue={sex}
                                 >
                                     <Select.Item label="Gender" value="0" />
                                     <Select.Item label="Male" value="1" />
@@ -240,6 +258,30 @@ const EditProfilePage = ({ navigation }) => {
                 </Box>
             </ScrollView>
 
+            <Box position="absolute" bottom={50} w="full" px={5} >
+                <TouchableOpacity onPress={saveProfile}>
+                    <Box
+                        style={{
+                            width: '100%',
+                            height: 45,
+                            backgroundColor: COLOR.IBase,
+                            borderRadius: 5,
+                            display: 'flex',
+                            justifyContent: 'center',
+                            alignItems: 'center',
+                        }}
+                        py={2}
+                    >
+                        <Text
+                            color={COLOR.white}
+                            fontWeight="bold"
+                            fontSize="md"
+                        >
+                            Save
+                        </Text>
+                    </Box>
+                </TouchableOpacity>
+            </Box>
             <BottomTab navigation={navigation} />
         </Box>
     )

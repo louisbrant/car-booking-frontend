@@ -140,10 +140,10 @@ const MessagePage = ({ navigation }) => {
                                     }}
                                 >
                                     <HStack justifyContent="space-between" alignItems="center">
-                                        <Text fontWeight="semibold" fontSize="xs">Name here</Text>
+                                        <Text fontWeight="semibold" fontSize="xs">{item?.userData?.username}</Text>
                                         <Text color={COLOR.inPlaceholder} fontWeight="medium" fontSize="2xs">{convertTZ(item?.chat_data?.senddate, backendtime)}</Text>
                                     </HStack>
-                                    <Text color={COLOR.inPlaceholder} fontWeight="medium" fontSize="2xs">Lorem ipsum dolor sit amet, consectetur.</Text>
+                                    <Text color={COLOR.inPlaceholder} fontWeight="medium" fontSize="2xs">{item?.chat_data?.text}</Text>
                                 </VStack>
                             </HStack>
                         </TouchableOpacity>
