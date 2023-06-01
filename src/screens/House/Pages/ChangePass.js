@@ -1,6 +1,6 @@
 import React, { useCallback, useState } from 'react';
 import { ScrollView, TouchableOpacity, Dimensions, StatusBar, Pressable, Animated } from "react-native";
-import { Image, Text, Box, Stack, HStack, Button, View, Icon, Avatar, VStack, Input, AspectRatio, Center, Actionsheet, useColorModeValue, Modal,useToast } from "native-base";
+import { Image, Text, Box, Stack, HStack, Button, View, Icon, Avatar, VStack, Input, AspectRatio, Center, Actionsheet, useColorModeValue, Modal, useToast } from "native-base";
 import { MaterialCommunityIcons, MaterialIcons, AntDesign, EvilIcons, Entypo, Ionicons, FontAwesome, SimpleLineIcons } from "@expo/vector-icons"
 
 import { COLOR, Images, LAYOUT } from "../../../constants";
@@ -23,24 +23,24 @@ const ChangePassPage = ({ navigation }) => {
     const onShowProfile = () => {
         navigation.navigate("EditProfileScreen")
     }
-    const onChangePass = ()=>{
+    const onChangePass = () => {
         if (currentpassword && password && confirmpassword) {
             if (password === confirmpassword) {
                 Api.ResetPassword({ email: user.email, password, old: confirmpassword }).then(({ data }) => {
                     if (data.status) {
                         setShowModal(true);
                     } else {
-                        return Toast.show({ title: data.msg, placement: 'bottom', status: 'error' , w: 300 })
+                        return Toast.show({ title: data.msg, placement: 'bottom', status: 'error', w: 300 })
                     }
                 })
             } else {
-                return Toast.show({ title: "ConfirmPassword is incorrect!", placement: 'bottom', status: 'error' , w: 300 })
+                return Toast.show({ title: "ConfirmPassword is incorrect!", placement: 'bottom', status: 'error', w: 300 })
             }
         } else {
-            return Toast.show({ title: "Something is incorrect!", placement: 'bottom', status: 'error', w: 300  })
+            return Toast.show({ title: "Something is incorrect!", placement: 'bottom', status: 'error', w: 300 })
         }
     }
-    const onForgotPass =()=>{
+    const onForgotPass = () => {
         navigation.navigate("ForgotPassScreen");
     }
     return (
@@ -48,7 +48,7 @@ const ChangePassPage = ({ navigation }) => {
             <Box
                 px={5}
                 pb={3}
-                pt={10}
+                pt={5}
                 bg={COLOR.white}
                 w="full"
                 style={{

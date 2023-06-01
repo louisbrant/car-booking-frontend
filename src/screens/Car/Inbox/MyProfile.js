@@ -6,6 +6,7 @@ import {
 } from "native-base";
 import { MaterialCommunityIcons, MaterialIcons, AntDesign, EvilIcons, Entypo, Ionicons, FontAwesome } from "@expo/vector-icons"
 import { useSelector, useDispatch } from 'react-redux'
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 import { COLOR, Images, LAYOUT, ROOT } from "../../../constants";
 
@@ -16,7 +17,7 @@ import { LinearGradient } from 'expo-linear-gradient'
 
 import { setUserInfo } from '../../../redux/actions/authActions';
 
-// import * as ImagePicker from 'expo-image-picker';
+import * as ImagePicker from 'expo-image-picker';
 
 const MyProfilePage = ({ navigation }) => {
 
@@ -32,33 +33,30 @@ const MyProfilePage = ({ navigation }) => {
         img: user.avatar != "" ? typeof (user.avatar) == 'string' ? { uri: ROOT.IMAGE_URL + "users/" + user.avatar } : user.avatar : Images.Profile8,
         selected: false
     });
-    // console.log(imageInfor, user.avatar, Images.Profile8);
 
     const onUpload = async () => {
-        // try {
-        //     let result = await ImagePicker.launchImageLibraryAsync
-        //         ({
-        //             mediaTypes: ImagePicker.MediaTypeOptions.All,
-        //             allowsEditing: false
-        //         })
-        //     let newuser = user;
-        //     newuser.avatar = result;
-        //     if (!result.cancelled) {
-        //         setImageInfor({
-        //             ...imageInfor,
-        //             img: result,
-        //             selected: true
-        //         });
-        //         dispatch(setUserInfo(newuser))
-        //     }
-        //     else {
-        //         return Toast.show({ title: "Upload error!", placement: 'bottom', status: 'error', w: 300 })
-        //     }
-        // }
-        // catch (E) {
-        //     console.log(E)
-        //     // return Toast.show({ title: "Upload errors!", placement: 'bottom', status: 'error', w: 300 })
-        // }
+        try {
+            let result = await ImagePicker.launchImageLibraryAsync
+                ({
+                    mediaTypes: ImagePicker.MediaTypeOptions.All,
+                    allowsEditing: false
+                })
+            if (!result.cancelled) {
+                await AsyncStorage.setItem('avatarImage', result?.uri);
+                setImageInfor({
+                    ...imageInfor,
+                    img: result,
+                    selected: true
+                });
+            }
+            else {
+                return Toast.show({ title: "Upload error!", placement: 'bottom', status: 'error', w: 300 })
+            }
+        }
+        catch (E) {
+            console.log(E)
+            // return Toast.show({ title: "Upload errors!", placement: 'bottom', status: 'error', w: 300 })
+        }
     }
 
     const onCheckAddCar = () => {
@@ -84,17 +82,21 @@ const MyProfilePage = ({ navigation }) => {
     const finalRef = React.useRef(null);
 
     useEffect(() => {
-        if (car)
-            if (car.currentaddcar)
+        const fetchData = async () => {
+            if (car?.currentaddcar) {
                 setModalVisible(true);
+            }
+            await AsyncStorage.setItem('avatarImage', '');
+        };
 
-    }, [])
+        fetchData();
+    }, []);
     return (
         <Box flex={1}>
             <Box
                 px={5}
                 pb={3}
-                pt={10}
+                pt={5}
                 bg={COLOR.white}
                 w="full"
             // style={{
@@ -134,7 +136,7 @@ const MyProfilePage = ({ navigation }) => {
                     <Box w="full" px={5} py={3} pb={10}>
                         <TouchableOpacity onPress={onUpload}>
                             <Box py={2}>
-                                <Image source={imageInfor.img} w="80px" h="80px" resizeMode="contain" alt="car" rounded="full" />
+                                <Image source={imageInfor.img} w="80px" h="80px" alt="car" rounded="full" />
                             </Box>
                         </TouchableOpacity>
                         <VStack>

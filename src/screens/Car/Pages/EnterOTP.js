@@ -53,7 +53,7 @@ const EnterOTPPage = ({ navigation }) => {
             <Box
                 px={5}
                 pb={3}
-                pt={10}
+                pt={5}
                 w="full"
             >
                 <Stack direction="row" alignItems="center">

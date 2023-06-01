@@ -107,7 +107,7 @@ const RequestDetailPage = ({ navigation }) => {
             <Box
                 px={5}
                 pb={3}
-                pt={10}
+                pt={5}
                 bg={COLOR.white}
                 w="full"
                 style={{
