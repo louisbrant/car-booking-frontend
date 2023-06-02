@@ -1,9 +1,10 @@
 import React, { useCallback, useState, useEffect } from 'react';
 import { COLOR, Images, LAYOUT, ROOT } from "../../../constants";
-import { ScrollView, TouchableOpacity } from "react-native";
+import { ScrollView, TouchableOpacity, Dimensions } from "react-native";
 import { Image, Text, Box, Stack, HStack, Button, View, Icon, Avatar, VStack, Input, AspectRatio, Center, Actionsheet, Menu, Pressable, useToast } from "native-base";
 import Slider from 'rn-range-slider';
 import { MaterialCommunityIcons, AntDesign, EvilIcons, Entypo, Feather, FontAwesome } from "@expo/vector-icons"
+import MapView from "react-native-maps";
 
 // import CalendarPicker from 'react-native-calendar-picker';
 // import { Calendar, CalendarList } from "react-native-calendars";
@@ -30,11 +31,19 @@ const markStyle = { dayTextStyle: { color: 'white', fontSize: 14, fontWeight: 'b
 const TellCarPage = ({ navigation }) => {
     const { user } = useSelector((store) => store.auth)
     const dispatch = useDispatch()
+    const { width } = Dimensions.get('window')
 
     const Toast = useToast()
     const Api = useApi()
     const [loading, setLoading] = useState(false);
     const [address, setAddress] = useState('')
+
+    const [position, setPosition] = useState({
+        latitude: 37.78825,
+        longitude: -122.4324,
+        latitudeDelta: 0.0922,
+        longitudeDelta: 0.0421
+    });
 
     const onIdentifyStart = () => {
         if (!address)
@@ -53,11 +62,40 @@ const TellCarPage = ({ navigation }) => {
             return Toast.show({ title: "Enter the Adress", placement: 'top', status: 'success', w: 300 })
         else {
             let car = {
-                address: address
+                address: address,
+                px: position.latitude,
+                py: position.longitude
             };
             dispatch(setCarInfo(car))
             return navigation.navigate("VecificationCarScreen");
         }
+    }
+
+    const changePosition = (mappos) => {
+        setPosition({
+            latitude: mappos?.latitude,
+            longitude: mappos?.longitude,
+            latitudeDelta: mappos?.latitudeDelta,
+            longitudeDelta: mappos?.longitudeDelta
+        })
+
+        let request = new XMLHttpRequest();
+        let method = 'GET';
+        let url = 'https://maps.googleapis.com/maps/api/geocode/json?latlng=' + mappos?.latitude + ',' + mappos?.longitude + '&key=' + ROOT.mapApiKey;
+        let async = true;
+        request.open(method, url, async);
+        request.onreadystatechange = function (datas) {
+            if (request.readyState == 4 && request.status == 200) {
+                let data = JSON.parse(request.responseText);
+                let address = data.results[0];
+                setAddress(address?.formatted_address);
+            }
+        };
+        request.send();
+    }
+
+    const showMap = () => {
+        console.log("DDd");
     }
 
     const onClose = () => {
@@ -146,6 +184,9 @@ const TellCarPage = ({ navigation }) => {
                         <Input
                             w="full"
                             onChangeText={setAddress}
+                            isDisabled={true}
+                            value={address}
+                            onFocus={showMap}
                             bg={COLOR.white}
                             p={2}
                             borderStyle="solid"
@@ -194,7 +235,31 @@ const TellCarPage = ({ navigation }) => {
                     </VStack>
                 </HStack>
             </Box>
+            <Box mt={2} ml={5}>
+                <Stack >
+                    {/* <Image source={Images.Map} h="185" resizeMode="cover" alt="image" /> */}
+                    <MapView
+                        style={{ width: width - 40, height: 200 }}
+                        initialRegion={{
+                            latitude: 37.78825,
+                            longitude: -122.4324,
+                            latitudeDelta: 0.0922,
+                            longitudeDelta: 0.0421
+                        }}
+                        onRegionChangeComplete={changePosition}
+                    >
+                        <MapView.Marker
+                            coordinate={{
+                                latitude: position.latitude,
+                                longitude: position.longitude,
+                            }}
+                            centerOffset={{ x: -18, y: -60 }}
+                            anchor={{ x: 0.69, y: 1 }}
+                        />
+                    </MapView>
 
+                </Stack>
+            </Box>
             <Box position="absolute" bottom={50} w="full" px={5}>
                 <TouchableOpacity onPress={onTellCarNext}>
                     <Box

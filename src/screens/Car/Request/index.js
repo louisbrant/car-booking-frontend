@@ -56,8 +56,8 @@ const RequestBookPage = ({ navigation }) => {
     const [mins, setMins] = useState([]);
 
     const [position, setPosition] = useState({
-        latitude: 37.78825,
-        longitude: -122.4324,
+        latitude: car?.px != undefined ? Number(car?.px) : 37.78825,
+        longitude: car?.py != undefined ? Number(car?.py) : -122.4324,
         latitudeDelta: 0.0922,
         longitudeDelta: 0.0421
     });
@@ -522,8 +522,8 @@ const RequestBookPage = ({ navigation }) => {
                             <MapView
                                 style={{ width: width - 40, height: 200 }}
                                 initialRegion={{
-                                    latitude: 37.78825,
-                                    longitude: -122.4324,
+                                    latitude: car?.px != undefined ? Number(car?.px) : 37.78825,
+                                    longitude: car?.py != undefined ? Number(car?.py) : -122.4324,
                                     latitudeDelta: 0.0922,
                                     longitudeDelta: 0.0421
                                 }}

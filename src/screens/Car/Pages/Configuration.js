@@ -37,11 +37,13 @@ const ConfigurationPage = ({ navigation }) => {
         else {
             setLoading(true);
             Api.AddCar({
-                email: user.email, name: car.carname, days, engine, seats, doors, automatic: car.transmission, address: car.address, barcode: car.barcode, odmeter: car.odmeter, trim: car.trim, style: car.style
+                email: user.email, name: car.carname, px: car.px, py: car.py, days, engine, seats, doors, automatic: car.transmission, address: car.address, barcode: car.barcode, odmeter: car.odmeter, trim: car.trim, style: car.style
             }).then(({ data }) => {
                 if (data.status) {
                     let newcar = {
                         address: car.address,
+                        px: car.px,
+                        py: car.py,
                         carname: car.carname,
                         barcode: car.barcode,
                         odmeter: car.odmeter,

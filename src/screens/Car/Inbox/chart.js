@@ -30,6 +30,11 @@ const ChartPage = ({ navigation }) => {
     const [Messages, setMessages] = useState([]);
     const [backendtime, setBackendTime] = useState();
     const [currenttime, setCurrentTime] = useState();
+    const [withUser, setWithUser] = useState({
+        name: "",
+        image: "",
+        state: ""
+    });
 
     const [file, setAddfile] = useState({
         data: [],
@@ -136,11 +141,12 @@ const ChartPage = ({ navigation }) => {
         });
     }
 
-    const LoadAppointData = () => {
-        if (receiver) {
+    const LoadAppointData = (receiverval) => {
+        console.log('receiver145=>', receiverval);
+        if (receiverval) {
             let msg = {
                 sender: user.email,
-                receiver: receiver,
+                receiver: receiverval,
             };
             ROOT.Socket.emit("get msg", msg);
         }
@@ -148,6 +154,27 @@ const ChartPage = ({ navigation }) => {
 
     const fetchData = async () => {
         const receiver = await AsyncStorage.getItem('withchat');
+        console.log('receiver157=>', receiver);
+        Api.GetUserInfor({ email: receiver }).then(({ data }) => {
+            if (data.status) {
+                let widhUserData = data?.data;
+                setWithUser({
+                    ...withUser,
+                    name: widhUserData?.username,
+                    image: ROOT.IMAGE_URL + "users/" + widhUserData?.avatar,
+                    state: "Online",
+                });
+            }
+            else {
+                return Toast.show({ title: data.message, placement: 'bottom', status: 'error', w: 300 });
+            }
+        }).catch(error => {
+            if (error.response && error.response.status === 400) {
+                return Toast.show({ title: error.response.data, placement: 'bottom', status: 'error', w: 300 })
+            } else {
+                return Toast.show({ title: "Error!", placement: 'bottom', status: 'error', w: 300 })
+            }
+        })
         setReceiver(receiver);
 
         ROOT.Socket.on("new user", function (data) {
@@ -155,16 +182,13 @@ const ChartPage = ({ navigation }) => {
         });
 
         ROOT.Socket.on("receive msg", (data) => {
+            console.log('data184=>', data);
             setMessages(data?.data);
             setBackendTime(data?.time);
             setCurrentTime(new Date().valueOf());
         })
 
-        const [appointData] = await Promise.all([
-            LoadAppointData()
-        ]);
-
-        setAppointData(appointData);
+        LoadAppointData(receiver)
     }
 
     useEffect(() => {
@@ -205,10 +229,10 @@ const ChartPage = ({ navigation }) => {
 
                     <View style={{ flex: 1, flexDirection: 'row', alignItems: 'center', justifyContent: 'flex-start' }} pl={8}>
                         <HStack space={2}>
-                            <Avatar bg="white" alignSelf="center" size={"36"} source={Images.Profile1} />
+                            <Avatar bg="white" alignSelf="center" size={"36"} source={{ uri: withUser.image }} />
                             <VStack space={1}>
-                                <Text fontWeight="semibold" fontSize="xs">Name here</Text>
-                                <Text color={COLOR.inPlaceholder} fontWeight="medium" fontSize="2xs">Online</Text>
+                                <Text fontWeight="semibold" fontSize="xs">{withUser.name}</Text>
+                                <Text color={COLOR.inPlaceholder} fontWeight="medium" fontSize="2xs">{withUser.state}</Text>
                             </VStack>
                         </HStack>
                     </View>
@@ -283,7 +307,7 @@ const ChartPage = ({ navigation }) => {
                                     <HStack style={{ flexDirection: 'row', justifyContent: 'flex-start' }}>
                                         <VStack space={5}>
                                             <Text color={COLOR.inPlaceholder} fontWeight="medium" >
-                                                {convertTZ(item?.senddate)}
+                                                {convertTZ(item?.senddate, backendtime)}
                                             </Text>
                                         </VStack>
                                     </HStack>

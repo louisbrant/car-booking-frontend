@@ -4,6 +4,7 @@ import { ScrollView, TouchableOpacity, Dimensions, StatusBar, Pressable, Animate
 import { Image, Text, Box, Stack, HStack, Button, View, Icon, Avatar, VStack, useToast, Input, AspectRatio, Center, Actionsheet, useColorModeValue } from "native-base";
 import { MaterialCommunityIcons, AntDesign, EvilIcons, Entypo, Ionicons, FontAwesome } from "@expo/vector-icons"
 import { useDispatch, useSelector } from 'react-redux';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 import { TabView, SceneMap } from 'react-native-tab-view';
 
@@ -22,7 +23,8 @@ const MessagePage = ({ navigation }) => {
     const Api = useApi();
     const [backendtime, setBackendTime] = useState("");
     const [chatList, setChatList] = useState([]);
-    const onDetail = () => {
+    const onChatDetail = async (chatInfor) => {
+        await AsyncStorage.setItem('withchat', chatInfor?.userData?.email);
         navigation.navigate("ChartPageScreen");
     }
 
@@ -126,7 +128,7 @@ const MessagePage = ({ navigation }) => {
             <VStack space={3}>
                 {chatList.map((item, idx) => {
                     return (
-                        <TouchableOpacity key={idx} onPress={onDetail}>
+                        <TouchableOpacity key={idx} onPress={() => { onChatDetail(item) }}>
                             <HStack space={2}>
                                 <Avatar bg="white" alignSelf="center" size="md" source={{ uri: item?.userData?.avatar }} />
                                 <VStack

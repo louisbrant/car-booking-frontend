@@ -4,6 +4,7 @@ import { ScrollView, TouchableOpacity, Dimensions } from "react-native";
 import { Image, Text, Box, Stack, HStack, Button, View, Icon, Avatar, VStack, Input, AspectRatio, Center, Actionsheet, Menu, Pressable, useToast, Checkbox } from "native-base";
 import SwipePicker from 'react-native-swipe-picker';
 import { MaterialCommunityIcons, AntDesign, EvilIcons, Entypo, Feather, FontAwesome } from "@expo/vector-icons"
+import MapView from "react-native-maps";
 
 
 import { useDispatch, useSelector } from 'react-redux'
@@ -64,7 +65,12 @@ const HouseTellPage = ({ navigation }) => {
     const [currentselpicker, setCurrentSelPicker] = useState(0);
 
     const [showpickeritem, setShowPickerItem] = useState(odmeterlist);
-
+    const [position, setPosition] = useState({
+        latitude: 37.78825,
+        longitude: -122.4324,
+        latitudeDelta: 0.0922,
+        longitudeDelta: 0.0421
+    });
 
     const onCarNameEdit = () => {
         setCarNameEdit(!carnameedit);
@@ -141,6 +147,8 @@ const HouseTellPage = ({ navigation }) => {
     const onShowSelectStyle = () => {
         let newcar = {
             address: address,
+            px: position.latitude,
+            py: position.longitude,
             carname: carname,
             barcode: car.barcode,
             odmeter: odmeter,
@@ -154,6 +162,29 @@ const HouseTellPage = ({ navigation }) => {
         return navigation.navigate("SelectCarStylePageScreen");
     }
 
+    const changePosition = (mappos) => {
+        setPosition({
+            latitude: mappos?.latitude,
+            longitude: mappos?.longitude,
+            latitudeDelta: mappos?.latitudeDelta,
+            longitudeDelta: mappos?.longitudeDelta
+        })
+
+        let request = new XMLHttpRequest();
+        let method = 'GET';
+        let url = 'https://maps.googleapis.com/maps/api/geocode/json?latlng=' + mappos?.latitude + ',' + mappos?.longitude + '&key=' + ROOT.mapApiKey;
+        let async = true;
+        request.open(method, url, async);
+        request.onreadystatechange = function (datas) {
+            if (request.readyState == 4 && request.status == 200) {
+                let data = JSON.parse(request.responseText);
+                let address = data.results[0];
+                setAddress(address?.formatted_address);
+            }
+        };
+        request.send();
+    }
+
     useEffect(() => {
         if (car.style != undefined)
             setStyle(car.style);
@@ -162,9 +193,9 @@ const HouseTellPage = ({ navigation }) => {
     return (
         <Box flex={1}>
             <Box
-                pt={10}
+                pt={5}
                 pb={2}
-                px={3}
+                px={5}
                 style={{
                     backgroundColor: COLOR.InputBlackWhiteBg,
                     width: '100%',
@@ -185,7 +216,7 @@ const HouseTellPage = ({ navigation }) => {
                 </HStack>
             </Box>
 
-            <Box py={2} px={3}
+            <Box py={2} px={5}
                 bg={COLOR.InputBlackWhiteBg}>
                 <HStack justifyContent="space-between" pb={4}>
                     <VStack w="100%" space={1}>
@@ -217,6 +248,7 @@ const HouseTellPage = ({ navigation }) => {
                             w="full"
                             value={address}
                             onChangeText={setAddress}
+                            isDisabled={true}
                             bg={COLOR.white}
                             p={2}
                             borderStyle="solid"
@@ -372,6 +404,31 @@ const HouseTellPage = ({ navigation }) => {
                     </VStack>
                 </HStack>
 
+            </Box>
+            <Box mt={1} ml={5}>
+                <Stack >
+                    {/* <Image source={Images.Map} h="185" resizeMode="cover" alt="image" /> */}
+                    <MapView
+                        style={{ width: width - 40, height: 180 }}
+                        initialRegion={{
+                            latitude: 37.78825,
+                            longitude: -122.4324,
+                            latitudeDelta: 0.0922,
+                            longitudeDelta: 0.0421
+                        }}
+                        onRegionChangeComplete={changePosition}
+                    >
+                        <MapView.Marker
+                            coordinate={{
+                                latitude: position.latitude,
+                                longitude: position.longitude,
+                            }}
+                            centerOffset={{ x: -18, y: -60 }}
+                            anchor={{ x: 0.69, y: 1 }}
+                        />
+                    </MapView>
+
+                </Stack>
             </Box>
             <Box position="absolute" bottom={2} w="full" px={5}>
                 <TouchableOpacity onPress={onTellHouseNext}>
