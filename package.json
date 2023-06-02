@@ -28,7 +28,7 @@
     "expo": "42.0.3",
     "expo-app-loading": "1.1.2",
     "expo-asset": "~8.3.3",
-    "expo-av": "9.2.3",
+    "expo-av": "^13.2.1",
     "expo-barcode-scanner": "9.1.0",
     "expo-font": "~9.2.1",
     "expo-image-picker": "~10.2.2",
