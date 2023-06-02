@@ -103,6 +103,8 @@ const ProjectHomePage = ({ navigation }) => {
                     const newcar = {
                         _id: data[i]._id,
                         name: data[i].name,
+                        px: data[i]?.px,
+                        py: data[i]?.py,
                         img: ROOT.IMAGE_URL + "cars/" + data[i].img,
                         days: data[i].daysval,
                         engine: data[i].engine,

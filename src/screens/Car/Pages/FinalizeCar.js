@@ -102,6 +102,8 @@ const FinalizeCarPage = ({ navigation }) => {
             else {
                 let newcar = {
                     address: address,
+                    px: car.px,
+                    py: car.py,
                     carname: carname,
                     barcode: car.barcode,
                     odmeter: odmeter,

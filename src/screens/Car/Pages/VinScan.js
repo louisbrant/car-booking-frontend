@@ -39,6 +39,8 @@ const VinScanPage = ({ navigation }) => {
     const goScreenDescription = () => {
         let newcar = {
             address: car.address,
+            px: car.px,
+            py: car.py,
             barcode: barcodeval
         };
         dispatch(setCarInfo(newcar));
