@@ -606,7 +606,7 @@ const FinalizeCarPage = ({ navigation }) => {
                 })()}
             </Box>
 
-            <Box w="full" px={5} py={1}>
+            <Box position="absolute" bottom={30} w="full" px={5}>
                 <TouchableOpacity onPress={onFinalizeCarNext}>
                     <Box
                         style={{

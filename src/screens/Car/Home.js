@@ -119,74 +119,86 @@ const HomePage = ({ navigation }) => {
                                         </Text>
                                     </Box>
                                 </Box>
-                                <Box pt={180} py={5} >
-                                    <Text
-                                        color={COLOR.white}
-                                        fontWeight="bold"
-                                        fontSize="24"
-                                        textAlign="center"
-                                    >
-                                        For the traveling heart
-                                    </Text>
-                                </Box>
-                                <Box
-                                    px={3}
-                                    py={5}
-                                >
-                                    <Box
-                                        style={{
-                                            width: '100%',
-                                            height: 45,
-                                            backgroundColor: COLOR.IBase,
-                                            borderRadius: 5,
-                                            display: 'flex',
-                                            justifyContent: 'center',
-                                            alignItems: 'center',
-                                            zIndex: 100
-                                        }}
-                                        onTouchStart={goSignUp}
-                                    >
-                                        <Text
-                                            color={COLOR.white}
-                                            fontWeight="bold"
-                                            fontSize="18"
-                                            textAlign="center"
-                                        >Sign up
-                                        </Text>
-                                    </Box>
-                                </Box>
-                                <Box
-                                    px={3}
-                                >
-                                    <Box
-                                        style={{
-                                            width: '100%',
-                                            height: 45,
-                                            backgroundColor: COLOR.Loginbtn,
-                                            borderRadius: 5,
-                                            display: 'flex',
-                                            justifyContent: 'center',
-                                            alignItems: 'center',
-                                            borderWidth: 0.3,
-                                            borderStyle: "solid",
-                                            borderColor: COLOR.white,
-                                        }}
-                                        onTouchStart={goLogIn}
-                                    >
-                                        <Text
-                                            color={COLOR.white}
-                                            fontWeight="bold"
-                                            fontSize="18"
-                                            textAlign="center"
-                                        >Log in
-                                        </Text>
-                                    </Box>
-                                </Box>
+
                             </Box>
                         </Stack>
                     </Box>
                 </Box>
-            </Box>
+
+                <Box
+                    w="full"
+                    justifyContent='center'
+                    style={{
+                        position: 'absolute',
+                        bottom: 30
+                    }}
+                >
+                    <Box
+                        py={5} >
+                        <Text
+                            color={COLOR.white}
+                            fontWeight="bold"
+                            fontSize="24"
+                            textAlign="center"
+                        >
+                            For the traveling heart
+                        </Text>
+                    </Box>
+                    <Box
+                        px={3}
+                        py={5}
+                    >
+                        <Box
+                            style={{
+                                width: '100%',
+                                height: 50,
+                                backgroundColor: COLOR.IBase,
+                                borderRadius: 5,
+                                display: 'flex',
+                                justifyContent: 'center',
+                                alignItems: 'center',
+                                zIndex: 100
+                            }}
+                            onTouchStart={goSignUp}
+                        >
+                            <Text
+                                color={COLOR.white}
+                                fontWeight="bold"
+                                fontSize="18"
+                                textAlign="center"
+                            >Sign up
+                            </Text>
+                        </Box>
+                    </Box>
+                    <Box
+                        px={3}
+                    >
+                        <Box
+                            style={{
+                                width: '100%',
+                                height: 50,
+                                backgroundColor: COLOR.Loginbtn,
+                                borderRadius: 5,
+                                display: 'flex',
+                                justifyContent: 'center',
+                                alignItems: 'center',
+                                borderWidth: 0.3,
+                                borderStyle: "solid",
+                                borderColor: COLOR.white,
+                            }}
+                            onTouchStart={goLogIn}
+                        >
+                            <Text
+                                color={COLOR.white}
+                                fontWeight="bold"
+                                fontSize="18"
+                                textAlign="center"
+                            >Log in
+                            </Text>
+                        </Box>
+                    </Box>
+                </Box>
+            </Box >
         );
     }
 };
