@@ -11,7 +11,7 @@ import { COLOR, Images, LAYOUT, ROOT, convertTZ } from "../../../constants";
 
 import * as ImagePicker from 'expo-image-picker';
 
-import { Video, ResizeMode } from "expo-av";
+// import { Video, ResizeMode } from "expo-av";
 import { useApi } from '../../../redux/services'
 const { width, height } = Dimensions.get('window')
 
@@ -20,7 +20,7 @@ const ChartPage = ({ navigation }) => {
     const { user } = useSelector((store) => store.auth);
     const [receiver, setReceiver] = useState("");
     const Toast = useToast();
-    const video = React.useRef(null);
+    // const video = React.useRef(null);
     const Api = useApi();
     const [loading, setLoading] = useState(false)
     const [flatList, setflatList] = useState()
@@ -325,7 +325,7 @@ const ChartPage = ({ navigation }) => {
                                 return (
                                     <HStack justifyContent="space-between" key={i}>
                                         <Box opacity={0.7}>
-                                            <Video
+                                            {/* <Video
                                                 style={{
                                                     width: 100,
                                                     height: 100,
@@ -338,7 +338,7 @@ const ChartPage = ({ navigation }) => {
                                                 useNativeControls
                                                 resizeMode={ResizeMode.CONTAIN}
                                                 isLooping
-                                            />
+                                            /> */}
                                         </Box>
                                         <View ml={-5}>
                                             <TouchableOpacity onPress={() => delete_file(i)}>

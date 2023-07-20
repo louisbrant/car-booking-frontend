@@ -17,7 +17,8 @@
       "**/*"
     ],
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "bundleIdentifier": "com.ibluday.IZRA"
     },
     "android": {
       "adaptiveIcon": {
@@ -27,7 +28,7 @@
       "package": "com.ibluday.IZRA",
       "config": {
         "googleMaps": {
-          "apiKey": "AIzaSyB0uPdSl2KFqBETm8gGdfgdAwsUxEjVXho"
+          "apiKey": "AIzaSyBXJiFMPFrDc1Q2hlsRG-evFpGAnOf07O0"
         }
       }
     },

@@ -260,7 +260,7 @@ const TellCarPage = ({ navigation }) => {
 
                 </Stack>
             </Box>
-            <Box position="absolute" bottom={50} w="full" px={5}>
+            <Box position="absolute" bottom={60} w="full" px={5}>
                 <TouchableOpacity onPress={onTellCarNext}>
                     <Box
                         style={{

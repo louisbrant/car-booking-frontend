@@ -122,7 +122,6 @@ const RequestDetailPage = ({ navigation }) => {
                 }}
             >
                 <Stack direction="row" alignItems="center">
-
                     <View style={{ position: 'absolute' }}>
                         <TouchableOpacity onPress={() => navigation.goBack()}>
                             <Icon color={COLOR.black} size="md" as={<Ionicons name="arrow-back" />} />
