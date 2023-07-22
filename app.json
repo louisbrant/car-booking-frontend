@@ -28,9 +28,10 @@
       "package": "com.ibluday.IZRA",
       "config": {
         "googleMaps": {
-          "apiKey": "AIzaSyBXJiFMPFrDc1Q2hlsRG-evFpGAnOf07O0"
+          "apiKey": "AIzaSyB0uPdSl2KFqBETm8gGdfgdAwsUxEjVXho"
         }
-      }
+      },
+      "buildType": "ipa"
     },
     "extra": {
       "eas": {
