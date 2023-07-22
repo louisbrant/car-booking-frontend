@@ -61,7 +61,7 @@ const EditProfilePage = ({ navigation }) => {
                 let updatedUser = JSON.parse(xhr?.response);
                 console.log('updatedUser=>', updatedUser);
                 dispatch(setUserInfo(updatedUser));
-                Toast.show({ title: "Successfully Updated!", placement: 'bottom', status: 'success', w: 300 })
+                Toast.show({ title: "Successfully Update!", placement: 'bottom', status: 'success', w: 300 })
             }
             else {
                 return Toast.show({ title: "Personal Info Faild!", placement: 'bottom', status: 'error', w: 300 })

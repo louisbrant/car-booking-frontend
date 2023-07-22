@@ -254,7 +254,7 @@ const VecificationCarPage = ({ navigation }) => {
                 </HStack>
             </Box>
 
-            <Box position="absolute" bottom={60} w="full" px={5}>
+            <Box position="absolute" bottom={50} w="full" px={5}>
                 <TouchableOpacity onPress={onVerificationContinue}>
                     <Box
                         style={{

@@ -84,9 +84,7 @@ import HouseRentSelectConfigPage from '../screens/House/HouseRentSelectConfig';
 
 const navigation = () => {
     const { user } = useSelector((store) => store.auth);
-
     console.log("user=>", user)
-
     const Api = useApi()
     if (user) {
         ROOT.Socket = io.connect(ROOT.SOCKET_URL);

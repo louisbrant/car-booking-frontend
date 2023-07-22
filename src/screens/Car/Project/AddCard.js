@@ -35,7 +35,7 @@ const AddCardPage = ({ navigation }) => {
         Api.AddCard({ carddata }).then(({ data }) => {
             console.log("Data", data)
             if (data.status) {
-                Toast.show({ title: "Successfully Sign In!", placement: 'bottom', status: 'success', w: 300 })
+                Toast.show({ title: "Success Sign In!", placement: 'bottom', status: 'success', w: 300 })
                 navigation.navigate("CarHomeScreen");
             }
             else {
