@@ -38,7 +38,7 @@ const LogInScreen = ({ navigation }) => {
         }).then(({ data }) => {
             dispatch(setUserInfo(data.user))
             if (data.status) {
-                Toast.show({ title: "Successfully Sign In!", placement: 'bottom', status: 'success', w: 300 })
+                Toast.show({ title: "Success Sign In!", placement: 'bottom', status: 'success', w: 300 })
                 navigation.navigate("CarHomeScreen");
             }
             else {

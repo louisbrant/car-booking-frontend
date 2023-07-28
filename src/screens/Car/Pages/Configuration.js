@@ -56,7 +56,7 @@ const ConfigurationPage = ({ navigation }) => {
                     };
                     dispatch(setCarInfo(newcar));
                     setLoading(false);
-                    Toast.show({ title: "Successfully Car Addss!", placement: 'bottom', status: 'success', w: 300 });
+                    Toast.show({ title: "Success Car Addss!", placement: 'bottom', status: 'success', w: 300 });
                     return navigation.navigate("MyProfileScreen");
                 }
                 else {
@@ -250,6 +250,7 @@ const ConfigurationPage = ({ navigation }) => {
                     </Box>
                 </TouchableOpacity>
             </Box>
+
         </Box>
     )
 }
