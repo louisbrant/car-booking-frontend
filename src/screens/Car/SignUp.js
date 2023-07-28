@@ -4,7 +4,7 @@ import { COLOR, Images, LAYOUT } from "../../constants";
 import { MaterialCommunityIcons, AntDesign, EvilIcons, Entypo, Ionicons } from "@expo/vector-icons"
 import { Image, Input, Icon, Text, Box, Stack, HStack, Button, IconButton, useToast, View, Spinner, VStack, Checkbox } from "native-base";
 // import {    GoogleSignin} from '@react-native-google-signin/google-signin';
-
+import * as AppleAuthentication from 'expo-apple-authentication';
 import { useApi } from '../../redux/services'
 import { setUserInfo } from '../../redux/actions/authActions';
 import { useDispatch } from 'react-redux'
@@ -60,6 +60,14 @@ const SignUpScreen = ({ navigation }) => {
 
 
     const onGoogleSignUp = async () => {
+        console.log('AppleAuthentication=>', AppleAuthentication);
+        const response = await AppleAuthentication.signInAsync({
+            requestedScopes: [
+                AppleAuthentication.AppleAuthenticationScope.FULL_NAME,
+                AppleAuthentication.AppleAuthenticationScope.EMAIL,
+            ],
+        });
+        console.log(response);
         // try {
         //     await GoogleSignIn.askForPlayServicesAsync()
         //     const { type, user } = await GoogleSignIn.signInAsync()
@@ -280,7 +288,32 @@ const SignUpScreen = ({ navigation }) => {
                     </HStack>
 
                     <HStack mt={5} justifyContent="space-between">
-                        <Box w="45%">
+                        <Box w="30%">
+                            {/* <AppleAuthentication.AppleAuthenticationButton
+                                buttonType={AppleAuthentication.AppleAuthenticationButtonType.SIGN_IN}
+                                buttonStyle={AppleAuthentication.AppleAuthenticationButtonStyle.BLACK}
+                                cornerRadius={5}
+                                style={{ width: 250, height: 50 }}
+                                onPress={async () => {
+                                    try {
+                                        const credential = await AppleAuthentication.signInAsync({
+                                            requestedScopes: [
+                                                AppleAuthentication.AppleAuthenticationScope.FULL_NAME,
+                                                AppleAuthentication.AppleAuthenticationScope.EMAIL,
+                                            ],
+                                        });
+                                        // signed in
+                                    } catch (e) {
+                                        if (e.code === 'ERR_REQUEST_CANCELED') {
+                                            // handle that the user canceled the sign-in flow
+                                        } else {
+                                            // handle other errors
+                                        }
+                                    }
+                                }}
+                            /> */}
+                        </Box>
+                        <Box w="30%">
                             <TouchableOpacity onPress={onFacebookSignUp}>
                                 <Box
                                     borderStyle="solid"
@@ -296,7 +329,7 @@ const SignUpScreen = ({ navigation }) => {
                                 </Box>
                             </TouchableOpacity>
                         </Box>
-                        <Box w="45%">
+                        <Box w="30%">
                             <TouchableOpacity onPress={onGoogleSignUp}>
                                 <Box
                                     borderStyle="solid"
