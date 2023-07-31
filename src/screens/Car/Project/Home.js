@@ -43,7 +43,7 @@ const ProjectHomePage = ({ navigation }) => {
             getHouses();
         }
     }
-    const getHouses = () => {
+    const getHouses = async () => {
         Api.GetAllHouses().then(({ data }) => {
             if (data.status) {
                 data = data.data;

@@ -30,6 +30,7 @@ export const Images = {
 
     Facebook: require('../assets/icon/facebook.png'),
     Google: require('../assets/icon/google.png'),
+    Apple: require('../assets/icon/apple.png'),
 
     Profile1: require('../assets/Profile/profile-1.png'),
     Profile2: require('../assets/Profile/profile-2.png'),

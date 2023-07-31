@@ -62,9 +62,9 @@ const ApiList = {
 }
 
 const dev = {
-  BACKEND_URL: "http://103.179.142.171/",
-  SOCKET_URL: "http://103.179.142.171/",
-  IMAGE_URL: "http://103.179.142.171/",
+  BACKEND_URL: "http://192.168.134.108:10040/",
+  SOCKET_URL: "http://192.168.134.108:10040/",
+  IMAGE_URL: "http://192.168.134.108:10040/",
   ...ApiList
 }
 //

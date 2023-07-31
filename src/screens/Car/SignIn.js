@@ -284,44 +284,94 @@ const LogInScreen = ({ navigation }) => {
                         <Text color={COLOR.inPlaceholder} fontWeight="medium" fontSize="2xs" px={3}>or login with</Text>
                         <Box borderStyle="solid" borderWidth={0.5} borderColor={COLOR.inpBorderColor} h={0} flex={1} />
                     </HStack>
-
-                    <HStack mt={5} justifyContent="space-between">
-                        <Box w="45%">
-                            <TouchableOpacity onPress={onFacebookSignIn}>
-                                <Box
-                                    borderStyle="solid"
-                                    borderWidth={1}
-                                    borderColor={COLOR.inpBorderColor}
-                                    rounded={5}
-                                    py={2}
-                                >
-                                    <HStack space={2} alignItems="center" justifyContent="center">
-                                        <Image source={Images.Facebook} alt="facebook" style={{ width: 20, height: 20 }} />
-                                        <Text fontWeight="semibold" fontSize="xs">Facebook</Text>
-                                    </HStack>
+                    {
+                        Platform.OS == "ios" ?
+                            <HStack mt={5} justifyContent="space-between">
+                                <Box w="30%">
+                                    <TouchableOpacity onPress={onFacebookSignIn}>
+                                        <Box
+                                            borderStyle="solid"
+                                            borderWidth={1}
+                                            borderColor={COLOR.inpBorderColor}
+                                            rounded={5}
+                                            py={2}
+                                        >
+                                            <HStack space={2} alignItems="center" justifyContent="center">
+                                                <Image source={Images.Apple} alt="facebook" style={{ width: 20, height: 20 }} />
+                                                <Text fontWeight="semibold" fontSize="xs">Apple</Text>
+                                            </HStack>
+                                        </Box>
+                                    </TouchableOpacity>
                                 </Box>
-                            </TouchableOpacity>
-                        </Box>
-                        <Box w="45%">
-                            <TouchableOpacity onPress={onGoogleSignIn}>
-                                <Box
-                                    borderStyle="solid"
-                                    borderWidth={1}
-                                    borderColor={COLOR.inpBorderColor}
-                                    rounded={5}
-                                    py={2}
-                                >
-                                    <HStack space={2} alignItems="center" justifyContent="center">
-                                        <Image source={Images.Google} alt="facebook" style={{ width: 20, height: 20 }} />
-                                        <Text fontWeight="semibold" fontSize="xs">Google</Text>
-                                    </HStack>
+                                <Box w="30%">
+                                    <TouchableOpacity onPress={onFacebookSignIn}>
+                                        <Box
+                                            borderStyle="solid"
+                                            borderWidth={1}
+                                            borderColor={COLOR.inpBorderColor}
+                                            rounded={5}
+                                            py={2}
+                                        >
+                                            <HStack space={2} alignItems="center" justifyContent="center">
+                                                <Image source={Images.Facebook} alt="facebook" style={{ width: 20, height: 20 }} />
+                                                <Text fontWeight="semibold" fontSize="xs">Facebook</Text>
+                                            </HStack>
+                                        </Box>
+                                    </TouchableOpacity>
                                 </Box>
-                            </TouchableOpacity>
-                        </Box>
-                    </HStack>
-
-
-
+                                <Box w="30%">
+                                    <TouchableOpacity onPress={onGoogleSignIn}>
+                                        <Box
+                                            borderStyle="solid"
+                                            borderWidth={1}
+                                            borderColor={COLOR.inpBorderColor}
+                                            rounded={5}
+                                            py={2}
+                                        >
+                                            <HStack space={2} alignItems="center" justifyContent="center">
+                                                <Image source={Images.Google} alt="facebook" style={{ width: 20, height: 20 }} />
+                                                <Text fontWeight="semibold" fontSize="xs">Google</Text>
+                                            </HStack>
+                                        </Box>
+                                    </TouchableOpacity>
+                                </Box>
+                            </HStack>
+                            :
+                            <HStack mt={5} justifyContent="space-between">
+                                <Box w="45%">
+                                    <TouchableOpacity onPress={onFacebookSignIn}>
+                                        <Box
+                                            borderStyle="solid"
+                                            borderWidth={1}
+                                            borderColor={COLOR.inpBorderColor}
+                                            rounded={5}
+                                            py={2}
+                                        >
+                                            <HStack space={2} alignItems="center" justifyContent="center">
+                                                <Image source={Images.Facebook} alt="facebook" style={{ width: 20, height: 20 }} />
+                                                <Text fontWeight="semibold" fontSize="xs">Facebook</Text>
+                                            </HStack>
+                                        </Box>
+                                    </TouchableOpacity>
+                                </Box>
+                                <Box w="45%">
+                                    <TouchableOpacity onPress={onGoogleSignIn}>
+                                        <Box
+                                            borderStyle="solid"
+                                            borderWidth={1}
+                                            borderColor={COLOR.inpBorderColor}
+                                            rounded={5}
+                                            py={2}
+                                        >
+                                            <HStack space={2} alignItems="center" justifyContent="center">
+                                                <Image source={Images.Google} alt="facebook" style={{ width: 20, height: 20 }} />
+                                                <Text fontWeight="semibold" fontSize="xs">Google</Text>
+                                            </HStack>
+                                        </Box>
+                                    </TouchableOpacity>
+                                </Box>
+                            </HStack>
+                    }
                 </Box>
             </Box>
 

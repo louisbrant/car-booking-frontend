@@ -1,10 +1,22 @@
 import React, { useState, useEffect } from "react";
-import { ScrollView, TouchableOpacity } from "react-native";
+import { ScrollView, TouchableOpacity, Platform } from "react-native";
 import { COLOR, Images, LAYOUT } from "../../constants";
 import { MaterialCommunityIcons, AntDesign, EvilIcons, Entypo, Ionicons } from "@expo/vector-icons"
 import { Image, Input, Icon, Text, Box, Stack, HStack, Button, IconButton, useToast, View, Spinner, VStack, Checkbox } from "native-base";
 // import {    GoogleSignin} from '@react-native-google-signin/google-signin';
 import * as AppleAuthentication from 'expo-apple-authentication';
+
+// import appleAuth, {
+//     AppleButton,
+//     AppleAuthRequestOperation,
+//     AppleAuthRequestScope,
+//     AppleAuthCredentialState,
+// } from '@invertase/react-native-apple-authentication';
+
+import { appleAuthAndroid } from '@invertase/react-native-apple-authentication';
+import 'react-native-get-random-values';
+import { v4 as uuid } from 'uuid'
+
 import { useApi } from '../../redux/services'
 import { setUserInfo } from '../../redux/actions/authActions';
 import { useDispatch } from 'react-redux'
@@ -13,6 +25,8 @@ import { useDispatch } from 'react-redux'
 // import * as Facebook from 'expo-facebook';
 
 const SignUpScreen = ({ navigation }) => {
+    console.log(Platform);
+    console.log("Platform.OS=>", Platform.OS);
     const Api = useApi()
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
@@ -60,23 +74,55 @@ const SignUpScreen = ({ navigation }) => {
 
 
     const onGoogleSignUp = async () => {
-        console.log('AppleAuthentication=>', AppleAuthentication);
-        const response = await AppleAuthentication.signInAsync({
-            requestedScopes: [
-                AppleAuthentication.AppleAuthenticationScope.FULL_NAME,
-                AppleAuthentication.AppleAuthenticationScope.EMAIL,
-            ],
+        // Generate secure, random values for state and nonce
+        const rawNonce = uuid();
+        const state = uuid();
+
+        console.log('appleAuthAndroid=>', appleAuthAndroid);
+        // Configure the request
+        appleAuthAndroid.configure({
+            // The Service ID you registered with Apple
+            clientId: 'com.ibluday.IZRA',
+
+            // Return URL added to your Apple dev console. We intercept this redirect, but it must still match
+            // the URL you provided to Apple. It can be an empty route on your backend as it's never called.
+            redirectUri: 'https://web.skype.com',
+
+            // The type of response requested - code, id_token, or both.
+            responseType: appleAuthAndroid?.ResponseType?.ALL,
+
+            // The amount of user information requested from Apple.
+            scope: appleAuthAndroid?.Scope?.ALL,
+
+            // Random nonce value that will be SHA256 hashed before sending to Apple.
+            nonce: rawNonce,
+
+            // Unique state value used to prevent CSRF attacks. A UUID will be generated if nothing is provided.
+            state,
         });
-        console.log(response);
-        // try {
-        //     await GoogleSignIn.askForPlayServicesAsync()
-        //     const { type, user } = await GoogleSignIn.signInAsync()
-        //     if (type === 'success') {
-        //         GoGoogleSignUp()
-        //     }
-        // } catch ({ message }) {
-        //     console.log('login: Error:' + message)
+
+        // Open the browser window for user sign in
+        const response = await appleAuthAndroid.signIn();
+
+        console.log('response=>', response);
+        // Send the authorization code to your backend for verification
+
+        // console.log('appleAuth=>', appleAuth);
+        // const appleAuthRequestResponse = await appleAuth.performRequest({
+        //     requestedOperation: AppleAuthRequestOperation.LOGIN,
+        //     requestedScopes: [AppleAuthRequestScope.EMAIL, AppleAuthRequestScope.FULL_NAME],
+        // });
+
+        // // get current authentication state for user
+        // // /!\ This method must be tested on a real device. On the iOS simulator it always throws an error.
+        // const credentialState = await appleAuth.getCredentialStateForUser(appleAuthRequestResponse.user);
+
+        // // use credentialState response to ensure the user is authenticated
+        // if (credentialState === AppleAuthCredentialState.AUTHORIZED) {
+        //     // user is authenticated
         // }
+        // console.log('appleAuthRequestResponse=>', appleAuthRequestResponse)
+        // console.log('credentialState=>', credentialState)
     }
 
     const GoGoogleSignUp = async () => {
@@ -286,69 +332,94 @@ const SignUpScreen = ({ navigation }) => {
                         <Text color={COLOR.inPlaceholder} fontWeight="medium" fontSize="2xs" px={3}>or login with</Text>
                         <Box borderStyle="solid" borderWidth={0.5} borderColor={COLOR.inpBorderColor} h={0} flex={1} />
                     </HStack>
-
-                    <HStack mt={5} justifyContent="space-between">
-                        <Box w="30%">
-                            {/* <AppleAuthentication.AppleAuthenticationButton
-                                buttonType={AppleAuthentication.AppleAuthenticationButtonType.SIGN_IN}
-                                buttonStyle={AppleAuthentication.AppleAuthenticationButtonStyle.BLACK}
-                                cornerRadius={5}
-                                style={{ width: 250, height: 50 }}
-                                onPress={async () => {
-                                    try {
-                                        const credential = await AppleAuthentication.signInAsync({
-                                            requestedScopes: [
-                                                AppleAuthentication.AppleAuthenticationScope.FULL_NAME,
-                                                AppleAuthentication.AppleAuthenticationScope.EMAIL,
-                                            ],
-                                        });
-                                        // signed in
-                                    } catch (e) {
-                                        if (e.code === 'ERR_REQUEST_CANCELED') {
-                                            // handle that the user canceled the sign-in flow
-                                        } else {
-                                            // handle other errors
-                                        }
-                                    }
-                                }}
-                            /> */}
-                        </Box>
-                        <Box w="30%">
-                            <TouchableOpacity onPress={onFacebookSignUp}>
-                                <Box
-                                    borderStyle="solid"
-                                    borderWidth={1}
-                                    borderColor={COLOR.inpBorderColor}
-                                    rounded={5}
-                                    py={2}
-                                >
-                                    <HStack space={2} alignItems="center" justifyContent="center">
-                                        <Image source={Images.Facebook} alt="facebook" style={{ width: 20, height: 20 }} />
-                                        <Text fontWeight="semibold" fontSize="xs">Facebook</Text>
-                                    </HStack>
+                    {
+                        Platform.OS == "ios" ?
+                            <HStack mt={5} justifyContent="space-between">
+                                <Box w="30%">
+                                    <TouchableOpacity onPress={onFacebookSignUp}>
+                                        <Box
+                                            borderStyle="solid"
+                                            borderWidth={1}
+                                            borderColor={COLOR.inpBorderColor}
+                                            rounded={5}
+                                            py={2}
+                                        >
+                                            <HStack space={2} alignItems="center" justifyContent="center">
+                                                <Image source={Images.Apple} alt="facebook" style={{ width: 20, height: 20 }} />
+                                                <Text fontWeight="semibold" fontSize="xs">Apple</Text>
+                                            </HStack>
+                                        </Box>
+                                    </TouchableOpacity>
                                 </Box>
-                            </TouchableOpacity>
-                        </Box>
-                        <Box w="30%">
-                            <TouchableOpacity onPress={onGoogleSignUp}>
-                                <Box
-                                    borderStyle="solid"
-                                    borderWidth={1}
-                                    borderColor={COLOR.inpBorderColor}
-                                    rounded={5}
-                                    py={2}
-                                >
-                                    <HStack space={2} alignItems="center" justifyContent="center">
-                                        <Image source={Images.Google} alt="facebook" style={{ width: 20, height: 20 }} />
-                                        <Text fontWeight="semibold" fontSize="xs">Google</Text>
-                                    </HStack>
+                                <Box w="30%">
+                                    <TouchableOpacity onPress={onFacebookSignUp}>
+                                        <Box
+                                            borderStyle="solid"
+                                            borderWidth={1}
+                                            borderColor={COLOR.inpBorderColor}
+                                            rounded={5}
+                                            py={2}
+                                        >
+                                            <HStack space={2} alignItems="center" justifyContent="center">
+                                                <Image source={Images.Facebook} alt="facebook" style={{ width: 20, height: 20 }} />
+                                                <Text fontWeight="semibold" fontSize="xs">Facebook</Text>
+                                            </HStack>
+                                        </Box>
+                                    </TouchableOpacity>
                                 </Box>
-                            </TouchableOpacity>
-                        </Box>
-                    </HStack>
-
-
-
+                                <Box w="30%">
+                                    <TouchableOpacity onPress={onGoogleSignUp}>
+                                        <Box
+                                            borderStyle="solid"
+                                            borderWidth={1}
+                                            borderColor={COLOR.inpBorderColor}
+                                            rounded={5}
+                                            py={2}
+                                        >
+                                            <HStack space={2} alignItems="center" justifyContent="center">
+                                                <Image source={Images.Google} alt="facebook" style={{ width: 20, height: 20 }} />
+                                                <Text fontWeight="semibold" fontSize="xs">Google</Text>
+                                            </HStack>
+                                        </Box>
+                                    </TouchableOpacity>
+                                </Box>
+                            </HStack>
+                            :
+                            <HStack mt={5} justifyContent="space-between">
+                                <Box w="45%">
+                                    <TouchableOpacity onPress={onFacebookSignUp}>
+                                        <Box
+                                            borderStyle="solid"
+                                            borderWidth={1}
+                                            borderColor={COLOR.inpBorderColor}
+                                            rounded={5}
+                                            py={2}
+                                        >
+                                            <HStack space={2} alignItems="center" justifyContent="center">
+                                                <Image source={Images.Facebook} alt="facebook" style={{ width: 20, height: 20 }} />
+                                                <Text fontWeight="semibold" fontSize="xs">Facebook</Text>
+                                            </HStack>
+                                        </Box>
+                                    </TouchableOpacity>
+                                </Box>
+                                <Box w="45%">
+                                    <TouchableOpacity onPress={onGoogleSignUp}>
+                                        <Box
+                                            borderStyle="solid"
+                                            borderWidth={1}
+                                            borderColor={COLOR.inpBorderColor}
+                                            rounded={5}
+                                            py={2}
+                                        >
+                                            <HStack space={2} alignItems="center" justifyContent="center">
+                                                <Image source={Images.Google} alt="facebook" style={{ width: 20, height: 20 }} />
+                                                <Text fontWeight="semibold" fontSize="xs">Google</Text>
+                                            </HStack>
+                                        </Box>
+                                    </TouchableOpacity>
+                                </Box>
+                            </HStack>
+                    }
                 </Box>
             </Box>
 

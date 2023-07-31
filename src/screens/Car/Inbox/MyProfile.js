@@ -10,7 +10,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 
 import { COLOR, Images, LAYOUT, ROOT } from "../../../constants";
 
-import { BottomTab } from '../../../components';
+import { BottomTab, CenterModal } from '../../../components';
 import { backgroundColor, borderColor } from 'styled-system';
 import { setCarInfo } from '../../../redux/actions/authActions';
 import { LinearGradient } from 'expo-linear-gradient'
@@ -21,6 +21,12 @@ import * as ImagePicker from 'expo-image-picker';
 
 const MyProfilePage = ({ navigation }) => {
 
+    const [modalVisible, setModalVisible] = useState(false);
+    const [delModal, setDelModal] = useState(false);
+
+    const initialRef = React.useRef(null);
+    const finalRef = React.useRef(null);
+
     const { user, car } = useSelector((store) => store.auth);
     const dispatch = useDispatch()
     const Toast = useToast()
@@ -29,10 +35,24 @@ const MyProfilePage = ({ navigation }) => {
         navigation.navigate("EditProfileScreen")
     }
 
+    const onPersonInfor = () => {
+        navigation.navigate("PersonalScreen");
+    }
+
+    const onPayment = () => {
+        navigation.navigate("MyPaymentScreen");
+    }
+
+    const onNotification = () => {
+        navigation.navigate("NotificationScreen");
+    }
+
     const [imageInfor, setImageInfor] = useState({
         img: user.avatar != "" ? typeof (user.avatar) == 'string' ? { uri: ROOT.IMAGE_URL + "users/" + user.avatar } : user.avatar : Images.Profile8,
         selected: false
     });
+
+    console.log('imageInfor=>', imageInfor);
 
     const onUpload = async () => {
         try {
@@ -59,6 +79,11 @@ const MyProfilePage = ({ navigation }) => {
         }
     }
 
+    const logOut = async () => {
+        dispatch(setUserInfo(""))
+        navigation.navigate("HomeScreen")
+    }
+
     const onCheckAddCar = () => {
         let newcar = {
             address: car.address,
@@ -76,10 +101,14 @@ const MyProfilePage = ({ navigation }) => {
         dispatch(setCarInfo(newcar));
         navigation.navigate("AllCarsScreen");
     }
-    const [modalVisible, setModalVisible] = useState(false);
 
-    const initialRef = React.useRef(null);
-    const finalRef = React.useRef(null);
+    const onDeleteAccount = () => {
+        setDelModal(true);
+    }
+
+    const deleteAccount = () => {
+
+    }
 
     useEffect(() => {
         const fetchData = async () => {
@@ -125,6 +154,12 @@ const MyProfilePage = ({ navigation }) => {
                             fontSize="md"
                         >My Profile</Text>
                     </View>
+
+                    <View >
+                        <TouchableOpacity onPress={() => logOut()}>
+                            <Icon color={COLOR.black} size="lg" as={<Ionicons name="log-out-outline" />} />
+                        </TouchableOpacity>
+                    </View>
                 </Stack>
 
             </Box>
@@ -142,176 +177,86 @@ const MyProfilePage = ({ navigation }) => {
                         <VStack>
                             <Text fontWeight="semibold" fontSize="md">{user.username}</Text>
                             <TouchableOpacity onPress={onShowProfile}>
-                                <Text fontWeight="medium" fontSize="2xs" underline>Show Profile</Text>
+                                <Text fontWeight="medium" fontSize="xs" underline>Show Profile</Text>
                             </TouchableOpacity>
                         </VStack>
                         <VStack mt={5} space={2}>
-                            <Text fontWeight="bold" fontSize="xs">Account Settings</Text>
+                            <Text fontWeight="bold" fontSize="md">Account Settings</Text>
                             <VStack>
-                                <HStack alignItems="center" space={2}>
-                                    <Icon color={COLOR.black} size="xs" as={<Ionicons name="person-outline" />} />
+                                <HStack alignItems="center" space={2} onTouchStart={onPersonInfor}>
+                                    <Icon color={COLOR.black} size="md" as={<Ionicons name="person-outline" />} />
                                     <Box py={2} borderStyle="solid" borderBottomWidth={1} borderColor={COLOR.inpBorderColor} flex={1}>
                                         <HStack alignItems="center" justifyContent="space-between" >
-                                            <Text fontWeight="medium" fontSize="xs">Personal Information</Text>
-                                            <Icon color={COLOR.black} size="xs" as={<AntDesign name="right" />} />
+                                            <Text fontWeight="medium" fontSize="md">Personal Information</Text>
+                                            <Icon color={COLOR.black} size="md" as={<AntDesign name="right" />} />
+                                        </HStack>
+                                    </Box>
+                                </HStack>
+                                <HStack alignItems="center" space={2} onTouchStart={onPayment}>
+                                    <Icon color={COLOR.black} size="md" as={<Ionicons name="card-outline" />} />
+                                    <Box py={2} borderStyle="solid" borderBottomWidth={1} borderColor={COLOR.inpBorderColor} flex={1}>
+                                        <HStack alignItems="center" justifyContent="space-between" >
+                                            <Text fontWeight="medium" fontSize="md">Payments and Payouts</Text>
+                                            <Icon color={COLOR.black} size="md" as={<AntDesign name="right" />} />
                                         </HStack>
                                     </Box>
                                 </HStack>
                                 <HStack alignItems="center" space={2}>
-                                    <Icon color={COLOR.black} size="xs" as={<Ionicons name="card-outline" />} />
+                                    <Icon color={COLOR.black} size="md" as={<MaterialIcons name="translate" />} />
                                     <Box py={2} borderStyle="solid" borderBottomWidth={1} borderColor={COLOR.inpBorderColor} flex={1}>
                                         <HStack alignItems="center" justifyContent="space-between" >
-                                            <Text fontWeight="medium" fontSize="xs">Payments and Payouts</Text>
-                                            <Icon color={COLOR.black} size="xs" as={<AntDesign name="right" />} />
+                                            <Text fontWeight="medium" fontSize="md">Traslation</Text>
+                                            <Icon color={COLOR.black} size="md" as={<AntDesign name="right" />} />
                                         </HStack>
                                     </Box>
                                 </HStack>
-                                <HStack alignItems="center" space={2}>
-                                    <Icon color={COLOR.black} size="xs" as={<MaterialIcons name="translate" />} />
+                                <HStack alignItems="center" space={2} onTouchStart={onNotification}>
+                                    <Icon color={COLOR.black} size="md" as={<Ionicons name="notifications-outline" />} />
                                     <Box py={2} borderStyle="solid" borderBottomWidth={1} borderColor={COLOR.inpBorderColor} flex={1}>
                                         <HStack alignItems="center" justifyContent="space-between" >
-                                            <Text fontWeight="medium" fontSize="xs">Traslation</Text>
-                                            <Icon color={COLOR.black} size="xs" as={<AntDesign name="right" />} />
+                                            <Text fontWeight="medium" fontSize="md">Notifications</Text>
+                                            <Icon color={COLOR.black} size="md" as={<AntDesign name="right" />} />
                                         </HStack>
                                     </Box>
                                 </HStack>
-                                <HStack alignItems="center" space={2}>
-                                    <Icon color={COLOR.black} size="xs" as={<Ionicons name="notifications-outline" />} />
-                                    <Box py={2} borderStyle="solid" borderBottomWidth={1} borderColor={COLOR.inpBorderColor} flex={1}>
-                                        <HStack alignItems="center" justifyContent="space-between" >
-                                            <Text fontWeight="medium" fontSize="xs">Notifications</Text>
-                                            <Icon color={COLOR.black} size="xs" as={<AntDesign name="right" />} />
-                                        </HStack>
-                                    </Box>
-                                </HStack>
-                                <HStack alignItems="center" space={2}>
-                                    <Icon color={COLOR.black} size="xs" as={<MaterialIcons name="lock-outline" />} />
+                                <HStack alignItems="center" space={2} onTouchStart={onPayment}>
+                                    <Icon color={COLOR.black} size="md" as={<MaterialIcons name="lock-outline" />} />
                                     <Box py={2} borderStyle="solid" borderBottomWidth={0} borderColor={COLOR.inpBorderColor} flex={1}>
                                         <HStack alignItems="center" justifyContent="space-between" >
-                                            <Text fontWeight="medium" fontSize="xs">Privacy and Sharing</Text>
-                                            <Icon color={COLOR.black} size="xs" as={<AntDesign name="right" />} />
+                                            <Text fontWeight="medium" fontSize="md">Privacy and Sharing</Text>
+                                            <Icon color={COLOR.black} size="md" as={<AntDesign name="right" />} />
                                         </HStack>
                                     </Box>
                                 </HStack>
                             </VStack>
 
-                            <Text fontWeight="bold" fontSize="xs">Account Activity</Text>
+                            <Text fontWeight="bold" fontSize="md">Account Activity</Text>
                             <VStack>
                                 <HStack alignItems="center" space={2}>
                                     <Box py={2} borderStyle="solid" borderBottomWidth={0} borderColor={COLOR.inpBorderColor} flex={1}>
                                         <HStack alignItems="center" justifyContent="space-between" >
-                                            <Text fontWeight="medium" fontSize="xs">My Vehicles</Text>
-                                            <Icon color={COLOR.black} size="xs" as={<AntDesign name="right" />} />
+                                            <Text fontWeight="medium" fontSize="md">My Vehicles</Text>
+                                            <Icon color={COLOR.black} size="md" as={<AntDesign name="right" />} />
                                         </HStack>
                                     </Box>
                                 </HStack>
                             </VStack>
+
+                            <HStack alignItems="center" space={2} onTouchStart={onDeleteAccount}>
+                                <Icon color={COLOR.red} size="md" as={<AntDesign name="delete" />} />
+                                <Box py={2} borderStyle="solid"  >
+                                    <HStack alignItems="center" justifyContent="space-between" >
+                                        <Text color={COLOR.red} fontSize="md">Delete Account</Text>
+                                    </HStack>
+                                </Box>
+                            </HStack>
                         </VStack>
                     </Box>
                 </ScrollView>
             </LinearGradient>
-            <Modal isOpen={modalVisible} onClose={() => setModalVisible(false)} initialFocusRef={initialRef} finalFocusRef={finalRef} _backdrop={true} backdropOpacity={0.5} backgroundColor={COLOR.ModalBgcolor} >
-                <Modal.Content style={{
-                    width: "80%",
-                }}>
-                    <Modal.Body style={{
-                        backgroundColor: COLOR.ModalBlackBgcolor
-                    }}>
-                        <HStack justifyContent="space-between" pb={2}>
-                            <VStack w="100%" space={1}
-                                style={{
-                                    display: 'flex',
-                                    justifyContent: 'center',
-                                    alignItems: 'center',
-                                }}>
-                                <Text
-                                    color={COLOR.white}
-                                    fontWeight="medium"
-                                    style={{
-                                        display: 'flex',
-                                        justifyContent: 'center',
-                                        alignItems: 'center',
-                                        fontSize: 17
-                                    }}
-                                >
-                                    Car confirmation
-                                </Text>
-                            </VStack>
-                        </HStack>
-                        <HStack justifyContent="space-between" pb={1}>
-                            <VStack w="100%" space={1}
-                                style={{
-                                    display: 'flex',
-                                    justifyContent: 'center',
-                                    alignItems: 'center',
-                                }}>
-                                <Text
-                                    color={COLOR.inPlaceholder}
-                                    fontSize="xs"
-                                    style={{
-                                        display: 'flex',
-                                        justifyContent: 'center',
-                                        alignItems: 'center',
-                                    }}
-                                >
-                                    Lorem ipsum dolor sit amet,
-                                </Text>
-                                <Text
-                                    color={COLOR.inPlaceholder}
-                                    fontSize="xs"
-                                    style={{
-                                        display: 'flex',
-                                        justifyContent: 'center',
-                                        alignItems: 'center',
-                                    }}
-                                >
-                                    consectetur adipiscing elit. Nulla nec
-                                </Text>
-                                <Text
-                                    color={COLOR.inPlaceholder}
-                                    fontSize="xs"
-                                    style={{
-                                        display: 'flex',
-                                        justifyContent: 'center',
-                                        alignItems: 'center',
-                                    }}
-                                >
-                                    ipsum ac quam auctor dapibus.
-                                </Text>
-                            </VStack>
-                        </HStack>
-                    </Modal.Body>
-                    <Modal.Footer style={{
-                        display: 'flex',
-                        justifyContent: 'center',
-                        alignItems: 'center',
-                        backgroundColor: COLOR.ModalBlackBgcolor,
-                        borderTopWidth: 0.3,
-                        borderColor: COLOR.ModalBordercolor
-                    }}>
-                        <Box>
-                            <TouchableOpacity onPress={onCheckAddCar}>
-                                <Box
-                                    style={{
-                                        width: '100%',
-                                        display: 'flex',
-                                        justifyContent: 'center',
-                                        alignItems: 'center',
-                                    }}
-                                >
-                                    <Text
-                                        color={COLOR.IBase}
-                                        fontWeight="bold"
-                                        fontSize={17}
-                                    >
-                                        OK
-                                    </Text>
-                                </Box>
-                            </TouchableOpacity>
-                        </Box>
-                    </Modal.Footer>
-                </Modal.Content>
-            </Modal>
+            < CenterModal isOpen={modalVisible} setIsOpen={setModalVisible} OK={onCheckAddCar} content={{ title: "Car confirmation", text: ["Lorem ipsum dolor sit amet,", "consectetur adipiscing elit. Nulla nec", "ipsum ac quam auctor dapibus."], ok: "OK" }} />
+
+            < CenterModal isOpen={delModal} setIsOpen={setDelModal} OK={deleteAccount} content={{ title: "Are you sure you want to delete your account?", text: ["This cannot be reveresed."], ok: "Yes", cancel: "Cancel" }} />
             <BottomTab navigation={navigation} />
 
         </Box>
