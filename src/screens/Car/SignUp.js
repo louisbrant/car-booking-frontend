@@ -71,6 +71,42 @@ const SignUpScreen = ({ navigation }) => {
         })
     }
 
+    const onAppleSignUp = async () => {
+        const credential = await AppleAuthentication.signInAsync({
+            requestedScopes: [
+                AppleAuthentication.AppleAuthenticationScope.FULL_NAME,
+                AppleAuthentication.AppleAuthenticationScope.EMAIL,
+            ],
+        });
+        if (credential?.email) {
+            if (credential.email) {
+                setEmail(credential.email)
+                Api.ThirdSignUp({
+                    email: credential.email,
+                    password: ""
+                }).then(({ data }) => {
+                    if (data.status) {
+                        navigation.navigate("SignInScreen");
+                        return Toast.show({ title: "Success Sign Up", placement: 'top', status: 'error', w: 300 })
+                    }
+                    else {
+                        return Toast.show({ title: data.message, placement: 'top', status: 'error', w: 300 })
+                    }
+                }).catch(error => {
+                    if (error.response && error.response.status === 400) {
+                        return Toast.show({ title: error.response.data, placement: 'top', status: 'error', w: 300 })
+                    } else {
+                        return Toast.show({ title: "Error", placement: 'bottom', status: 'error', w: 300 })
+                    }
+                })
+            }
+            else {
+                return Toast.show({ title: "Error", placement: 'bottom', status: 'error', w: 300 });
+            }
+        }
+    }
+
+
 
 
     const onGoogleSignUp = async () => {
@@ -336,7 +372,7 @@ const SignUpScreen = ({ navigation }) => {
                         Platform.OS == "ios" ?
                             <HStack mt={5} justifyContent="space-between">
                                 <Box w="30%">
-                                    <TouchableOpacity onPress={onFacebookSignUp}>
+                                    <TouchableOpacity onPress={onAppleSignUp}>
                                         <Box
                                             borderStyle="solid"
                                             borderWidth={1}

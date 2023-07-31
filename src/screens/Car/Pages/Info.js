@@ -5,7 +5,7 @@ import { MaterialCommunityIcons, MaterialIcons, AntDesign, EvilIcons, Entypo, Io
 
 import { COLOR, Images, LAYOUT } from "../../../constants";
 
-import { BottomTab } from '../../../components';
+import { BottomTab, CenterModal } from '../../../components';
 import { useSelector, useDispatch } from 'react-redux'
 import { setUserInfo } from '../../../redux/actions/authActions';
 
@@ -24,7 +24,8 @@ const InfoPage = ({ navigation }) => {
     }
 
     const closeAccount = () => {
-        dispatch(setUserInfo(""))
+        dispatch(setUserInfo(""));
+        navigation.navigate("SignInScreen");
     }
 
 
