@@ -53,6 +53,49 @@ const LogInScreen = ({ navigation }) => {
             }
         })
     }
+
+    const onAppleSignIn = async () => {
+        const credential = await AppleAuthentication.signInAsync({
+            requestedScopes: [
+                AppleAuthentication.AppleAuthenticationScope.FULL_NAME,
+                AppleAuthentication.AppleAuthenticationScope.EMAIL,
+            ],
+        });
+        if (credential.email) {
+            setEmail(credential.email)
+            Api.ThirdSignIn({
+                email: credential.email,
+                password: ""
+            }).then(({ data }) => {
+                // console.log("data=>",data)
+                dispatch(setUserInfo(data.user))
+                if (data.status) {
+                    Toast.show({ title: "Success Sign In!", placement: 'bottom', status: 'success', w: 300 })
+                    if (data.user.roles == "renter") {
+                        navigation.navigate("SecondScreen")
+                    }
+                    else {
+                        navigation.navigate("CarHomeScreen");
+                    }
+                }
+                else {
+                    return Toast.show({ title: data.message, placement: 'bottom', status: 'error', w: 300 })
+                }
+            }).catch(error => {
+                console.log(error);
+                if (error.response && error.response.status === 400) {
+                    return Toast.show({ title: error.response.data, placement: 'bottom', status: 'error', w: 300 })
+                } else {
+                    return Toast.show({ title: "Error", placement: 'bottom', status: 'error', w: 300 })
+
+                }
+            })
+        }
+        else {
+            return Toast.show({ title: "Error", placement: 'bottom', status: 'error', w: 300 });
+        }
+    }
+
     const onGoogleSignIn = async () => {
         // try {
         //     await GoogleSignIn.askForPlayServicesAsync()
@@ -64,6 +107,7 @@ const LogInScreen = ({ navigation }) => {
         //     console.log('login: Error:' + message)
         // }
     }
+
     const GoGoogleSignIn = async () => {
         // const user = await GoogleSignIn.signInSilentlyAsync();
         // if (user.email) {
@@ -288,7 +332,7 @@ const LogInScreen = ({ navigation }) => {
                         Platform.OS == "ios" ?
                             <HStack mt={5} justifyContent="space-between">
                                 <Box w="30%">
-                                    <TouchableOpacity onPress={onFacebookSignIn}>
+                                    <TouchableOpacity onPress={onAppleSignIn}>
                                         <Box
                                             borderStyle="solid"
                                             borderWidth={1}
