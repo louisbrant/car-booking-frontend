@@ -52,6 +52,7 @@ const ApiList = {
   DeleteMyCar: "cars/deletecar",
   GetAllCars: "cars/getAllCars",
   RentCar: "cars/rentcar",
+  DelAccount: "users/delAccount",
 
   GetMyHouses: "houses/getMyHouses",
   GetAllHouses: "houses/getAllHouses",

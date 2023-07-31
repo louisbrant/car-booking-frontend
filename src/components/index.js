@@ -489,42 +489,53 @@ export const CenterModal = ({ isOpen, setIsOpen, OK, Cancel, content }) => {
               </Text>
             </VStack>
           </HStack>
-          <HStack justifyContent="space-between" pb={1}>
-            <VStack w="100%" space={1}
-              style={{
-                display: 'flex',
-                justifyContent: 'center',
-                alignItems: 'center',
-              }}>
-              {content?.text.length && content?.text.map((text, idx) => {
-                return (
-                  <Text
-                    color={COLOR.inPlaceholder}
-                    fontSize="xs"
-                    style={{
-                      display: 'flex',
-                      justifyContent: 'center',
-                      alignItems: 'center',
-                    }}
-                    key={idx}
-                  >
-                    {text}
-                  </Text>
-                )
-              })}
-            </VStack>
-          </HStack>
+          {content?.text &&
+            <HStack justifyContent="space-between" pb={1}>
+              <VStack w="100%" space={1}
+                style={{
+                  display: 'flex',
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                }}>
+                {content?.text.length && content?.text.map((text, idx) => {
+                  return (
+                    <Text
+                      color={COLOR.inPlaceholder}
+                      fontSize="xs"
+                      style={{
+                        display: 'flex',
+                        justifyContent: 'center',
+                        alignItems: 'center',
+                      }}
+                      key={idx}
+                    >
+                      {text}
+                    </Text>
+                  )
+                })}
+              </VStack>
+            </HStack>
+          }
         </Modal.Body>
-        <Modal.Footer style={{
+        {/* <Modal.Footer style={{
           justifyContent: 'center',
           alignItems: 'center',
           backgroundColor: COLOR.ModalBlackBgcolor,
           borderTopWidth: 0.3,
           borderColor: COLOR.ModalBordercolor,
           p: 0
+        }}> */}
+        <Box style={{
+          justifyContent: 'center',
+          alignItems: 'center',
+          backgroundColor: COLOR.ModalBlackBgcolor,
+          borderTopWidth: 0.4,
+          borderColor: COLOR.ModalBordercolor,
         }}>
-          <HStack justifyContent="space-between" pb={2}>
+
+          <HStack justifyContent="space-between" pb={2} mt={2}>
             <VStack w="100%" space={1}
+              mt={1}
               style={{
                 display: 'flex',
                 justifyContent: 'center',
@@ -554,19 +565,19 @@ export const CenterModal = ({ isOpen, setIsOpen, OK, Cancel, content }) => {
               }
             </VStack>
           </HStack>
-          <HStack justifyContent="space-between" pb={2}
-            style={{
-              borderTopWidth: 0.3,
-              borderColor: COLOR.ModalBordercolor
-            }}>
-            <VStack w="100%" space={1}
+          {content?.cancel &&
+            <HStack py={2} justifyContent="space-between" pb={2}
               style={{
-                display: 'flex',
-                justifyContent: 'center',
-                alignItems: 'center',
+                borderTopWidth: 0.4,
+                borderColor: COLOR.ModalBordercolor
               }}>
+              <VStack w="100%" space={1}
+                style={{
+                  display: 'flex',
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                }}>
 
-              {content?.cancel &&
                 <Box
                 >
                   <TouchableOpacity onPress={Cancel}>
@@ -588,10 +599,11 @@ export const CenterModal = ({ isOpen, setIsOpen, OK, Cancel, content }) => {
                     </Box>
                   </TouchableOpacity>
                 </Box>
-              }
-            </VStack>
-          </HStack>
-        </Modal.Footer>
+              </VStack>
+            </HStack>
+          }
+        </Box>
+        {/* </Modal.Footer> */}
       </Modal.Content>
     </Modal>
   )
