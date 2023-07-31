@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from 'react';
+import React, { useCallback, useState, useEffect } from 'react';
 import { ScrollView, TouchableOpacity, Dimensions, StatusBar, Pressable, Animated } from "react-native";
 import { Image, Text, Box, Stack, HStack, Button, View, Icon, Avatar, VStack, Input, AspectRatio, Center, Actionsheet, useColorModeValue } from "native-base";
 import { MaterialCommunityIcons, MaterialIcons, AntDesign, EvilIcons, Entypo, Ionicons, FontAwesome, SimpleLineIcons } from "@expo/vector-icons"
@@ -7,15 +7,26 @@ import { COLOR, Images, LAYOUT } from "../../../constants";
 
 import { BottomTab } from '../../../components';
 import { useSelector, useDispatch } from 'react-redux'
+import { setUserInfo } from '../../../redux/actions/authActions';
 
 const InfoPage = ({ navigation }) => {
 
     const { user } = useSelector((store) => store.auth);
     const dispatch = useDispatch()
+    const [closeModal, setCloseModal] = useState(false);
 
     const onShowProfile = () => {
         navigation.navigate("EditProfileScreen")
     }
+
+    const oncloseAccount = () => {
+        setCloseModal(true);
+    }
+
+    const closeAccount = () => {
+        dispatch(setUserInfo(""))
+    }
+
 
     useEffect(() => {
 
@@ -65,7 +76,7 @@ const InfoPage = ({ navigation }) => {
                         <VStack space={1}>
                             <Text color={COLOR.inPlaceholder} fontWeight="medium" fontSize="2xs">Email</Text>
                             <HStack justifyContent="space-between" alignItems="center">
-                                <Text fontWeight="semibold" fontSize="xs">johnsmith@example.com</Text>
+                                <Text fontWeight="semibold" fontSize="xs">{user?.email}</Text>
                                 <Text color={COLOR.green} fontWeight="semibold" fontSize={9}>verified</Text>
                             </HStack>
                         </VStack>
@@ -74,8 +85,15 @@ const InfoPage = ({ navigation }) => {
                         <VStack space={1}>
                             <Text color={COLOR.inPlaceholder} fontWeight="medium" fontSize="2xs">Mobile Number</Text>
                             <HStack justifyContent="space-between" alignItems="center">
-                                <Text fontWeight="semibold" fontSize="xs">+91 123 123 1234</Text>
-                                <Text color={COLOR.IRed} fontWeight="semibold" fontSize={9}>Not verified</Text>
+                                {
+                                    user?.phone ?
+                                        <Text fontWeight="semibold" fontSize="xs">{user?.phone}</Text> : <Text fontWeight="semibold" fontSize="xs">none</Text>
+                                }
+                                {
+                                    user?.phone ?
+                                        <Text color={COLOR.IRed} fontWeight="semibold" fontSize={9}>Not verified</Text> : <Text fontWeight="semibold" fontSize="xs"></Text>
+                                }
+
                             </HStack>
                         </VStack>
                     </Box>
@@ -84,7 +102,10 @@ const InfoPage = ({ navigation }) => {
                             <HStack justifyContent="space-between" alignItems="center">
                                 <Text fontWeight="semibold" fontSize="sm">Facebook</Text>
                                 <HStack space={2} alignItems="center">
-                                    <Text fontWeight="semibold" fontSize={9}>Not Connected</Text>
+                                    {
+                                        user?.facebook ?
+                                            <Text fontWeight="semibold" fontSize={9}>Connected</Text> : <Text fontWeight="semibold" fontSize={9}>Not Connected</Text>
+                                    }
                                     <Icon color={COLOR.black} size="xs" as={<AntDesign name="right" />} />
                                 </HStack>
                             </HStack>
@@ -95,7 +116,10 @@ const InfoPage = ({ navigation }) => {
                             <HStack justifyContent="space-between" alignItems="center">
                                 <Text fontWeight="semibold" fontSize="sm">Google</Text>
                                 <HStack space={2} alignItems="center">
-                                    <Text fontWeight="semibold" fontSize={9}>Not Connected</Text>
+                                    {
+                                        user?.google ?
+                                            <Text fontWeight="semibold" fontSize={9}>Connected</Text> : <Text fontWeight="semibold" fontSize={9}>Not Connected</Text>
+                                    }
                                     <Icon color={COLOR.black} size="xs" as={<AntDesign name="right" />} />
                                 </HStack>
                             </HStack>
@@ -105,7 +129,7 @@ const InfoPage = ({ navigation }) => {
             </Box>
 
             <Box position="absolute" bottom={125} w="full">
-                <TouchableOpacity onPress={() => navigation.navigate("ChangePassScreen")}>
+                <TouchableOpacity onPress={oncloseAccount}>
                     <HStack flex={1} justifyContent="center" alignItems="center">
                         <Text color={COLOR.red} fontWeight="semibold" fontSize="md">Close my account</Text>
                     </HStack>
@@ -113,6 +137,7 @@ const InfoPage = ({ navigation }) => {
             </Box>
 
             <BottomTab navigation={navigation} />
+            < CenterModal isOpen={closeModal} setIsOpen={setCloseModal} OK={closeAccount} Cancel={() => { setCloseModal(false) }} content={{ title: "Are you sure you want to close?", ok: "Yes", cancel: "Cancel" }} />
 
         </Box>
     )

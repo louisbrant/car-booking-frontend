@@ -16,6 +16,7 @@ import { setCarInfo } from '../../../redux/actions/authActions';
 import { LinearGradient } from 'expo-linear-gradient'
 
 import { setUserInfo } from '../../../redux/actions/authActions';
+import { useApi } from '../../../redux/services'
 
 import * as ImagePicker from 'expo-image-picker';
 
@@ -23,6 +24,9 @@ const MyProfilePage = ({ navigation }) => {
 
     const [modalVisible, setModalVisible] = useState(false);
     const [delModal, setDelModal] = useState(false);
+    const [outModal, setOutModal] = useState(false);
+
+    const Api = useApi()
 
     const initialRef = React.useRef(null);
     const finalRef = React.useRef(null);
@@ -79,9 +83,15 @@ const MyProfilePage = ({ navigation }) => {
         }
     }
 
+    const onlogOut = async () => {
+        console.log("D");
+        setOutModal(true);
+    }
+
     const logOut = async () => {
+        console.log("DD");
         dispatch(setUserInfo(""))
-        navigation.navigate("HomeScreen")
+        navigation.navigate("SignInScreen")
     }
 
     const onCheckAddCar = () => {
@@ -107,7 +117,27 @@ const MyProfilePage = ({ navigation }) => {
     }
 
     const deleteAccount = () => {
+        setDelModal(false);
+        Api.DelAccount({
+            email: user?.email
+        }).then(({ data }) => {
+            console.log(data);
+            dispatch(setUserInfo(""))
+            if (data.status) {
+                Toast.show({ title: "Successfully delete account!", placement: 'bottom', status: 'success', w: 300 })
+                navigation.navigate("SignInScreen");
+            }
+            else {
+                return Toast.show({ title: data.message, placement: 'bottom', status: 'error', w: 300 })
+            }
+        }).catch(error => {
+            if (error.response && error.response.status === 400) {
+                return Toast.show({ title: error.response.data, placement: 'bottom', status: 'error', w: 300 })
+            } else {
+                return Toast.show({ title: "Error", placement: 'bottom', status: 'error', w: 300 })
 
+            }
+        })
     }
 
     useEffect(() => {
@@ -156,7 +186,7 @@ const MyProfilePage = ({ navigation }) => {
                     </View>
 
                     <View >
-                        <TouchableOpacity onPress={() => logOut()}>
+                        <TouchableOpacity onPress={onlogOut}>
                             <Icon color={COLOR.black} size="lg" as={<Ionicons name="log-out-outline" />} />
                         </TouchableOpacity>
                     </View>
@@ -219,7 +249,7 @@ const MyProfilePage = ({ navigation }) => {
                                         </HStack>
                                     </Box>
                                 </HStack>
-                                <HStack alignItems="center" space={2} onTouchStart={onPayment}>
+                                <HStack alignItems="center" space={2} onTouchStart={() => navigation.navigate("ChangePassScreen")}>
                                     <Icon color={COLOR.black} size="md" as={<MaterialIcons name="lock-outline" />} />
                                     <Box py={2} borderStyle="solid" borderBottomWidth={0} borderColor={COLOR.inpBorderColor} flex={1}>
                                         <HStack alignItems="center" justifyContent="space-between" >
@@ -256,7 +286,9 @@ const MyProfilePage = ({ navigation }) => {
             </LinearGradient>
             < CenterModal isOpen={modalVisible} setIsOpen={setModalVisible} OK={onCheckAddCar} content={{ title: "Car confirmation", text: ["Lorem ipsum dolor sit amet,", "consectetur adipiscing elit. Nulla nec", "ipsum ac quam auctor dapibus."], ok: "OK" }} />
 
-            < CenterModal isOpen={delModal} setIsOpen={setDelModal} OK={deleteAccount} content={{ title: "Are you sure you want to delete your account?", text: ["This cannot be reveresed."], ok: "Yes", cancel: "Cancel" }} />
+            < CenterModal isOpen={delModal} setIsOpen={setDelModal} OK={deleteAccount} Cancel={() => { setDelModal(false) }} content={{ title: "Are you sure you want to delete your account?", text: ["This cannot be reveresed."], ok: "Yes", cancel: "Cancel" }} />
+
+            < CenterModal isOpen={outModal} setIsOpen={setOutModal} OK={logOut} Cancel={() => { setOutModal(false) }} content={{ title: "Are you sure you want to logout?", ok: "Yes", cancel: "Cancel" }} />
             <BottomTab navigation={navigation} />
 
         </Box>

@@ -219,6 +219,10 @@ class ApiService {
   GetAllCars(...args) {
     return axios.post(ROOT.GetAllCars, ...args)
   }
+  DelAccount(...args) {
+    return axios.post(ROOT.DelAccount, ...args)
+  }
+
 
 
   GetMyHouses(...args) {
