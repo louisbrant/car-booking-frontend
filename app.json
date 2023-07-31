@@ -7,7 +7,7 @@
     "icon": "./src/assets/img/tatum.png",
     "splash": {
       "image": "./src/assets/img/tatum.png",
-      "resizeMode": "contain",
+      "resizeMode": "cover",
       "backgroundColor": "#66a3ff"
     },
     "updates": {
