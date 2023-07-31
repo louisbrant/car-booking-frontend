@@ -6,12 +6,20 @@ import { MaterialCommunityIcons, MaterialIcons, AntDesign, EvilIcons, Entypo, Io
 import { COLOR, Images, LAYOUT } from "../../../constants";
 
 import { BottomTab } from '../../../components';
+import { useSelector, useDispatch } from 'react-redux'
 
 const InfoPage = ({ navigation }) => {
+
+    const { user } = useSelector((store) => store.auth);
+    const dispatch = useDispatch()
 
     const onShowProfile = () => {
         navigation.navigate("EditProfileScreen")
     }
+
+    useEffect(() => {
+
+    }, []);
 
     return (
         <Box flex={1}>

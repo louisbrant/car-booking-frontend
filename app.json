@@ -30,8 +30,7 @@
         "googleMaps": {
           "apiKey": "AIzaSyB0uPdSl2KFqBETm8gGdfgdAwsUxEjVXho"
         }
-      },
-      "buildType": "ipa"
+      }
     },
     "extra": {
       "eas": {

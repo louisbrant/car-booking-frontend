@@ -16,7 +16,6 @@ import {
   Stack,
   Modal,
   VStack,
-
 } from "native-base"
 import { StyleSheet, TouchableOpacity, Dimensions } from "react-native"
 import { navigate, useApi } from "../redux/services"
@@ -455,6 +454,148 @@ export const TreadingViewItem = ({ data = {} }) => {
   )
 }
 
+export const CenterModal = ({ isOpen, setIsOpen, OK, Cancel, content }) => {
+
+  const initialRef = React.useRef(null);
+  const finalRef = React.useRef(null);
+
+  return (
+    <Modal isOpen={isOpen} onClose={() => setIsOpen(false)} initialFocusRef={initialRef} finalFocusRef={finalRef} _backdrop={true} backdropOpacity={0.5} backgroundColor={COLOR.ModalBgcolor} >
+      <Modal.Content style={{
+        width: "80%",
+      }}>
+        <Modal.Body style={{
+          backgroundColor: COLOR.ModalBlackBgcolor
+        }}>
+          <HStack justifyContent="space-between" pb={2}>
+            <VStack w="100%" space={1}
+              style={{
+                display: 'flex',
+                justifyContent: 'center',
+                alignItems: 'center',
+              }}>
+              <Text
+                color={COLOR.white}
+                fontWeight="medium"
+                style={{
+                  display: 'flex',
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                  textAlign: 'center',
+                  fontSize: 17
+                }}
+              >
+                {content?.title}
+              </Text>
+            </VStack>
+          </HStack>
+          <HStack justifyContent="space-between" pb={1}>
+            <VStack w="100%" space={1}
+              style={{
+                display: 'flex',
+                justifyContent: 'center',
+                alignItems: 'center',
+              }}>
+              {content?.text.length && content?.text.map((text, idx) => {
+                return (
+                  <Text
+                    color={COLOR.inPlaceholder}
+                    fontSize="xs"
+                    style={{
+                      display: 'flex',
+                      justifyContent: 'center',
+                      alignItems: 'center',
+                    }}
+                    key={idx}
+                  >
+                    {text}
+                  </Text>
+                )
+              })}
+            </VStack>
+          </HStack>
+        </Modal.Body>
+        <Modal.Footer style={{
+          justifyContent: 'center',
+          alignItems: 'center',
+          backgroundColor: COLOR.ModalBlackBgcolor,
+          borderTopWidth: 0.3,
+          borderColor: COLOR.ModalBordercolor,
+          p: 0
+        }}>
+          <HStack justifyContent="space-between" pb={2}>
+            <VStack w="100%" space={1}
+              style={{
+                display: 'flex',
+                justifyContent: 'center',
+                alignItems: 'center',
+              }}>
+              {content?.ok &&
+                <Box>
+                  <TouchableOpacity onPress={OK}>
+                    <Box
+                      style={{
+                        width: '100%',
+                        display: 'flex',
+                        justifyContent: 'center',
+                        alignItems: 'center',
+                      }}
+                    >
+                      <Text
+                        color={COLOR.IBase}
+                        fontWeight="bold"
+                        fontSize={17}
+                      >
+                        {content?.ok}
+                      </Text>
+                    </Box>
+                  </TouchableOpacity>
+                </Box>
+              }
+            </VStack>
+          </HStack>
+          <HStack justifyContent="space-between" pb={2}
+            style={{
+              borderTopWidth: 0.3,
+              borderColor: COLOR.ModalBordercolor
+            }}>
+            <VStack w="100%" space={1}
+              style={{
+                display: 'flex',
+                justifyContent: 'center',
+                alignItems: 'center',
+              }}>
+
+              {content?.cancel &&
+                <Box
+                >
+                  <TouchableOpacity onPress={Cancel}>
+                    <Box
+                      style={{
+                        width: '100%',
+                        display: 'flex',
+                        justifyContent: 'center',
+                        alignItems: 'center',
+                      }}
+                    >
+                      <Text
+                        color={COLOR.IBase}
+                        fontWeight="bold"
+                        fontSize={17}
+                      >
+                        {content?.cancel}
+                      </Text>
+                    </Box>
+                  </TouchableOpacity>
+                </Box>
+              }
+            </VStack>
+          </HStack>
+        </Modal.Footer>
+      </Modal.Content>
+    </Modal>
+  )
+}
 
 // export const UserAvatars = ({ info = null, size = 35 }) => {
 //   if (info && info.avatar) {

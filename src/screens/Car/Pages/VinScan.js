@@ -149,7 +149,7 @@ const VinScanPage = ({ navigation }) => {
                             </Text>
                         </Box>
                     </Box>
-                    <Box pt={230} px={4} >
+                    <Box pt={230} px={4} backgroundColor={COLOR.transform} >
                         <BarCodeScanner
                             onBarCodeScanned={scanned ? undefined : handleBarCodeScanned}
                             style={StyleSheet.absoluteFillObject}

@@ -67,4 +67,5 @@ export const COLOR = {
 	SwiperBgcolor: '#F7F7FA !important',
 	ChatInputMessageIconcolor: '#898A8D',
 	ChatInputMessagebg: 'rgba(177, 169, 169, 0.2)',
+	transform: "#ffffff00",
 }
