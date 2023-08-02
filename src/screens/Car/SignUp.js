@@ -3,7 +3,7 @@ import { ScrollView, TouchableOpacity, Platform } from "react-native";
 import { COLOR, Images, LAYOUT } from "../../constants";
 import { MaterialCommunityIcons, AntDesign, EvilIcons, Entypo, Ionicons } from "@expo/vector-icons"
 import { Image, Input, Icon, Text, Box, Stack, HStack, Button, IconButton, useToast, View, Spinner, VStack, Checkbox } from "native-base";
-// import {    GoogleSignin} from '@react-native-google-signin/google-signin';
+// import { GoogleSignin } from '@react-native-google-signin/google-signin';
 import * as AppleAuthentication from 'expo-apple-authentication';
 
 // import appleAuth, {
@@ -21,7 +21,7 @@ import { useApi } from '../../redux/services'
 import { setUserInfo } from '../../redux/actions/authActions';
 import { useDispatch } from 'react-redux'
 
-// import { GoogleSignIn } from 'expo-google-sign-in';
+import * as GoogleSignIn from 'expo-google-sign-in';
 // import * as Facebook from 'expo-facebook';
 
 const SignUpScreen = ({ navigation }) => {
@@ -110,55 +110,35 @@ const SignUpScreen = ({ navigation }) => {
 
 
     const onGoogleSignUp = async () => {
-        // Generate secure, random values for state and nonce
-        const rawNonce = uuid();
-        const state = uuid();
-
-        console.log('appleAuthAndroid=>', appleAuthAndroid);
-        // Configure the request
-        appleAuthAndroid.configure({
-            // The Service ID you registered with Apple
-            clientId: 'com.ibluday.IZRA',
-
-            // Return URL added to your Apple dev console. We intercept this redirect, but it must still match
-            // the URL you provided to Apple. It can be an empty route on your backend as it's never called.
-            redirectUri: 'https://web.skype.com',
-
-            // The type of response requested - code, id_token, or both.
-            responseType: appleAuthAndroid?.ResponseType?.ALL,
-
-            // The amount of user information requested from Apple.
-            scope: appleAuthAndroid?.Scope?.ALL,
-
-            // Random nonce value that will be SHA256 hashed before sending to Apple.
-            nonce: rawNonce,
-
-            // Unique state value used to prevent CSRF attacks. A UUID will be generated if nothing is provided.
-            state,
-        });
-
-        // Open the browser window for user sign in
-        const response = await appleAuthAndroid.signIn();
-
-        console.log('response=>', response);
-        // Send the authorization code to your backend for verification
-
-        // console.log('appleAuth=>', appleAuth);
-        // const appleAuthRequestResponse = await appleAuth.performRequest({
-        //     requestedOperation: AppleAuthRequestOperation.LOGIN,
-        //     requestedScopes: [AppleAuthRequestScope.EMAIL, AppleAuthRequestScope.FULL_NAME],
-        // });
-
-        // // get current authentication state for user
-        // // /!\ This method must be tested on a real device. On the iOS simulator it always throws an error.
-        // const credentialState = await appleAuth.getCredentialStateForUser(appleAuthRequestResponse.user);
-
-        // // use credentialState response to ensure the user is authenticated
-        // if (credentialState === AppleAuthCredentialState.AUTHORIZED) {
-        //     // user is authenticated
+        console.log(GoogleSignIn);
+        const user = await GoogleSignIn.signInAsync();
+        // const { type, user } = await GoogleSignIn();
+        console.log("user=>", user);
+        // if (user.email) {
+        //     setEmail(user.email)
+        //     Api.ThirdSignUp({
+        //         email,
+        //         password: ""
+        //     }).then(({ data }) => {
+        //         // console.log(data)
+        //         if (data.status) {
+        //             navigation.navigate("SignInScreen");
+        //             return Toast.show({ title: "Success Sign Up", placement: 'top', status: 'error', w: 300 })
+        //         }
+        //         else {
+        //             return Toast.show({ title: data.message, placement: 'top', status: 'error', w: 300 })
+        //         }
+        //     }).catch(error => {
+        //         if (error.response && error.response.status === 400) {
+        //             return Toast.show({ title: error.response.data, placement: 'top', status: 'error', w: 300 })
+        //         } else {
+        //             return Toast.show({ title: "Error", placement: 'bottom', status: 'error', w: 300 })
+        //         }
+        //     })
         // }
-        // console.log('appleAuthRequestResponse=>', appleAuthRequestResponse)
-        // console.log('credentialState=>', credentialState)
+        // else {
+        //     return Toast.show({ title: "Error", placement: 'bottom', status: 'error', w: 300 });
+        // }
     }
 
     const GoGoogleSignUp = async () => {

@@ -2149,6 +2149,11 @@
   resolved "https://registry.yarnpkg.com/@react-native-community/masked-view/-/masked-view-0.1.10.tgz#5dda643e19e587793bc2034dd9bf7398ad43d401"
   integrity sha512-rk4sWFsmtOw8oyx8SD3KSvawwaK7gRBSEIy2TAwURyGt+3TizssXP1r8nx3zY+R7v2vYYHXZ+k2/GULAT/bcaQ==
 
+"@react-native-google-signin/google-signin@6.0.0":
+  version "6.0.0"
+  resolved "https://registry.yarnpkg.com/@react-native-google-signin/google-signin/-/google-signin-6.0.0.tgz#115b666221169cbd6aabd6d9a622a7f48205ea2e"
+  integrity sha512-xmrrG2muhwmoPy9AdfP+ceLBZtnrXkZwgN/jR5u3xOHadyerJfvD76w2BSmm7zeoiMB1wwSkZkzFSa9+i1BdKA==
+
 "@react-native/normalize-color@*":
   version "2.1.0"
   resolved "https://registry.yarnpkg.com/@react-native/normalize-color/-/normalize-color-2.1.0.tgz#939b87a9849e81687d3640c5efa2a486ac266f91"
@@ -4225,6 +4230,13 @@ expo-font@~9.2.1:
   dependencies:
     expo-modules-core "~0.2.0"
     fontfaceobserver "^2.1.0"
+
+expo-google-sign-in@5.0.1:
+  version "5.0.1"
+  resolved "https://registry.yarnpkg.com/expo-google-sign-in/-/expo-google-sign-in-5.0.1.tgz#1285afd2cb605129c310ef89b555ba8a3a5f61c2"
+  integrity sha512-VwKIiG+S7uswF27RN9+WBO4dGQhmBPeqYnlBjuw3Zf8pS+tZcE5VROb1PBzyhgn4WEvGEql+40axm8fIMlensw==
+  dependencies:
+    invariant "^2.2.4"
 
 expo-image-picker@~10.2.2:
   version "10.2.3"
