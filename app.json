@@ -2,7 +2,7 @@
   "expo": {
     "name": "IZRA",
     "slug": "IZRA",
-    "version": "1.0.2",
+    "version": "1.0.3",
     "orientation": "portrait",
     "icon": "./src/assets/img/tatum.png",
     "splash": {
@@ -18,7 +18,18 @@
     ],
     "ios": {
       "supportsTablet": true,
-      "bundleIdentifier": "com.ibluday.IZRA"
+      "bundleIdentifier": "com.ibluday.IZRA",
+      "config": {
+        "googleSignIn": {
+          "reservedClientId": "<YOUR_REVERSED_IOS_CLIENT_ID>"
+        }
+      },
+      "googleServicesFile": "./GoogleService-Info.plist",
+      "buildNumber": "1.1.4",
+      "infoPlist": {
+        "NSPhotoLibraryUsageDescription": "Hello............",
+        "NSCameraUsageDescription": "hello......................"
+      }
     },
     "android": {
       "adaptiveIcon": {
@@ -30,7 +41,9 @@
         "googleMaps": {
           "apiKey": "AIzaSyB0uPdSl2KFqBETm8gGdfgdAwsUxEjVXho"
         }
-      }
+      },
+      "buildNumber": "1.1.4",
+      "googleServicesFile": "./google-services.json"
     },
     "extra": {
       "eas": {
