@@ -21,7 +21,7 @@
       "bundleIdentifier": "com.ibluday.IZRA",
       "config": {
         "googleSignIn": {
-          "reservedClientId": "<YOUR_REVERSED_IOS_CLIENT_ID>"
+          "reservedClientId": "8a034e5e-2906-4772-9348-a827f08b316e"
         }
       },
       "googleServicesFile": "./GoogleService-Info.plist",
